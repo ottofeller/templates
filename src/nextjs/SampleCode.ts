@@ -5,14 +5,14 @@ import {Component, SampleDir, web} from 'projen'
  */
 export class SampleCode extends Component {
   /**
-   * 
+   *
    * @param project Parent project to add files to.
    * @param path Path to a file to add. The path is relative to the source folder of the project.
    * @param code Code to insert into the file.
    */
   constructor(project: web.NextJsTypeScriptProject, path: string, code: string) {
     super(project)
-    new SampleDir(project, project.srcdir, {files: {[path]: code}});
+    new SampleDir(project, project.srcdir, {files: {[path]: code}})
   }
 }
 
