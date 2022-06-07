@@ -22,7 +22,7 @@ export class SampleCode extends Component {
 export const srcCode = `import Link from 'next/link'
 import {memo} from 'react'
 
-const Home = memo(function Home(props: {cookies: Record<string, string>}) {
+const Home = memo(function Home(props: {cookies?: Record<string, string>}) {
   return (
     <div className="grid gap-y-4 place-content-center place-items-center min-h-screen">
       <h2 className="text-24">It works!</h2>
@@ -35,7 +35,7 @@ const Home = memo(function Home(props: {cookies: Record<string, string>}) {
           Blog
         </Link>
       </nav>
-      with cookies - {props.cookies.io}
+      with cookies - {props.cookies?.io}
     </div>
   )
 })
