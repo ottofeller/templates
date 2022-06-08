@@ -3,9 +3,6 @@
 /test-reports/
 junit.xml
 /coverage/
-/dist/changelog.md
-/dist/version.txt
-/.mergify.yml
 /src/__tests__/
 /tsconfig.dev.json
 /src/

@@ -4,7 +4,7 @@ import {SampleCode, srcCode} from './SampleCode'
 /**
  * Project that wraps NextJsTypeScriptProject and adds specific configurations and sample code.
  *
- * @pjid ottofeller-nextjs
+ * @pjid nextjs
  */
 export class OttofellerNextJs extends web.NextJsTypeScriptProject {
   constructor(options: web.NextJsTypeScriptProjectOptions) {

@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-ts-template",
+  "name": "nextjs",
   "description": "projen template for nextjs projects with typescript support",
   "repository": {
     "type": "git",
@@ -7,12 +7,10 @@
   },
   "scripts": {
     "build": "npx projen build",
-    "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
     "default": "npx projen default",
-    "docgen": "npx projen docgen",
     "eject": "npx projen eject",
     "format": "npx projen format",
     "lint": "npx projen lint",
@@ -20,14 +18,10 @@
     "package-all": "npx projen package-all",
     "package:js": "npx projen package:js",
     "post-compile": "npx projen post-compile",
-    "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
-    "release": "npx projen release",
     "test": "npx projen test",
     "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
-    "unbump": "npx projen unbump",
-    "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },
@@ -43,16 +37,14 @@
     "@types/node": "^16",
     "@types/prettier": "2.6.0",
     "@typescript-eslint/eslint-plugin": "5.10.2",
+    "@typescript-eslint/parser": "^5.27.1",
     "eslint-plugin-import": "2.25.4",
     "jest": "^27",
     "jest-junit": "^13",
     "jsii": "^1.59.0",
     "jsii-diff": "^1.59.0",
-    "jsii-docgen": "^7.0.28",
     "jsii-pacmak": "^1.59.0",
-    "npm-check-updates": "^12",
     "projen": "0.57.3",
-    "standard-version": "^9",
     "typescript": "^4.7.3"
   },
   "peerDependencies": {
