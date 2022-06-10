@@ -62,7 +62,7 @@ const githubWorkflow = project.github.addWorkflow('test')
  */
 const job = (steps) => ({
   runsOn: ['ubuntu-latest'],
-  permissions: {pullRequests: github.workflows.JobPermission.READ},
+  permissions: {contents: github.workflows.JobPermission.READ},
   steps,
 })
 
