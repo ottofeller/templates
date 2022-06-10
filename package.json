@@ -22,6 +22,7 @@
     "test": "npx projen test",
     "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
+    "typecheck": "npx projen typecheck",
     "watch": "npx projen watch",
     "projen": "npx projen"
   },

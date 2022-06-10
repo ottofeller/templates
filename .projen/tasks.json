@@ -173,6 +173,14 @@
         }
       ]
     },
+    "typecheck": {
+      "name": "typecheck",
+      "steps": [
+        {
+          "exec": "tsc --noEmit"
+        }
+      ]
+    },
     "watch": {
       "name": "watch",
       "description": "Watch & compile in the background",
