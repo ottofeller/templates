@@ -12,14 +12,15 @@ export class SampleCode extends Component {
    */
   constructor(project: web.NextJsTypeScriptProject, path: string, code: string) {
     super(project)
-    new SampleDir(project, project.srcdir, {files: {[path]: code}})
+    const [, dir, file] = path.match(/(.*)\/(.*\..*)$/) || []
+    new SampleDir(project, `${project.srcdir}${dir ? `/${dir}` : ''}`, {files: {[file || path]: code}})
   }
 }
 
 /**
  * Source code for the index page.
  */
-export const srcCode = `import Link from 'next/link'
+export const indexPage = `import Link from 'next/link'
 import {memo} from 'react'
 
 const Home = memo(function Home(props: {cookies?: Record<string, string>}) {
@@ -41,4 +42,38 @@ const Home = memo(function Home(props: {cookies?: Record<string, string>}) {
 })
 
 export default Home
+`
+
+/**
+ * Source code for the index page.
+ */
+export const indexPageTest = `import {MockedProvider} from '@apollo/client/testing'
+import {render, screen} from '@testing-library/react'
+import {act} from 'react-dom/test-utils'
+import Home from '../index'
+
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    prefetch: () => new Promise((resolve) => resolve('')),
+    route: '/',
+    query: {id: 1},
+  }),
+}))
+
+describe('Home page', () => {
+  it('shows title', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Home cookies={{}} />
+      </MockedProvider>,
+    )
+
+    await act(async () => {
+      // Wait for a query;
+      await new Promise((resolve) => setTimeout(resolve))
+    })
+
+    expect(screen.getByText('It works!')).toBeTruthy()
+  })
+})
 `
