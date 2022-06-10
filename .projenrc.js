@@ -63,7 +63,7 @@ const githubWorkflow = project.github.addWorkflow('test')
 const job = (steps) => ({
   runsOn: ['ubuntu-latest'],
   permissions: {pullRequests: github.workflows.JobPermission.READ},
-  steps: [{uses: 'actions/checkout@v2', with: {fetchDepth: 0}}, ...steps],
+  steps,
 })
 
 githubWorkflow.on({

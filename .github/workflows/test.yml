@@ -16,9 +16,6 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetchDepth: 0
       - uses: ottofeller/github-actions/npm-run@main
         with:
           nodeVersion: 16
@@ -28,9 +25,6 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetchDepth: 0
       - uses: ottofeller/github-actions/npm-run@main
         with:
           nodeVersion: 16
@@ -40,9 +34,6 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetchDepth: 0
       - uses: ottofeller/github-actions/npm-run@main
         with:
           nodeVersion: 16
