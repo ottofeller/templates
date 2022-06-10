@@ -76,19 +76,19 @@ githubWorkflow.addJobs({
   lint: job([
     {
       uses: 'ottofeller/github-actions/npm-run@main',
-      with: {nodeVersion: 16, command: 'npm run lint'},
+      with: {'node-version': 16, command: 'npm run lint'},
     },
   ]),
   typecheck: job([
     {
       uses: 'ottofeller/github-actions/npm-run@main',
-      with: {nodeVersion: 16, command: 'npm run typecheck'},
+      with: {'node-version': 16, command: 'npm run typecheck'},
     },
   ]),
   test: job([
     {
       uses: 'ottofeller/github-actions/npm-run@main',
-      with: {nodeVersion: 16, command: 'npm run test'},
+      with: {'node-version': 16, command: 'npm run test'},
     },
   ]),
 })
