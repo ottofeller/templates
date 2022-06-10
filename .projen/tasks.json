@@ -177,7 +177,7 @@
       "name": "typecheck",
       "steps": [
         {
-          "exec": "tsc --noEmit"
+          "exec": "tsc --noEmit --project tsconfig.dev.json"
         }
       ]
     },

@@ -17,7 +17,7 @@ const project = new cdk.JsiiProject({
   scripts: {
     format: 'npx ofmt .projenrc.js && npx ofmt src',
     lint: 'npx ofmt --lint .projenrc.js && npx ofmt --lint src && npx olint src .projenrc.js --ignore-pattern "!.projenrc.js"',
-    typecheck: 'tsc --noEmit'
+    typecheck: 'tsc --noEmit --project tsconfig.dev.json'
   },
 
   testdir: 'src/__tests__',
