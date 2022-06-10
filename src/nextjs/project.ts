@@ -2,7 +2,7 @@ import {javascript, TextFile, web} from 'projen'
 // eslint-disable-next-line import/no-relative-parent-imports -- projen jsii project compilation does not pick up path aliases. Thus relative import are used as a safe alternative.
 import {PullRequestLint} from '../github/pull-request-lint'
 import {configureJest, DEFAULT_CONFIG_FILENAME} from './jest'
-import {SampleCode, indexPage, indexPageTest} from './SampleCode'
+import {indexPage, indexPageTest, SampleCode} from './SampleCode'
 
 /**
  * Project that wraps NextJsTypeScriptProject and adds specific configurations and sample code.
@@ -14,24 +14,24 @@ export class OttofellerNextJs extends web.NextJsTypeScriptProject {
   constructor(options: web.NextJsTypeScriptProjectOptions) {
     super({
       ...options,
-      docgen        : false,
+      docgen: false,
       packageManager: javascript.NodePackageManager.NPM,
-      sampleCode    : false,
+      sampleCode: false,
 
       // GitHub CI setup
-      github       : true,
+      github: true,
       githubOptions: {
-        mergify        : false,
+        mergify: false,
         pullRequestLint: false,
       },
       buildWorkflow: false,
-      release      : false,
-      depsUpgrade  : false,
+      release: false,
+      depsUpgrade: false,
       jest: true,
       jestOptions: {
         configFilePath: DEFAULT_CONFIG_FILENAME,
         junitReporting: false,
-      }
+      },
     })
 
     // javascript.NpmConfig class sets only registry. Hence a need for manual file creation.
