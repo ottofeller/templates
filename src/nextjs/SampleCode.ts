@@ -77,3 +77,24 @@ describe('Home page', () => {
   })
 })
 `
+
+/**
+ * Source code for the Users GraphQL query.
+ */
+export const usersGraphqlQuery = `import gql from 'graphql-tag'
+
+export const Users = gql\`
+  query Users {
+    user {
+      id
+      firstName
+      lastName
+    }
+  }
+\`
+`
+
+/**
+ * Source code for the Users GraphQL query.
+ */
+ export const usersListGraphqlQuery = usersGraphqlQuery.replace(/Users/g, 'UsersList')
