@@ -158,6 +158,30 @@ export class OttofellerNextJs extends web.NextJsTypeScriptProject {
 
     new JsonFile(this, 'schema.json', {obj: {__schema}, readonly: false})
 
+    // Docker setup
+    new TextFile(this, '.dockerignore', {
+      lines: [
+        GENERATED_BY_PROJEN,
+        'node_modules',
+        '.next',
+      ],
+    })
+
+    new TextFile(this, 'Dockerfile.dev', {
+      lines: [
+        GENERATED_BY_PROJEN,
+        'FROM node:16-buster-slim',
+        '',
+        'WORKDIR /app',
+        '',
+        'COPY package*.json ./',
+        'RUN npm install',
+        'COPY . .',
+        'EXPOSE 3000',
+        'CMD ["npm", "run", "dev"]',
+      ],
+    })
+
     // Sample code
     new SampleCode(this, 'index.tsx', indexPage)
     new SampleCode(this, '__tests__/index.tsx', indexPageTest)
