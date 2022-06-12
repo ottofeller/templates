@@ -97,4 +97,4 @@ export const Users = gql\`
 /**
  * Source code for the Users GraphQL query.
  */
- export const usersListGraphqlQuery = usersGraphqlQuery.replace(/Users/g, 'UsersList')
+export const usersListGraphqlQuery = usersGraphqlQuery.replace(/Users/g, 'UsersList')
