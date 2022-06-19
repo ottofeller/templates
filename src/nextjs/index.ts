@@ -18,4 +18,3 @@ export class OttofellerNextjsProject extends projen.typescript.TypeScriptProject
     this.nextjs.synth();
   }
 }
-
