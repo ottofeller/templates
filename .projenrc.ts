@@ -1,11 +1,18 @@
-import {cdk, javascript} from 'projen'
+import {cdk, github, javascript} from 'projen'
+import {JobStep} from 'projen/lib/github/workflows-model'
 
+// ANCHOR Basic setup
 const project = new cdk.JsiiProject({
   author: 'ottofeller',
   authorAddress: 'https://ottofeller.com',
   defaultReleaseBranch: 'main',
   docgen: false,
-  githubOptions: {mergify: false, workflows: false, pullRequestLint: false},
+  github: true,
+  buildWorkflow: false,
+  release: false,
+  dependabot: true,
+  depsUpgrade: false,
+  githubOptions: {mergify: false, workflows: true, pullRequestLint: false},
   pullRequestTemplate: false,
   name: '@ottofeller/templates',
   projenrcTs: true,
@@ -41,5 +48,30 @@ const project = new cdk.JsiiProject({
 
   eslint: false,
 })
+
+// ANCHOR Github Workflow
+const githubWorkflow = project.github!.addWorkflow('Test')
+
+const job = (steps: Array<JobStep>) => ({
+  runsOn: ['ubuntu-latest'],
+  permissions: {contents: github.workflows.JobPermission.READ},
+  steps,
+})
+
+githubWorkflow.on({pullRequestTarget: {types: ['opened', 'synchronize', 'reopened']}, push: {branches: ['*']}})
+
+githubWorkflow.addJobs({
+  lint: job([
+    {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run lint'}},
+  ]),
+
+  typecheck: job([
+    {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run typecheck'}},
+  ]),
+
+   test: job([
+    {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run test'}},
+  ]),
+ })
 
 project.synth()

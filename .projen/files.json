@@ -1,6 +1,8 @@
 {
   "files": [
     ".gitattributes",
+    ".github/dependabot.yml",
+    ".github/workflows/test.yml",
     ".gitignore",
     ".projen/deps.json",
     ".projen/files.json",

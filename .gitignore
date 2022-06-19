@@ -30,8 +30,7 @@ jspm_packages/
 .yarn-integrity
 .cache
 !/.projenrc.js
-/dist/changelog.md
-/dist/version.txt
+!/.github/dependabot.yml
 !/test/
 !/tsconfig.dev.json
 !/src/
@@ -39,3 +38,4 @@ jspm_packages/
 /dist/
 .jsii
 tsconfig.json
+!/.github/workflows/test.yml
