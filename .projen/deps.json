@@ -1,8 +1,42 @@
 {
   "dependencies": [
     {
+      "name": "@ottofeller/eslint-config-ofmt",
+      "version": "1.3.6",
+      "type": "build"
+    },
+    {
+      "name": "@ottofeller/ofmt",
+      "version": "1.3.6",
+      "type": "build"
+    },
+    {
+      "name": "@ottofeller/prettier-config-ofmt",
+      "version": "1.3.6",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
-      "version": "^14",
+      "version": "^16",
+      "type": "build"
+    },
+    {
+      "name": "@types/prettier",
+      "version": "2.6.0",
+      "type": "build"
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "version": "5.10.2",
+      "type": "build"
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "type": "build"
+    },
+    {
+      "name": "eslint-plugin-import",
+      "version": "2.25.4",
       "type": "build"
     },
     {
@@ -41,10 +75,12 @@
     },
     {
       "name": "projen",
+      "version": "0.57.3",
       "type": "peer"
     },
     {
       "name": "projen",
+      "version": "0.57.3",
       "type": "runtime"
     }
   ],
