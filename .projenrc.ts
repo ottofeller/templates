@@ -24,7 +24,8 @@ const project = new cdk.JsiiProject({
   minNodeVersion: '16.0.0',
   deps: ['projen@0.57.3'],
   devDeps: [
-    // Solves the typescript > 4 problem (https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343).
+    // Solves the typescript > 4 problem
+    // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
     '@types/prettier@2.6.0',
 
     '@ottofeller/eslint-config-ofmt@1.3.6',
