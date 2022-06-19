@@ -1,2 +1,1 @@
-# templates
-Home for project templates
+# replace this
