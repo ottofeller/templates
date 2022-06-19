@@ -62,17 +62,13 @@ const job = (steps: Array<JobStep>) => ({
 githubWorkflow.on({pullRequestTarget: {types: ['opened', 'synchronize', 'reopened']}, push: {branches: ['*']}})
 
 githubWorkflow.addJobs({
-  lint: job([
-    {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run lint'}},
-  ]),
+  lint: job([{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run lint'}}]),
 
   typecheck: job([
     {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run typecheck'}},
   ]),
 
-   test: job([
-    {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run test'}},
-  ]),
- })
+  test: job([{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run test'}}]),
+})
 
 project.synth()
