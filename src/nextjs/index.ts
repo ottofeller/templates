@@ -1,20 +1,27 @@
 import * as projen from 'projen'
-
-export class OttofellerNextjsProject extends projen.typescript.TypeScriptProject {
-  private readonly nextjs: projen.web.NextJsTypeScriptProject
-
+export class OttofellerNextjsProject extends projen.web.NextJsTypeScriptProject {
   constructor(options: projen.typescript.TypeScriptProjectOptions) {
-    super({...options, projenrcTs: true, projenrcJs: false})
-
-    this.nextjs = new projen.web.NextJsTypeScriptProject({
+    super({
+      ...options,
+      projenrcTs: true,
+      projenrcJs: false,
       defaultReleaseBranch: 'main',
       name: 'nextjs',
-      projenrcJs: false,
-    })
-  }
+      packageManager: projen.javascript.NodePackageManager.NPM,
+      tsconfig: {compilerOptions: {target: 'es6'}},
 
-  synth(): void {
-    super.synth()
-    this.nextjs.synth()
+      devDeps: [
+        '@ottofeller/eslint-config-ofmt',
+        '@ottofeller/ofmt',
+        '@ottofeller/prettier-config-ofmt',
+        'eslint@>=8',
+      ],
+
+      scripts: {
+        format: 'npx ofmt .projenrc.ts && npx ofmt pages',
+        lint: 'npx ofmt --lint .projenrc.ts && npx ofmt --lint pages && npx olint pages .projenrc.ts',
+        typecheck: 'tsc --noEmit --project tsconfig.dev.json',
+      },
+    })
   }
 }
