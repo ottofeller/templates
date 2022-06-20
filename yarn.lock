@@ -2134,10 +2134,10 @@
   "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.6.2.tgz"
   "version" "2.6.2"
 
-"projen@^0.58.15":
-  "integrity" "sha512-js9tdlmyUqPdz46BDYcdCrN936Gcr8ndnjX0J5aYVgOxucS1EHWXdLHqAOyhZiuYevpQ2dXg2AYurEdgjRXPtA=="
-  "resolved" "https://registry.npmjs.org/projen/-/projen-0.58.15.tgz"
-  "version" "0.58.15"
+"projen@0.57.3":
+  "integrity" "sha512-eyfjMStv+V1epu8D8ymSFCizJFyv93ZDazEBYquII+MpQNOEZLa5Z8KYvRO68C7L3gpSmTiCIXF6PVa4WhV6nQ=="
+  "resolved" "https://registry.npmjs.org/projen/-/projen-0.57.3.tgz"
+  "version" "0.57.3"
   dependencies:
     "@iarna/toml" "^2.2.5"
     "case" "^1.6.3"

@@ -22,7 +22,7 @@ const project = new cdk.JsiiProject({
   packageName: 'nextjs',
   packageManager: javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
-  deps: ['projen@0.57.3'],
+  deps: ['projen'],
   devDeps: [
     // Solves the typescript > 4 problem
     // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
@@ -36,7 +36,7 @@ const project = new cdk.JsiiProject({
     '@typescript-eslint/parser',
   ],
 
-  peerDeps: ['projen@0.57.3'],
+  peerDeps: ['projen'],
 
   scripts: {
     format: 'npx ofmt .projenrc.ts && npx ofmt src',
