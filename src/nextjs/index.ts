@@ -9,13 +9,7 @@ export class OttofellerNextjsProject extends projen.web.NextJsTypeScriptProject 
       name: 'nextjs',
       packageManager: projen.javascript.NodePackageManager.NPM,
       tsconfig: {compilerOptions: {target: 'es6'}},
-
-      devDeps: [
-        '@ottofeller/eslint-config-ofmt',
-        '@ottofeller/ofmt',
-        '@ottofeller/prettier-config-ofmt',
-        'eslint@>=8',
-      ],
+      devDeps: ['@ottofeller/eslint-config-ofmt', '@ottofeller/ofmt', '@ottofeller/prettier-config-ofmt', 'eslint@>=8'],
 
       scripts: {
         format: 'npx ofmt .projenrc.ts && npx ofmt pages',
