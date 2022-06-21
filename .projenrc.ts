@@ -19,7 +19,7 @@ const project = new cdk.JsiiProject({
   repositoryUrl: 'https://github.com/gvidon/templates.git',
   sampleCode: false,
   description: 'Projen templates for OttoFeller projects',
-  packageName: 'nextjs',
+  packageName: '@ottofeller/templates',
   packageManager: javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
   deps: ['projen'],
