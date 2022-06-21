@@ -1,5 +1,6 @@
 import * as projen from 'projen'
 import {PullRequestTest} from './pull-request-test-workflow'
+import {indexPage} from './sampleCode'
 
 export class OttofellerNextjsProject extends projen.web.NextJsTypeScriptProject {
   constructor(options: projen.typescript.TypeScriptProjectOptions) {
@@ -11,6 +12,7 @@ export class OttofellerNextjsProject extends projen.web.NextJsTypeScriptProject 
       name: 'nextjs',
       packageManager: projen.javascript.NodePackageManager.NPM,
       tsconfig: {compilerOptions: {target: 'es6'}},
+      sampleCode: false,
       deps: ['@apollo/client'],
       devDeps: [
         '@ottofeller/eslint-config-ofmt',
@@ -37,6 +39,7 @@ export class OttofellerNextjsProject extends projen.web.NextJsTypeScriptProject 
         'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml',
       },
 
+      // Enable Github but remove all default stuff.
       github: true,
       githubOptions: {mergify: false, pullRequestLint: false},
       buildWorkflow: false,
@@ -90,5 +93,8 @@ export class OttofellerNextjsProject extends projen.web.NextJsTypeScriptProject 
         },
       },
     })
+
+    // Source code
+    new projen.SampleDir(this, this.srcdir, {files: {'index.tsx': indexPage}})
   }
 }
