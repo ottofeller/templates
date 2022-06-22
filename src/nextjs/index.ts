@@ -2,6 +2,7 @@ import {SampleDir, TextFile, YamlFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {NextJsTypeScriptProject} from 'projen/lib/web'
+// eslint-disable-next-line import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases. Need to find a way to control "tsconfig.json".
 import {configureVSCode, VsCodeSettings} from '../vscode'
 import {PullRequestTest} from './pull-request-test-workflow'
 import {indexPage} from './sampleCode'
@@ -56,6 +57,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR Source code
     new SampleDir(this, this.srcdir, {files: {'index.tsx': indexPage}})
+
+    // ANCHOR ESLint and prettier setup
+    this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
+    this.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
 
     // ANCHOR Github workflow
     if (this.github) {

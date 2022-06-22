@@ -50,6 +50,10 @@ const project = new cdk.JsiiProject({
   eslint: false,
 })
 
+// ANCHOR ESLint and prettier setup
+project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
+project.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
+
 // ANCHOR Github Workflow
 const githubWorkflow = project.github!.addWorkflow('Test')
 
