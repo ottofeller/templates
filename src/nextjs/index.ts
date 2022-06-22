@@ -35,6 +35,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
         '@graphql-codegen/typescript-operations',
         '@graphql-codegen/typescript-react-apollo',
         'graphql',
+
+        // REVIEW Required during "npx projen new", fails without this dependency
+        'yaml',
       ],
 
       scripts: {
