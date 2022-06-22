@@ -1,4 +1,6 @@
-import {SampleDir, TextFile, YamlFile} from 'projen'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
 
@@ -12,6 +14,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
   constructor(options: NextJsTypeScriptProjectOptions) {
     super({
       ...options,
+      bundlerOptions: {},
       projenrcTs: true,
       projenrcJs: false,
       defaultReleaseBranch: 'main',
@@ -20,6 +23,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       tsconfig: {compilerOptions: {target: 'es6'}},
       sampleCode: false,
       deps: ['@apollo/client'],
+
       devDeps: [
         '@ottofeller/eslint-config-ofmt',
         '@ottofeller/ofmt',
@@ -58,7 +62,12 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     // ANCHOR Source code
-    new SampleDir(this, this.srcdir, {sourceDir: './assets'})
+    new projen.SampleDir(this, 'pages', {
+      files: {
+        // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
+        'index.tsx': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/index.tsx'), 'utf-8'),
+      },
+    })
 
     // ANCHOR ESLint and prettier setup
     this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
@@ -70,7 +79,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Codegen
-    new YamlFile(this, 'codegen.yml', {
+    new projen.YamlFile(this, 'codegen.yml', {
       marker: true,
 
       obj: {
@@ -111,11 +120,11 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     // ANCHOR Docker setup
-    new TextFile(this, '.dockerignore', {
+    new projen.TextFile(this, '.dockerignore', {
       lines: [GENERATED_BY_PROJEN, 'node_modules', '.next'],
     })
 
-    new TextFile(this, 'Dockerfile.dev', {
+    new projen.TextFile(this, 'Dockerfile.dev', {
       lines: [
         GENERATED_BY_PROJEN,
         'FROM node:16-buster-slim',
@@ -130,7 +139,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       ],
     })
 
-    new TextFile(this, 'Dockerfile.production', {
+    new projen.TextFile(this, 'Dockerfile.production', {
       lines: [
         GENERATED_BY_PROJEN,
         '# 1. Install dependencies only when needed',
