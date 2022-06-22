@@ -79,44 +79,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Codegen
-    new projen.YamlFile(this, 'codegen.yml', {
-      marker: true,
-
-      obj: {
-        overwrite: true,
-        schema: './schema.json',
-
-        generates: {
-          'generated/types.ts': {
-            documents: ['pages/**/graphql/*.{ts,tsx}'],
-            plugins: ['typescript', 'typescript-operations'],
-          },
-
-          'generated/frontend.ts': {
-            documents: ['pages/**/graphql/*.tsx'],
-            preset: 'import-types',
-            presetConfig: {typesPath: './types'},
-            plugins: ['typescript-react-apollo'],
-          },
-
-          'generated/api.ts': {
-            documents: ['pages/**/graphql/*.ts'],
-            preset: 'import-types',
-            presetConfig: {typesPath: './types'},
-            plugins: [
-              // 'typescript-operations' plugin is needed here because of buggy behavior of 'typescript-graphql-request'.
-              // The latter does not work properly with 'import-types' preset and does not import operation types.
-              // There is an open issue:
-              // https://github.com/dotansimha/graphql-code-generator/issues/5285
-              // In this setup the types generated here are duplicates of 'types.ts' and thus preferable to be imported from there.
-              'typescript-operations',
-              'typescript-graphql-request',
-            ],
-          },
-
-          './schema.json': {plugins: ['introspection']},
-        },
-      },
+    new projen.SampleFile(this, 'codegen.yml', {
+      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
+      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/codegen.yml'), 'utf-8'),
     })
 
     // ANCHOR Docker setup
