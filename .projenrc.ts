@@ -1,8 +1,8 @@
-import {cdk, github, javascript} from 'projen'
+import * as projen from 'projen'
 import {JobStep} from 'projen/lib/github/workflows-model'
 
 // ANCHOR Basic setup
-const project = new cdk.JsiiProject({
+const project = new projen.cdk.JsiiProject({
   author: 'ottofeller',
   authorAddress: 'https://ottofeller.com',
   defaultReleaseBranch: 'main',
@@ -20,9 +20,10 @@ const project = new cdk.JsiiProject({
   sampleCode: false,
   description: 'Projen templates for OttoFeller projects',
   packageName: '@ottofeller/templates',
-  packageManager: javascript.NodePackageManager.NPM,
+  packageManager: projen.javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
   deps: ['projen'],
+
   devDeps: [
     // Solves the typescript > 4 problem
     // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
@@ -59,7 +60,7 @@ const githubWorkflow = project.github!.addWorkflow('Test')
 
 const job = (steps: Array<JobStep>) => ({
   runsOn: ['ubuntu-latest'],
-  permissions: {contents: github.workflows.JobPermission.READ},
+  permissions: {contents: projen.github.workflows.JobPermission.READ},
   steps,
 })
 
