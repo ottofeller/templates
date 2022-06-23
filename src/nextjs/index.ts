@@ -90,55 +90,17 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     new projen.TextFile(this, 'Dockerfile.dev', {
-      lines: [
-        GENERATED_BY_PROJEN,
-        'FROM node:16-buster-slim',
-        '',
-        'WORKDIR /app',
-        '',
-        'COPY package*.json ./',
-        'RUN npm install',
-        'COPY . .',
-        'EXPOSE 3000',
-        'CMD ["npm", "run", "dev"]',
-      ],
+      lines: [GENERATED_BY_PROJEN].concat(
+        fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/Dockerfile.dev'), 'utf-8').split('\n'),
+      ),
     })
 
     new projen.TextFile(this, 'Dockerfile.production', {
-      lines: [
-        GENERATED_BY_PROJEN,
-        '# 1. Install dependencies only when needed',
-        'FROM node:16-buster-slim AS deps',
-        'WORKDIR /app',
-        'COPY package.json package-lock.json ./ ',
-        'RUN npm ci',
-        '',
-        '# 2. Rebuild the source code only when needed',
-        'FROM node:16-buster-slim AS builder',
-        'WORKDIR /app',
-        'COPY --from=deps /app/node_modules ./node_modules',
-        'COPY . .',
-        'RUN npm run build',
-        '',
-        '# 3. Production image, copy all the files and run next',
-        'FROM node:16-buster-slim AS runner',
-        'WORKDIR /app',
-        '',
-        'RUN addgroup --system --gid 1007 nodejs',
-        'RUN adduser --system --uid 1007 nextjs',
-        '',
-        'COPY --from=builder /app/next.config.js ./',
-        'COPY --from=builder /app/package.json ./package.json',
-        'COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./',
-        '# Copy "public" and "static" content. However these should ideally be handled by a CDN.',
-        'COPY --from=builder /app/public ./public',
-        'COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static',
-        '',
-        'USER nextjs',
-        'EXPOSE 3000',
-        'ENV PORT 3000',
-        'CMD ["npm", "start"]',
-      ],
+      lines: [GENERATED_BY_PROJEN].concat(
+        fs
+          .readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/Dockerfile.production'), 'utf-8')
+          .split('\n'),
+      ),
     })
 
     // ANCHOR VSCode settings
