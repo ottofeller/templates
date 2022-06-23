@@ -1,7 +1,7 @@
 # OttoFeller Projen Templates
 
 ## 🛠 Development guide
-### Installation
+### Install
 Simply install dependencies:
 ```sh
 npm install
