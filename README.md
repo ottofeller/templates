@@ -16,7 +16,7 @@ npx projen
 > :warning: Normally you should never modify anything other than templates in `src/` dir and `.projenrc.ts`.
 
 ### Build
-The build is the process of creating [JSII](https://github.com/aws/jsii) artefacts. These are the files required to run `npx projen new --from ...` (JSII is much more powerful technology, but it is out of the scope of this project). The build create/update the `.jsii` file (JSII config):
+The build is the process of creating [JSII](https://github.com/aws/jsii) artefacts. These are the files required to run `npx projen new --from ...` (JSII is much more powerful technology, but it is out of the scope of this project). The build creates/updates the `.jsii` file (JSII config):
 ```sh
 npx projen build
 ```
