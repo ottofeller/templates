@@ -1,0 +1,32 @@
+# ANCHOR Install dependencies only when needed
+FROM node:16-buster-slim AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./ 
+RUN npm ci
+
+# ANCHOR Rebuild the source code only when needed
+FROM node:16-buster-slim AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# ANCHOR Production image, copy all the files and run next
+FROM node:16-buster-slim AS runner
+WORKDIR /app
+
+RUN addgroup --system --gid 1007 nodejs
+RUN adduser --system --uid 1007 nextjs
+
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+
+# ANCHOR Copy "public" and "static" content. However these should ideally be handled by a CDN.
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+EXPOSE 3000
+ENV PORT 3000
+CMD ["npm", "start"]
