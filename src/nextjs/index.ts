@@ -88,6 +88,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       obj: {plugins: {'tailwindcss/nesting': {}, tailwindcss: {}, autoprefixer: {}}},
       marker: false,
     })
+
     new projen.SampleFile(this, 'tailwind.config.js', {
       // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
       contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/tailwind.config.js'), 'utf-8'),
