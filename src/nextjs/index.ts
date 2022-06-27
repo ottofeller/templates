@@ -23,6 +23,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       packageManager: NodePackageManager.NPM,
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
       sampleCode: false,
+      tailwind: false, // Tailwind has to be configured manually.
       deps: ['@apollo/client'],
 
       devDeps: [
@@ -66,6 +67,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new projen.SampleDir(this, 'pages', {
       files: {
         // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
+        '_app.tsx': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/_app.tsx'), 'utf-8'),
+        'global.css': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/global.css'), 'utf-8'),
         'index.tsx': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/index.tsx'), 'utf-8'),
       },
     })
@@ -78,6 +81,17 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     if (this.github) {
       new PullRequestTest(this.github)
     }
+
+    // ANCHOR Tailwind
+    this.addDeps('postcss', 'tailwindcss', 'autoprefixer', '@tailwindcss/line-clamp')
+    new projen.JsonFile(this, 'postcss.config.json', {
+      obj: {plugins: {'tailwindcss/nesting': {}, tailwindcss: {}, autoprefixer: {}}},
+      marker: false,
+    })
+    new projen.SampleFile(this, 'tailwind.config.js', {
+      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
+      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/tailwind.config.js'), 'utf-8'),
+    })
 
     // ANCHOR Codegen
     new projen.SampleFile(this, 'codegen.yml', {
