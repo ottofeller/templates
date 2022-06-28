@@ -1,0 +1,8 @@
+node_modules
+Dockerfile
+Dockerfile.dev
+build
+.dockerignore
+.editorconfig
+.env
+.eslintignore

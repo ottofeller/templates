@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+import * as path from 'path'
 import * as projen from 'projen'
 import {JobStep} from 'projen/lib/github/workflows-model'
 
@@ -74,6 +76,11 @@ githubWorkflow.addJobs({
   ]),
 
   test: job([{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run test'}}]),
+})
+
+// ANCHOR Copy assets to the compiled project
+fs.readdirSync(path.join(__dirname, 'assets')).forEach((templateFolder) => {
+  project.compileTask.exec(`cp -R assets/${templateFolder}/. lib/${templateFolder}/assets`)
 })
 
 project.synth()
