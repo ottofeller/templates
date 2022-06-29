@@ -17,7 +17,7 @@ sourceMapSupport.install({environment: 'node'})
 dotenv.config({path: './.env.local'})
 dotenv.config({path: './.env.development'})
 
-// Anchor Schema
+// ANCHOR Schema
 const schema = makeExecutableSchema({
   resolvers: mergeResolvers([]),
 
