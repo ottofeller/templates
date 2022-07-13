@@ -16,9 +16,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
   constructor(options: TypeScriptProjectOptions) {
     super({
       ...options,
-      bundlerOptions: {},
+      // bundlerOptions: {},
       projenrcTs: true,
-      projenrcJs: false,
       defaultReleaseBranch: 'main',
       name: 'apollo-server',
       packageManager: NodePackageManager.NPM,
@@ -26,33 +25,35 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       sampleCode: false,
       eslint: false,
       jest: false,
+      dependabot: true,
+      dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
       deps: [
-        'apollo-server',
-        'axios',
-        'dd-trace',
-        'dotenv',
-        'esbuild',
-        'graphql',
-        'source-map-support',
-        'yup',
-        '@graphql-tools/merge',
-        '@graphql-tools/schema',
+        'apollo-server@3.7.0',
+        'axios@0.27.2',
+        'dd-trace@2.7.1',
+        'dotenv@16.0.0',
+        'esbuild@0.14.39',
+        'graphql@16.5.0',
+        'source-map-support@0.5.21',
+        'yup@0.32.11',
+        '@graphql-tools/merge@8.2.11',
+        '@graphql-tools/schema@8.3.13',
       ],
 
       devDeps: [
-        '@graphql-codegen/add',
-        '@graphql-codegen/cli',
-        '@graphql-codegen/named-operations-object',
-        '@graphql-codegen/typescript',
-        '@graphql-codegen/typescript-operations',
-        '@graphql-codegen/typescript-resolvers',
-        '@graphql-codegen/typescript-graphql-request',
-        '@ottofeller/eslint-config-ofmt',
-        '@ottofeller/ofmt',
-        '@ottofeller/prettier-config-ofmt',
-        '@types/source-map-support',
-        'nodemon',
+        '@graphql-codegen/add@3.1.1',
+        '@graphql-codegen/cli@2.6.2',
+        '@graphql-codegen/named-operations-object@2.2.1',
+        '@graphql-codegen/typescript@2.4.8',
+        '@graphql-codegen/typescript-operations@2.4.0',
+        '@graphql-codegen/typescript-resolvers@2.6.4',
+        '@graphql-codegen/typescript-graphql-request@4.4.8',
+        '@ottofeller/eslint-config-ofmt@1.3.6',
+        '@ottofeller/ofmt@1.3.6',
+        '@ottofeller/prettier-config-ofmt@1.3.6',
+        '@types/source-map-support@0.5.4',
+        'nodemon@2.0.16',
       ],
 
       scripts: {
@@ -74,9 +75,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       pullRequestTemplate: false,
     })
 
-    this.package.addField('type', 'module')
-    const tasksToRemove = ['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch']
-    tasksToRemove.forEach(this.removeTask.bind(this))
+    this.package.addField('type', 'module');
+    ['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
     // ANCHOR Source code
