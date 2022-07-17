@@ -17,6 +17,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     super({
       ...options,
       projenrcTs: true,
+      projenrcJs: false,
       defaultReleaseBranch: 'main',
       name: 'apollo-server',
       packageManager: NodePackageManager.NPM,
