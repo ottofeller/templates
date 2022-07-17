@@ -89,7 +89,10 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     new projen.SampleDir(this, 'src', {
       files: {
         // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-        'index.ts': fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/src/index.ts.sample'), 'utf-8'),
+        'index.ts': fs.readFileSync(
+          path.join(__dirname, '..', '..', 'src/apollo-server/assets/src/index.ts.sample'),
+          'utf-8',
+        ),
       },
     })
 
@@ -101,13 +104,19 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     new projen.SampleFile(this, 'apollo.config.cjs', {
       // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/apollo.config.cjs'), 'utf-8'),
+      contents: fs.readFileSync(
+        path.join(__dirname, '..', '..', 'src/apollo-server/assets/apollo.config.cjs'),
+        'utf-8',
+      ),
     })
 
     // ANCHOR esbuild
     new projen.SampleFile(this, 'esbuild.config.js', {
       // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/esbuild.config.js'), 'utf-8'),
+      contents: fs.readFileSync(
+        path.join(__dirname, '..', '..', 'src/apollo-server/assets/esbuild.config.js'),
+        'utf-8',
+      ),
     })
 
     // ANCHOR Nodemon
