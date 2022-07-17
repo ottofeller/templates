@@ -92,9 +92,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     // ANCHOR Nodemon
     new projen.JsonFile(this, 'nodemon.json', {
       obj: {
-        env: {
-          NODE_ENV: 'development',
-        },
+        env: {NODE_ENV: 'development'},
         exec: 'npm run build && npm run start',
         ext: 'ts,json',
         ignore: ['src/**/*.test.ts', 'src/**/__tests__/**'],
