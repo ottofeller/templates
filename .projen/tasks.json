@@ -71,9 +71,6 @@
       "steps": [
         {
           "exec": "jsii --silence-warnings=reserved-word"
-        },
-        {
-          "exec": "cp -R assets/apollo-server/. lib/apollo-server/assets"
         }
       ]
     },
