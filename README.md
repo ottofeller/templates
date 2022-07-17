@@ -27,11 +27,17 @@ npx projen build
 In order to install a certain project (template) from `@ottofeller/templates` call `npx projen new` in the dir of the new project in the following way:
 ```sh
 # This will synthesize NextJS project in the current dir
-npx projen new --from @ottofeller/templates ottofeller_nextjs
+npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```
 
 ## Templates
 
 ### NextJS
+```sh
+npx projen new --from @ottofeller/templates ottofeller-nextjs
+```
 
 ### Apollo Server
+```sh
+npx projen new --from @ottofeller/templates ottofeller-apollo-server
+```
