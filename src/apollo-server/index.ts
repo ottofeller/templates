@@ -16,7 +16,6 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
   constructor(options: TypeScriptProjectOptions) {
     super({
       ...options,
-      // bundlerOptions: {},
       projenrcTs: true,
       defaultReleaseBranch: 'main',
       name: 'apollo-server',
