@@ -18,7 +18,10 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       ...options,
       projenrcTs: true,
       projenrcJs: false,
+
+      // Comply with node loader
       projenrcTsOptions: {filename: '.projenrc.mjs'},
+
       defaultReleaseBranch: 'main',
       name: 'apollo-server',
       packageManager: NodePackageManager.NPM,
@@ -69,6 +72,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
       // Enable Github but remove all default stuff.
       github: true,
+
       githubOptions: {mergify: false, pullRequestLint: false},
       buildWorkflow: false,
       release: false,
