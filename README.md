@@ -31,4 +31,7 @@ npx projen new --from @ottofeller/templates ottofeller_nextjs
 ```
 
 ## Templates
+
 ### NextJS
+
+### Apollo Server
