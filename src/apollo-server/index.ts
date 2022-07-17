@@ -75,8 +75,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       pullRequestTemplate: false,
     })
 
-    this.package.addField('type', 'module');
-    ['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
+    this.package.addField('type', 'module')
+    ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
     // ANCHOR Source code
