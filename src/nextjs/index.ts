@@ -28,6 +28,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       sampleCode: false,
       tailwind: false, // Tailwind has to be configured manually.
       deps: ['@apollo/client'],
+      dependabot: true,
+      dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
       devDeps: [
         '@ottofeller/eslint-config-ofmt',
