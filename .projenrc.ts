@@ -55,7 +55,7 @@ const project = new projen.cdk.JsiiProject({
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
 project.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
 
-// ANCHOR Github Workflow
+// ANCHOR Github workflows
 const githubWorkflow = project.github!.addWorkflow('Test')
 
 const job = (steps: Array<JobStep>) => ({
