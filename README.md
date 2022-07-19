@@ -30,7 +30,7 @@ In order to install a certain project (template) from `@ottofeller/templates` ca
 npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```
 
-## Templates
+## 🧩 Templates
 
 ### NextJS
 ```sh
