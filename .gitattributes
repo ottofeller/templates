@@ -6,7 +6,6 @@
 /.github/workflows/publish-release.yml linguist-generated
 /.github/workflows/test.yml linguist-generated
 /.gitignore linguist-generated
-/.npmignore linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated

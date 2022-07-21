@@ -15,6 +15,10 @@ const project = new projen.cdk.JsiiProject({
   githubOptions: {mergify: false, workflows: true, pullRequestLint: false},
   pullRequestTemplate: false,
   name: '@ottofeller/templates',
+
+  // FIXME A temporary solution until the assets are finally bundled in the build
+  npmignoreEnabled: false,
+
   projenrcTs: true,
   repositoryUrl: 'https://github.com/gvidon/templates.git',
   sampleCode: false,
@@ -52,7 +56,7 @@ const project = new projen.cdk.JsiiProject({
 })
 
 // REVIEW There is probably another way to manage the version property
-project.package.addField('version', '1.0.2')
+project.package.addField('version', '1.0.3')
 
 // ANCHOR ESLint and prettier setup
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
