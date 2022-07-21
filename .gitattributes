@@ -2,6 +2,8 @@
 
 /.gitattributes linguist-generated
 /.github/dependabot.yml linguist-generated
+/.github/workflows/create-release.yml linguist-generated
+/.github/workflows/publish-release.yml linguist-generated
 /.github/workflows/test.yml linguist-generated
 /.gitignore linguist-generated
 /.npmignore linguist-generated

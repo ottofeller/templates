@@ -39,3 +39,5 @@ jspm_packages/
 .jsii
 tsconfig.json
 !/.github/workflows/test.yml
+!/.github/workflows/create-release.yml
+!/.github/workflows/publish-release.yml
