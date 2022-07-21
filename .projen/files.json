@@ -2,6 +2,8 @@
   "files": [
     ".gitattributes",
     ".github/dependabot.yml",
+    ".github/workflows/create-release.yml",
+    ".github/workflows/publish-release.yml",
     ".github/workflows/test.yml",
     ".gitignore",
     ".projen/deps.json",

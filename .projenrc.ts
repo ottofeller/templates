@@ -56,24 +56,89 @@ project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
 project.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
 
 // ANCHOR Github workflows
-const githubWorkflow = project.github!.addWorkflow('Test')
-
 const job = (steps: Array<JobStep>) => ({
   runsOn: ['ubuntu-latest'],
   permissions: {contents: projen.github.workflows.JobPermission.READ},
   steps,
 })
 
-githubWorkflow.on({pullRequestTarget: {types: ['opened', 'synchronize', 'reopened']}, push: {branches: ['*']}})
+const testGithubWorkflow = project.github!.addWorkflow('test')
+const npmRunJob = (command: string) => ({
+  uses: 'ottofeller/github-actions/npm-run@main',
+  with: {'node-version': 16, command: `npm run ${command}`},
+})
+testGithubWorkflow.on({push: {paths: ['src/**']}})
 
-githubWorkflow.addJobs({
-  lint: job([{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run lint'}}]),
+testGithubWorkflow.addJobs({
+  lint: job([npmRunJob('lint')]),
+  typecheck: job([npmRunJob('typecheck')]),
+  test: job([npmRunJob('test')]),
+})
 
-  typecheck: job([
-    {uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run typecheck'}},
+const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')
+
+createReleaseGithubWorkflow.on({
+  workflowDispatch: {
+    inputs: {
+      bumpLevel: {
+        description: 'Version level to bump',
+        default: 'patch',
+        required: false,
+        type: 'choice',
+        options: ['none', 'patch', 'minor', 'major'],
+      },
+    },
+  },
+})
+
+createReleaseGithubWorkflow.addJobs({
+  create: job([
+    {
+      uses: 'ottofeller/github-actions/create-release@main',
+
+      with: {
+        'initial-version': '1.0.0',
+        'bump-level': '${{ github.event.inputs.bump-level }}',
+        'release-branches': 'master',
+        'update-root-package_json': true,
+        'github-token': '${{ secrets.GITHUB_TOKEN }}',
+      },
+    },
+  ]),
+})
+
+const publishReleaseGithubWorkflow = project.github!.addWorkflow('publish-release')
+publishReleaseGithubWorkflow.on({release: {types: ['published', 'unpublished']}})
+
+publishReleaseGithubWorkflow.addJobs({
+  'set-commit-hash': job([
+    {
+      id: 'commit-hash',
+      uses: 'ottofeller/github-actions/latest-release-commit-hash@main',
+      with: {'github-token': '${{ secrets.GITHUB_TOKEN }}'},
+    },
   ]),
 
-  test: job([{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command: 'npm run test'}}]),
+  lint: {needs: ['set-commit-hash'], ...job([npmRunJob('lint')])},
+  typecheck: {needs: ['set-commit-hash'], ...job([npmRunJob('typecheck')])},
+  test: {needs: ['set-commit-hash'], ...job([npmRunJob('test')])},
+
+  publish: {
+    needs: ['set-commit-hash', 'lint', 'typecheck', 'test'],
+
+    ...job([
+      {
+        uses: 'ottofeller/github-actions/publish-npm@main',
+
+        with: {
+          ref: '${{ needs.set-commit-hash.outputs.commit_hash }}',
+          'registry-url': 'https://registry.npmjs.org/',
+          'npm-token': '${{ secrets.NPM_TOKEN }}',
+          'include-build-step': true,
+        },
+      },
+    ]),
+  },
 })
 
 project.synth()
