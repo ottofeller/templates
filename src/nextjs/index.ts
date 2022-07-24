@@ -1,6 +1,5 @@
 // FIXME Need to find a way to control "tsconfig.json"
 /* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
-import * as fs from 'fs'
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
@@ -69,13 +68,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     // ANCHOR Source code
-    new projen.SampleDir(this, 'pages', {
-      files: {
-        // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-        '_app.tsx': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/_app.tsx'), 'utf-8'),
-        'global.css': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/global.css'), 'utf-8'),
-        'index.tsx': fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/pages/index.tsx'), 'utf-8'),
-      },
+    ;['_app.tsx', 'global.css', 'index.tsx'].forEach((file) => {
+      new projen.SampleFile(this, `pages/${file}`, {
+        sourcePath: path.join(__dirname, '..', '..', `src/nextjs/assets/pages/${file}`),
+      })
     })
 
     // ANCHOR ESLint and prettier setup
@@ -95,14 +91,12 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     new projen.SampleFile(this, 'tailwind.config.js', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/tailwind.config.js'), 'utf-8'),
+      sourcePath: path.join(__dirname, '..', '..', 'src/nextjs/assets/tailwind.config.js'),
     })
 
     // ANCHOR Codegen
     new projen.SampleFile(this, 'codegen.yml', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/codegen.yml'), 'utf-8'),
+      sourcePath: path.join(__dirname, '..', '..', 'src/nextjs/assets/codegen.yml'),
     })
 
     // ANCHOR Docker setup
@@ -110,18 +104,12 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       lines: [GENERATED_BY_PROJEN, 'node_modules', '.next'],
     })
 
-    new projen.TextFile(this, 'Dockerfile.dev', {
-      lines: [GENERATED_BY_PROJEN].concat(
-        fs.readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/Dockerfile.dev'), 'utf-8').split('\n'),
-      ),
+    new projen.SampleFile(this, 'Dockerfile.dev', {
+      sourcePath: path.join(__dirname, '..', '..', 'src/nextjs/assets/Dockerfile.dev'),
     })
 
-    new projen.TextFile(this, 'Dockerfile.production', {
-      lines: [GENERATED_BY_PROJEN].concat(
-        fs
-          .readFileSync(path.join(__dirname, '..', '..', 'src/nextjs/assets/Dockerfile.production'), 'utf-8')
-          .split('\n'),
-      ),
+    new projen.SampleFile(this, 'Dockerfile.production', {
+      sourcePath: path.join(__dirname, '..', '..', 'src/nextjs/assets/Dockerfile.production'),
     })
 
     // ANCHOR VSCode settings

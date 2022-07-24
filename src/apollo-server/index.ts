@@ -1,6 +1,5 @@
 // FIXME Need to find a way to control "tsconfig.json"
 /* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
-import * as fs from 'fs'
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
@@ -57,6 +56,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
         '@ottofeller/eslint-config-ofmt@1.3.6',
         '@ottofeller/ofmt@1.3.6',
         '@ottofeller/prettier-config-ofmt@1.3.6',
+        // '@ottofeller/templates',
         '@types/source-map-support@0.5.4',
         'nodemon@2.0.16',
       ],
@@ -86,37 +86,22 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
     // ANCHOR Source code
-    new projen.SampleDir(this, 'src', {
-      files: {
-        // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-        'index.ts': fs.readFileSync(
-          path.join(__dirname, '..', '..', 'src/apollo-server/assets/src/index.ts.sample'),
-          'utf-8',
-        ),
-      },
+    new projen.SampleFile(this, 'src/index.ts', {
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/src/index.ts.sample'),
     })
 
     // ANCHOR Apollo server config
     new projen.SampleFile(this, '.env.development', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/.env.development'), 'utf-8'),
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/.env.development'),
     })
 
     new projen.SampleFile(this, 'apollo.config.cjs', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(
-        path.join(__dirname, '..', '..', 'src/apollo-server/assets/apollo.config.cjs'),
-        'utf-8',
-      ),
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/apollo.config.cjs'),
     })
 
     // ANCHOR esbuild
     new projen.SampleFile(this, 'esbuild.config.js', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(
-        path.join(__dirname, '..', '..', 'src/apollo-server/assets/esbuild.config.js'),
-        'utf-8',
-      ),
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/esbuild.config.js'),
     })
 
     // ANCHOR Nodemon
@@ -141,19 +126,16 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     // ANCHOR Codegen
     new projen.SampleFile(this, 'codegen.yml', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/codegen.yml'), 'utf-8'),
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/codegen.yml'),
     })
 
     // ANCHOR Docker setup
     new projen.SampleFile(this, '.dockerignore', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/.dockerignore'), 'utf-8'),
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/.dockerignore'),
     })
 
     new projen.SampleFile(this, 'Dockerfile', {
-      // FIXME Find a way to copy/include an arbitrary file to the TypeScript output dir
-      contents: fs.readFileSync(path.join(__dirname, '..', '..', 'src/apollo-server/assets/Dockerfile'), 'utf-8'),
+      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/Dockerfile'),
     })
 
     // ANCHOR VSCode settings
