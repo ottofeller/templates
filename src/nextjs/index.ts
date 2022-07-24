@@ -30,26 +30,6 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       dependabot: true,
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
-      devDeps: [
-        '@ottofeller/eslint-config-ofmt',
-        '@ottofeller/ofmt',
-        '@ottofeller/prettier-config-ofmt',
-        'eslint@>=8',
-        '@graphql-codegen/add',
-        '@graphql-codegen/cli',
-        '@graphql-codegen/import-types-preset',
-        '@graphql-codegen/introspection',
-        '@graphql-codegen/named-operations-object',
-        '@graphql-codegen/typescript',
-        '@graphql-codegen/typescript-graphql-request',
-        '@graphql-codegen/typescript-operations',
-        '@graphql-codegen/typescript-react-apollo',
-        'graphql',
-
-        // REVIEW Required during "npx projen new", fails without this dependency
-        'yaml',
-      ],
-
       scripts: {
         format: 'npx ofmt .projenrc.ts && npx ofmt pages',
         lint: 'npx ofmt --lint .projenrc.ts && npx ofmt --lint pages && npx olint pages .projenrc.ts',
@@ -66,6 +46,26 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       depsUpgrade: false,
       pullRequestTemplate: false,
     })
+
+    this.addDevDeps(
+      '@ottofeller/eslint-config-ofmt',
+      '@ottofeller/ofmt',
+      '@ottofeller/prettier-config-ofmt',
+      'eslint@>=8',
+      '@graphql-codegen/add',
+      '@graphql-codegen/cli',
+      '@graphql-codegen/import-types-preset',
+      '@graphql-codegen/introspection',
+      '@graphql-codegen/named-operations-object',
+      '@graphql-codegen/typescript',
+      '@graphql-codegen/typescript-graphql-request',
+      '@graphql-codegen/typescript-operations',
+      '@graphql-codegen/typescript-react-apollo',
+      'graphql',
+
+      // REVIEW Required during "npx projen new", fails without this dependency
+      'yaml',
+    )
 
     // ANCHOR Source code
     ;['_app.tsx', 'global.css', 'index.tsx'].forEach((file) => {

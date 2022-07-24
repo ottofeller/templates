@@ -32,35 +32,6 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       dependabot: true,
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
-      deps: [
-        'apollo-server@3.7.0',
-        'axios@0.27.2',
-        'dd-trace@2.7.1',
-        'dotenv@16.0.0',
-        'esbuild@0.14.39',
-        'graphql@16.5.0',
-        'source-map-support@0.5.21',
-        'yup@0.32.11',
-        '@graphql-tools/merge@8.2.11',
-        '@graphql-tools/schema@8.3.13',
-      ],
-
-      devDeps: [
-        '@graphql-codegen/add@3.1.1',
-        '@graphql-codegen/cli@2.6.2',
-        '@graphql-codegen/named-operations-object@2.2.1',
-        '@graphql-codegen/typescript@2.4.8',
-        '@graphql-codegen/typescript-operations@2.4.0',
-        '@graphql-codegen/typescript-resolvers@2.6.4',
-        '@graphql-codegen/typescript-graphql-request@4.4.8',
-        '@ottofeller/eslint-config-ofmt@1.3.6',
-        '@ottofeller/ofmt@1.3.6',
-        '@ottofeller/prettier-config-ofmt@1.3.6',
-        // '@ottofeller/templates',
-        '@types/source-map-support@0.5.4',
-        'nodemon@2.0.16',
-      ],
-
       scripts: {
         dev: 'nodemon',
         start: 'node build/index.js',
@@ -80,6 +51,35 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       depsUpgrade: false,
       pullRequestTemplate: false,
     })
+
+    // ANCHOR Add required dependencies
+    this.addDeps(
+      'apollo-server@3.7.0',
+      'axios@0.27.2',
+      'dd-trace@2.7.1',
+      'dotenv@16.0.0',
+      'esbuild@0.14.39',
+      'graphql@16.5.0',
+      'source-map-support@0.5.21',
+      'yup@0.32.11',
+      '@graphql-tools/merge@8.2.11',
+      '@graphql-tools/schema@8.3.13',
+    )
+
+    this.addDevDeps(
+      '@graphql-codegen/add@3.1.1',
+      '@graphql-codegen/cli@2.6.2',
+      '@graphql-codegen/named-operations-object@2.2.1',
+      '@graphql-codegen/typescript@2.4.8',
+      '@graphql-codegen/typescript-operations@2.4.0',
+      '@graphql-codegen/typescript-resolvers@2.6.4',
+      '@graphql-codegen/typescript-graphql-request@4.4.8',
+      '@ottofeller/eslint-config-ofmt@1.3.6',
+      '@ottofeller/ofmt@1.3.6',
+      '@ottofeller/prettier-config-ofmt@1.3.6',
+      '@types/source-map-support@0.5.4',
+      'nodemon@2.0.16',
+    )
 
     this.package.addField('type', 'module')
     ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
