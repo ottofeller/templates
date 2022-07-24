@@ -2,17 +2,17 @@
   "dependencies": [
     {
       "name": "@ottofeller/eslint-config-ofmt",
-      "version": "1.3.6",
+      "version": "1.4.1",
       "type": "build"
     },
     {
       "name": "@ottofeller/ofmt",
-      "version": "1.3.6",
+      "version": "1.4.1",
       "type": "build"
     },
     {
       "name": "@ottofeller/prettier-config-ofmt",
-      "version": "1.3.6",
+      "version": "1.4.1",
       "type": "build"
     },
     {
