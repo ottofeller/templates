@@ -35,7 +35,6 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
       sampleCode: false,
       tailwind: false, // Tailwind has to be configured manually.
-      deps: ['@apollo/client'],
       dependabot: true,
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
@@ -55,6 +54,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     // ANCHOR Add required dependencies
+    this.addDeps('@apollo/client')
+
     this.addDevDeps(
       '@ottofeller/eslint-config-ofmt',
       '@ottofeller/ofmt',
