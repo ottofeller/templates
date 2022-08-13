@@ -12,11 +12,7 @@ import {VsCodeSettings} from '../common/vscode-settings'
 export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
   constructor(options: AwsCdkTypeScriptAppOptions) {
     super({
-      ...options,
-      projenrcTs: true,
-      projenrcJs: false,
-      defaultReleaseBranch: 'main',
-      name: 'cdk',
+      // Default options
       packageManager: NodePackageManager.NPM,
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
       sampleCode: false,
@@ -24,12 +20,6 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       jest: false,
       dependabot: true,
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
-
-      scripts: {
-        format: 'ofmt .projenrc.ts && ofmt src',
-        lint: 'ofmt --lint .projenrc.ts && ofmt --lint src && olint src .projenrc.ts',
-        typecheck: 'tsc --noEmit --project tsconfig.dev.json',
-      },
 
       // Enable Github but remove all default stuff.
       github: true,
@@ -39,7 +29,21 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       release: false,
       depsUpgrade: false,
       pullRequestTemplate: false,
+
+      // Allow changing default options
+      ...options,
+
+      // Non-changeable options
+      defaultReleaseBranch: 'main',
+      name: 'cdk',
+      projenrcTs: true,
+      projenrcJs: false,
     })
+
+    // ANCHOR Scripts
+    this.setScript('format', 'ofmt .projenrc.ts && ofmt src')
+    this.setScript('lint', 'ofmt --lint .projenrc.ts && ofmt --lint src && olint src .projenrc.ts')
+    this.setScript('typecheck', 'tsc --noEmit --project tsconfig.dev.json')
 
     // ANCHOR Install ofmt
     this.addDevDeps(
