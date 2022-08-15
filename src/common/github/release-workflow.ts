@@ -1,5 +1,5 @@
 import {job} from './job'
-import {Component, github} from 'projen'
+import {github} from 'projen'
 
 /**
  * Options for PullRequestLint
@@ -15,13 +15,11 @@ export interface ReleaseWorkflowOptions {
 /**
  * A GitHub workflow taht bumps the version of root package and create draft release.
  */
-export class ReleaseWorkflow extends Component {
+export class ReleaseWorkflow extends github.GithubWorkflow {
   constructor(githubInstance: github.GitHub, options: ReleaseWorkflowOptions = {initlaReleaseVersion: '0.0.1'}) {
-    super(githubInstance.project)
+    super(githubInstance, 'release')
 
-    const workflow = githubInstance.addWorkflow('release')
-
-    workflow.on({
+    this.on({
       workflowDispatch: {
         inputs: {
           bumpLevel: {
@@ -35,7 +33,7 @@ export class ReleaseWorkflow extends Component {
       },
     })
 
-    workflow.addJobs({
+    this.addJobs({
       create: job([
         {
           uses: 'ottofeller/github-actions/create-release@main',
