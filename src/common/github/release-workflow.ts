@@ -1,51 +1,54 @@
 import {job} from './job'
-import {github} from 'projen'
+import {Component, github} from 'projen'
 
 /**
- * Bump the version of root package and create draft release.
+ * Options for PullRequestLint
  */
-export const releaseWorkflow = (params: {
+export interface ReleaseWorkflowOptions {
   /**
-   * An instance of Github component of a project.
+   * The initial version to bump
+   * @default 0.0.1
    */
-  githubInstance: github.GitHub
+  readonly initlaReleaseVersion: string
+}
 
-  /**
-   * The initial version to bump, e.g. "0.0.1".
-   */
-  initlaReleaseVersion: string
-}): github.GithubWorkflow => {
-  const workflow = params.githubInstance.addWorkflow('release')
+/**
+ * A GitHub workflow taht bumps the version of root package and create draft release.
+ */
+export class ReleaseWorkflow extends Component {
+  constructor(githubInstance: github.GitHub, options: ReleaseWorkflowOptions = {initlaReleaseVersion: '0.0.1'}) {
+    super(githubInstance.project)
 
-  workflow.on({
-    workflowDispatch: {
-      inputs: {
-        bumpLevel: {
-          description: 'Version level to bump',
-          default: 'patch',
-          required: false,
-          type: 'choice',
-          options: ['none', 'patch', 'minor', 'major'],
+    const workflow = githubInstance.addWorkflow('release')
+
+    workflow.on({
+      workflowDispatch: {
+        inputs: {
+          bumpLevel: {
+            description: 'Version level to bump',
+            default: 'patch',
+            required: false,
+            type: 'choice',
+            options: ['none', 'patch', 'minor', 'major'],
+          },
         },
       },
-    },
-  })
-  
-  workflow.addJobs({
-    create: job([
-      {
-        uses: 'ottofeller/github-actions/create-release@main',
-  
-        with: {
-          'initial-version': params.initlaReleaseVersion,
-          'bump-level': '${{ github.event.inputs.bump-level }}',
-          'release-branches': 'master',
-          'update-root-package_json': true,
-          'github-token': '${{ secrets.GITHUB_TOKEN }}',
-        },
-      },
-    ]),
-  })
+    })
 
-  return workflow
+    workflow.addJobs({
+      create: job([
+        {
+          uses: 'ottofeller/github-actions/create-release@main',
+
+          with: {
+            'initial-version': options.initlaReleaseVersion,
+            'bump-level': '${{ github.event.inputs.bump-level }}',
+            'release-branches': 'master',
+            'update-root-package_json': true,
+            'github-token': '${{ secrets.GITHUB_TOKEN }}',
+          },
+        },
+      ]),
+    })
+  }
 }

@@ -2,7 +2,7 @@
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
-import {releaseWorkflow} from '../common/github/release-workflow'
+import {ReleaseWorkflow} from '../common/github'
 import {VsCodeSettings} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions extends AwsCdkTypeScriptAppOptions {
@@ -68,7 +68,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Github
     if(this.github) {
-      releaseWorkflow({githubInstance: this.github, initlaReleaseVersion: this.initialReleaseVersion})
+      new ReleaseWorkflow(this.github, {initlaReleaseVersion: this.initialReleaseVersion})
     }
 
     // ANCHOR VSCode settings
