@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {PullRequestTest} from '../common/github/pull-request-test-workflow'
+import {PullRequestTest} from '../common/github'
 import {VsCodeSettings} from '../common/vscode-settings'
 
 /**

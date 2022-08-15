@@ -1,5 +1,5 @@
 import * as projen from 'projen'
-import {JobStep} from 'projen/lib/github/workflows-model'
+import {job, npmRunJob} from './src/common/github'
 
 // ANCHOR Basic setup
 const project = new projen.cdk.JsiiProject({
@@ -63,17 +63,7 @@ project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
 project.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
 
 // ANCHOR Github workflows
-const job = (steps: Array<JobStep>) => ({
-  runsOn: ['ubuntu-latest'],
-  permissions: {contents: projen.github.workflows.JobPermission.READ},
-  steps,
-})
-
 const testGithubWorkflow = project.github!.addWorkflow('test')
-const npmRunJob = (command: string) => ({
-  uses: 'ottofeller/github-actions/npm-run@main',
-  with: {'node-version': 16, command: `npm run ${command}`},
-})
 testGithubWorkflow.on({push: {paths: ['src/**']}})
 
 testGithubWorkflow.addJobs({

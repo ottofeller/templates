@@ -41,3 +41,8 @@ npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-apollo-server
 ```
+
+### CDK
+```sh
+npx projen new --from @ottofeller/templates ottofeller-cdk
+```
