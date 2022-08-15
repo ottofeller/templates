@@ -2,7 +2,17 @@
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
+import {releaseWorkflow} from '../common/github/release-workflow'
 import {VsCodeSettings} from '../common/vscode-settings'
+
+export interface OttofellerCDKProjectOptions extends AwsCdkTypeScriptAppOptions {
+  /**
+   * The base version of the very first release.
+   *
+   * @default 0.0.1
+   */
+  readonly initialReleaseVersion?: string
+}
 
 /**
  * AWS CDK template.
@@ -10,7 +20,9 @@ import {VsCodeSettings} from '../common/vscode-settings'
  * @pjid ottofeller-cdk
  */
 export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
-  constructor(options: AwsCdkTypeScriptAppOptions) {
+  public readonly initialReleaseVersion: string = '0.0.1'
+
+  constructor(options: OttofellerCDKProjectOptions) {
     super({
       // Default options
       packageManager: NodePackageManager.NPM,
@@ -40,6 +52,8 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       projenrcJs: false,
     })
 
+    this.initialReleaseVersion = options.initialReleaseVersion || this.initialReleaseVersion
+
     // ANCHOR Scripts
     this.setScript('format', 'ofmt .projenrc.ts && ofmt src')
     this.setScript('lint', 'ofmt --lint .projenrc.ts && ofmt --lint src && olint src .projenrc.ts')
@@ -51,6 +65,11 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       '@ottofeller/ofmt@1.3.6',
       '@ottofeller/prettier-config-ofmt@1.3.6',
     )
+
+    // ANCHOR Github
+    if(this.github) {
+      releaseWorkflow({githubInstance: this.github, initlaReleaseVersion: this.initialReleaseVersion})
+    }
 
     // ANCHOR VSCode settings
     VsCodeSettings.addToProject(this)
