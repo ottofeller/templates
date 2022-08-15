@@ -1,6 +1,5 @@
 import * as projen from 'projen'
-import {job} from './src/common/github'
-import {npmRunJob} from './src/common/github'
+import {job, npmRunJob} from './src/common/github'
 
 // ANCHOR Basic setup
 const project = new projen.cdk.JsiiProject({

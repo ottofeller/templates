@@ -3,8 +3,8 @@
  */
 export const npmRunJob = (
   /**
- * npm script command. E.g. command === "build" will result in "npm run build"
- */
+   * npm script command. E.g. command === "build" will result in "npm run build"
+   */
   command: string,
 ) => ({
   uses: 'ottofeller/github-actions/npm-run@main',

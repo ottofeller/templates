@@ -1,5 +1,5 @@
-import {job} from './job'
 import {github} from 'projen'
+import {job} from './job'
 
 /**
  * Options for PullRequestLint
