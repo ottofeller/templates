@@ -1,8 +1,18 @@
 import {job} from './job'
 import {github} from 'projen'
 
+/**
+ * Bump the version of root package and create draft release.
+ */
 export const releaseWorkflow = (params: {
+  /**
+   * An instance of Github component of a project.
+   */
   githubInstance: github.GitHub
+
+  /**
+   * The initial version to bump, e.g. "0.0.1".
+   */
   initlaReleaseVersion: string
 }): github.GithubWorkflow => {
   const workflow = params.githubInstance.addWorkflow('release')
