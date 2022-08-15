@@ -1,4 +1,10 @@
 # OttoFeller Projen Templates
+## 📀 User guide
+In order to install a certain project (template) from `@ottofeller/templates` call `npx projen new` in the dir of the new project in the following way:
+```sh
+# This will synthesize NextJS project in the current dir
+npx projen new --from @ottofeller/templates ottofeller-nextjs
+```
 
 ## 🛠 Development guide
 ### Install
@@ -22,13 +28,6 @@ npx projen build
 ```
 
 ### Publish
-
-## 📀 User guide
-In order to install a certain project (template) from `@ottofeller/templates` call `npx projen new` in the dir of the new project in the following way:
-```sh
-# This will synthesize NextJS project in the current dir
-npx projen new --from @ottofeller/templates ottofeller-nextjs
-```
 
 ## 🧩 Templates
 
