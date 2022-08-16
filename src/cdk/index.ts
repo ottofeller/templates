@@ -66,6 +66,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       '@ottofeller/prettier-config-ofmt@1.3.6',
     )
 
+    // ANCHOR Install dependencies
+    this.addDeps('cdk-nag@2.15.45')
+
     // ANCHOR Github
     if (this.github) {
       new ReleaseWorkflow(this.github, {initlaReleaseVersion: this.initialReleaseVersion})
