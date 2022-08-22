@@ -4,6 +4,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
+import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest} from '../common/github'
 import {VsCodeSettings} from '../common/vscode-settings'
 
@@ -85,23 +86,25 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
+    const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
     // ANCHOR Source code
     new projen.SampleFile(this, 'src/index.ts', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/src/index.ts.sample'),
+      sourcePath: path.join(assetsDir, 'src/index.ts.sample'),
+    })
+
+    // ANCHOR Environment file
+    new projen.SampleFile(this, '.env.development', {
+      sourcePath: path.join(assetsDir, '.env.development'),
     })
 
     // ANCHOR Apollo server config
-    new projen.SampleFile(this, '.env.development', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/.env.development'),
-    })
-
-    new projen.SampleFile(this, 'apollo.config.cjs', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/apollo.config.cjs'),
+    new AssetFile(this, 'apollo.config.cjs', {
+      sourcePath: path.join(assetsDir, 'apollo.config.cjs'),
     })
 
     // ANCHOR esbuild
-    new projen.SampleFile(this, 'esbuild.config.js', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/esbuild.config.js'),
+    new AssetFile(this, 'esbuild.config.js', {
+      sourcePath: path.join(assetsDir, 'esbuild.config.js'),
     })
 
     // ANCHOR Nodemon
@@ -125,17 +128,17 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     }
 
     // ANCHOR Codegen
-    new projen.SampleFile(this, 'codegen.yml', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/codegen.yml'),
+    new AssetFile(this, 'codegen.yml', {
+      sourcePath: path.join(assetsDir, 'codegen.yml'),
     })
 
     // ANCHOR Docker setup
-    new projen.SampleFile(this, '.dockerignore', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/.dockerignore'),
+    new AssetFile(this, '.dockerignore', {
+      sourcePath: path.join(assetsDir, '.dockerignore'),
     })
 
-    new projen.SampleFile(this, 'Dockerfile', {
-      sourcePath: path.join(__dirname, '..', '..', 'src/apollo-server/assets/Dockerfile'),
+    new AssetFile(this, 'Dockerfile', {
+      sourcePath: path.join(assetsDir, 'Dockerfile'),
     })
 
     // ANCHOR VSCode settings
