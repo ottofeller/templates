@@ -8,13 +8,22 @@ import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest} from '../common/github'
 import {VsCodeSettings} from '../common/vscode-settings'
 
+export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectOptions {
+  /**
+   * Include a default GitHub pull request template.
+   *
+   * @default true
+   */
+  readonly hasDefaultGithubWorkflows?: boolean
+}
+
 /**
  * Apollo server template.
  *
  * @pjid ottofeller-apollo-server
  */
 export class OttofellerApolloServerProject extends TypeScriptAppProject {
-  constructor(options: TypeScriptProjectOptions) {
+  constructor(options: OttofellerApolloServerProjectOptions) {
     super({
       ...options,
       projenrcTs: true,
@@ -30,7 +39,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       sampleCode: false,
       eslint: false,
       jest: false,
-      dependabot: true,
+      dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
       scripts: {
@@ -43,9 +52,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
         'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development',
       },
 
-      // Enable Github but remove all default stuff.
-      github: true,
-
+      // In case Github is enabled remove all default stuff.
       githubOptions: {mergify: false, pullRequestLint: false},
       buildWorkflow: false,
       release: false,
@@ -123,7 +130,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     this.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
 
     // ANCHOR Github workflow
-    if (this.github) {
+    const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+    if (hasDefaultGithubWorkflows && this.github) {
       new PullRequestTest(this.github)
     }
 
