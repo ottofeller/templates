@@ -75,6 +75,27 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       })
     })
 
+    // ANCHOR NextJS config
+    new AssetFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
+
+    new projen.JsonFile(this, 'next.config.json', {
+      obj: {
+        images: {formats: ['avif', 'webp'].map((type) => `image/${type}`)},
+        output: 'standalone',
+        poweredByHeader: false,
+
+        publicRuntimeConfig: {
+          ACCEPT_IMAGES_MIME_TYPES: ['avif', 'gif', 'jpeg', 'png', 'svg+xml', 'webp']
+            .map((type) => `image/${type}`)
+            .join(', '),
+          ITEMS_PER_PAGE: 25,
+          US_DATE_FORMAT: 'MM/DD/YYYY',
+        },
+
+        reactStrictMode: true,
+      },
+    })
+
     // ANCHOR ESLint and prettier setup
     this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
     this.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
@@ -100,10 +121,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       )
 
       // ANCHOR Codegen
-      new AssetFile(this, 'codegen.yml', {
-        sourcePath: path.join(assetsDir, 'codegen.yml'),
-      })
-
+      new AssetFile(this, 'codegen.yml', {sourcePath: path.join(assetsDir, 'codegen.yml')})
       this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
       this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.yml'})
     }
@@ -115,22 +133,12 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       marker: false,
     })
 
-    new AssetFile(this, 'tailwind.config.js', {
-      sourcePath: path.join(assetsDir, 'tailwind.config.js'),
-    })
+    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js')})
 
     // ANCHOR Docker setup
-    new projen.TextFile(this, '.dockerignore', {
-      lines: [GENERATED_BY_PROJEN, 'node_modules', '.next'],
-    })
-
-    new AssetFile(this, 'Dockerfile.dev', {
-      sourcePath: path.join(assetsDir, 'Dockerfile.dev'),
-    })
-
-    new AssetFile(this, 'Dockerfile.production', {
-      sourcePath: path.join(assetsDir, 'Dockerfile.production'),
-    })
+    new projen.TextFile(this, '.dockerignore', {lines: [GENERATED_BY_PROJEN, 'node_modules', '.next']})
+    new AssetFile(this, 'Dockerfile.dev', {sourcePath: path.join(assetsDir, 'Dockerfile.dev')})
+    new AssetFile(this, 'Dockerfile.production', {sourcePath: path.join(assetsDir, 'Dockerfile.production')})
 
     // ANCHOR VSCode settings
     VsCodeSettings.addToProject(this)
