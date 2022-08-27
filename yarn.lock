@@ -85,15 +85,22 @@
     chalk "^4.1.2"
     semver "^7.3.7"
 
-"@jsii/spec@1.61.0", "@jsii/spec@^1.61.0":
+"@jsii/check-node@1.65.0":
+  version "1.65.0"
+  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.65.0.tgz#d48826f3551acc00727983f86a1be7fbe7dab27d"
+  dependencies:
+    chalk "^4.1.2"
+    semver "^7.3.7"
+
+"@jsii/spec@1.61.0":
   version "1.61.0"
   resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.61.0.tgz"
   dependencies:
     ajv "^8.11.0"
 
-"@jsii/spec@^1.62.0":
-  version "1.62.0"
-  resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.62.0.tgz"
+"@jsii/spec@^1.61.0", "@jsii/spec@^1.62.0", "@jsii/spec@^1.65.0":
+  version "1.65.0"
+  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.65.0.tgz#da47e531e35589776d3ccf6dfdd699cd64025f38"
   dependencies:
     ajv "^8.11.0"
 
@@ -682,9 +689,9 @@ cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz"
 
-date-format@^4.0.10:
-  version "4.0.11"
-  resolved "https://registry.npmjs.org/date-format/-/date-format-4.0.11.tgz"
+date-format@^4.0.13:
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/date-format/-/date-format-4.0.13.tgz#87c3aab3a4f6f37582c5f5f63692d2956fa67890"
 
 debug@^2.6.9:
   version "2.6.9"
@@ -1100,9 +1107,13 @@ flat-cache@^3.0.4:
     flatted "^3.1.0"
     rimraf "^3.0.2"
 
-flatted@^3.1.0, flatted@^3.2.5:
+flatted@^3.1.0:
   version "3.2.5"
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.5.tgz"
+
+flatted@^3.2.6:
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.7.tgz#609f39207cb614b89d0765b477cb2d437fbf9787"
 
 fs-extra@^10.1.0:
   version "10.1.0"
@@ -1111,6 +1122,14 @@ fs-extra@^10.1.0:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
     universalify "^2.0.0"
+
+fs-extra@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
 
 fs-extra@^9.1.0:
   version "9.1.0"
@@ -1484,7 +1503,7 @@ jsii-rosetta@^1.61.0:
     workerpool "^6.2.1"
     yargs "^16.2.0"
 
-jsii@1.61.0, jsii@^1.61.0:
+jsii@1.61.0:
   version "1.61.0"
   resolved "https://registry.npmjs.org/jsii/-/jsii-1.61.0.tgz"
   dependencies:
@@ -1500,6 +1519,24 @@ jsii@1.61.0, jsii@^1.61.0:
     sort-json "^2.0.1"
     spdx-license-list "^6.6.0"
     typescript-3.9 "npm:typescript@~3.9.10"
+    yargs "^16.2.0"
+
+jsii@^1.61.0:
+  version "1.65.0"
+  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.65.0.tgz#6d24b1d7095a6ad124ef2b178b1b961b312a4e9d"
+  dependencies:
+    "@jsii/check-node" "1.65.0"
+    "@jsii/spec" "^1.65.0"
+    case "^1.6.3"
+    chalk "^4"
+    fast-deep-equal "^3.1.3"
+    fs-extra "^10.1.0"
+    log4js "^6.6.1"
+    semver "^7.3.7"
+    semver-intersect "^1.4.0"
+    sort-json "^2.0.1"
+    spdx-license-list "^6.6.0"
+    typescript "~3.9.10"
     yargs "^16.2.0"
 
 json-parse-even-better-errors@^2.3.0:
@@ -1523,6 +1560,12 @@ json5@^1.0.1:
   resolved "https://registry.npmjs.org/json5/-/json5-1.0.1.tgz"
   dependencies:
     minimist "^1.2.0"
+
+jsonfile@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
+  optionalDependencies:
+    graceful-fs "^4.1.6"
 
 jsonfile@^6.0.1:
   version "6.1.0"
@@ -1575,15 +1618,15 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
 
-log4js@^6.5.2:
-  version "6.5.2"
-  resolved "https://registry.npmjs.org/log4js/-/log4js-6.5.2.tgz"
+log4js@^6.5.2, log4js@^6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/log4js/-/log4js-6.6.1.tgz#48f23de8a87d2f5ffd3d913f24ca9ce77895272f"
   dependencies:
-    date-format "^4.0.10"
+    date-format "^4.0.13"
     debug "^4.3.4"
-    flatted "^3.2.5"
+    flatted "^3.2.6"
     rfdc "^1.3.0"
-    streamroller "^3.1.1"
+    streamroller "^3.1.2"
 
 loose-envify@^1.4.0:
   version "1.4.0"
@@ -2152,13 +2195,13 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
 
-streamroller@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/streamroller/-/streamroller-3.1.1.tgz"
+streamroller@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/streamroller/-/streamroller-3.1.2.tgz#abd444560768b340f696307cf84d3f46e86c0e63"
   dependencies:
-    date-format "^4.0.10"
+    date-format "^4.0.13"
     debug "^4.3.4"
-    fs-extra "^10.1.0"
+    fs-extra "^8.1.0"
 
 string-width@^4.1.0, string-width@^4.2.0:
   version "4.2.3"
@@ -2337,6 +2380,10 @@ typescript@^4.7.4:
   version "4.8.2"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.8.2.tgz"
 
+typescript@~3.9.10:
+  version "3.9.10"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.10.tgz#70f3910ac7a51ed6bef79da7800690b19bf778b8"
+
 unbox-primitive@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/unbox-primitive/-/unbox-primitive-1.0.2.tgz"
@@ -2345,6 +2392,10 @@ unbox-primitive@^1.0.2:
     has-bigints "^1.0.2"
     has-symbols "^1.0.3"
     which-boxed-primitive "^1.0.2"
+
+universalify@^0.1.0:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
 
 universalify@^2.0.0:
   version "2.0.0"
