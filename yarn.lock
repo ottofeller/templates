@@ -71,13 +71,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@jsii/check-node@1.62.0":
-  version "1.62.0"
-  resolved "https://registry.npmjs.org/@jsii/check-node/-/check-node-1.62.0.tgz"
-  dependencies:
-    chalk "^4.1.2"
-    semver "^7.3.7"
-
 "@jsii/check-node@1.65.0":
   version "1.65.0"
   resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.65.0.tgz#d48826f3551acc00727983f86a1be7fbe7dab27d"
@@ -85,7 +78,7 @@
     chalk "^4.1.2"
     semver "^7.3.7"
 
-"@jsii/spec@1.65.0", "@jsii/spec@^1.62.0", "@jsii/spec@^1.65.0":
+"@jsii/spec@1.65.0", "@jsii/spec@^1.65.0":
   version "1.65.0"
   resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.65.0.tgz#da47e531e35589776d3ccf6dfdd699cd64025f38"
   dependencies:
@@ -1433,14 +1426,14 @@ js-yaml@^4.1.0:
     argparse "^2.0.1"
 
 jsii-diff@^1.61.0:
-  version "1.62.0"
-  resolved "https://registry.npmjs.org/jsii-diff/-/jsii-diff-1.62.0.tgz"
+  version "1.65.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.65.0.tgz#5026836c2ad78202ddbe8d45014434b360c1a91f"
   dependencies:
-    "@jsii/check-node" "1.62.0"
-    "@jsii/spec" "^1.62.0"
+    "@jsii/check-node" "1.65.0"
+    "@jsii/spec" "^1.65.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.62.0"
-    log4js "^6.5.2"
+    jsii-reflect "^1.65.0"
+    log4js "^6.6.1"
     yargs "^16.2.0"
 
 jsii-pacmak@^1.61.0:
@@ -1461,7 +1454,7 @@ jsii-pacmak@^1.61.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.62.0, jsii-reflect@^1.65.0:
+jsii-reflect@^1.65.0:
   version "1.65.0"
   resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.65.0.tgz#899d4d31c77cf23336de37a950e53839a97e3ec4"
   dependencies:
@@ -1585,7 +1578,7 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
 
-log4js@^6.5.2, log4js@^6.6.1:
+log4js@^6.6.1:
   version "6.6.1"
   resolved "https://registry.yarnpkg.com/log4js/-/log4js-6.6.1.tgz#48f23de8a87d2f5ffd3d913f24ca9ce77895272f"
   dependencies:
