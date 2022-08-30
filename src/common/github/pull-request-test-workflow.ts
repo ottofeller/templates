@@ -20,12 +20,8 @@ export class PullRequestTest extends Component {
 
     const job = (command: string): github.workflows.Job => ({
       runsOn: options.runsOn ?? ['ubuntu-latest'],
-      permissions: {pullRequests: github.workflows.JobPermission.READ},
-
-      steps: [
-        {uses: 'actions/checkout@v2', with: {fetchDepth: 0}},
-        {uses: 'ottofeller/github-actions/npm-run@main', with: {nodeVersion: 16, command}},
-      ],
+      permissions: {contents: github.workflows.JobPermission.READ},
+      steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {nodeVersion: 16, command}}],
     })
 
     const workflow = githubInstance.addWorkflow('test')
