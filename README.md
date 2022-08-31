@@ -36,6 +36,14 @@ npx projen build
 npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```
 
+#### Tailwind
+The template uses tailwind for CSS. The main config used by tailwind is `tailwind.config.js`. The file is not editable. It configures plugins which are dynamic and thus can not to be defined statically. The static part of the config resides in `tailwind.config.json`. This file can be edited via `.projenrc.ts`, e.g.:
+```typescript
+const tailwindConfig = project.tryFindObjectFile('tailwind.config.json')
+tailwindConfig?.addOverride('theme.colors.aaaaaa', '#aaaaaa')
+tailwindConfig?.addOverride('theme.fontSize.18', 'calc(18 * 1rem / 16)')
+```
+
 ### Apollo Server
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-apollo-server
