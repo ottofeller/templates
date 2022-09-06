@@ -1,14 +1,25 @@
 
-# Exclude typescript source and config
+# Exclude typescript source, config and build info
+src/
 *.ts
 tsconfig.json
+tsconfig.dev.json
+/lib/tsconfig.tsbuildinfo
 
 # Include javascript files and typescript declarations
 !*.js
 !*.d.ts
+
+# Include assets
+!src/**/assets/*
 
 # Exclude jsii outdir
 dist
 
 # Include .jsii
 !.jsii
+
+# Exclude dev folders
+.github/
+.projen/
+coverage/
