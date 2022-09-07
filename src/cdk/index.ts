@@ -3,7 +3,7 @@ import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow} from '../common/github'
-import {VsCodeSettings} from '../common/vscode-settings'
+import {VsCodeSettings} from 'common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions extends AwsCdkTypeScriptAppOptions {
   /**

@@ -22,7 +22,14 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "ES2019"
+    "target": "ES2019",
+    "outDir": "lib",
+    "baseUrl": "src",
+    "paths": {
+      "common/*": [
+        "./common/*"
+      ]
+    }
   },
   "include": [
     ".projenrc.js",

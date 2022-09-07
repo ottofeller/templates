@@ -1,12 +1,10 @@
-// FIXME Need to find a way to control "tsconfig.json"
-/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {AssetFile} from '../common/files/AssetFile'
-import {PullRequestTest} from '../common/github'
-import {VsCodeSettings} from '../common/vscode-settings'
+import {AssetFile} from 'common/files/AssetFile'
+import {PullRequestTest} from 'common/github'
+import {VsCodeSettings} from 'common/vscode-settings'
 
 export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectOptions {
   /**
@@ -93,7 +91,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
-    const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
+    const assetsDir = path.join(__dirname, '..', 'src/apollo-server/assets')
     // ANCHOR Source code
     new projen.SampleFile(this, 'src/index.ts', {
       sourcePath: path.join(assetsDir, 'src/index.ts.sample'),

@@ -37,6 +37,7 @@
     "@types/prettier": "2.6.0",
     "@typescript-eslint/eslint-plugin": "5.10.2",
     "@typescript-eslint/parser": "^5.28.0",
+    "esbuild": "^0.15.6",
     "eslint-plugin-import": "2.25.4",
     "jsii": "^1.61.0",
     "jsii-diff": "^1.61.0",
@@ -64,6 +65,12 @@
     "targets": {},
     "tsc": {
       "outDir": "lib",
+      "baseUrl": "src",
+      "paths": {
+        "common/*": [
+          "./common/*"
+        ]
+      },
       "rootDir": "src"
     }
   },

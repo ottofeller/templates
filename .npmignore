@@ -1,13 +1,14 @@
 
-# Exclude typescript source, config and build info
+# Exclude typescript source, config and build info, temp javascript files
 src/
 *.ts
 tsconfig.json
 tsconfig.dev.json
 /lib/tsconfig.tsbuildinfo
+/lib/**/*.js
 
-# Include javascript files and typescript declarations
-!*.js
+# Include bundled javascript and typescript declarations
+!/lib/index.js
 !*.d.ts
 
 # Include assets
