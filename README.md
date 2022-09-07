@@ -44,6 +44,14 @@ tailwindConfig?.addOverride('theme.colors.aaaaaa', '#aaaaaa')
 tailwindConfig?.addOverride('theme.fontSize.18', 'calc(18 * 1rem / 16)')
 ```
 
+Note that the `tailwind.config.js` is not editable by default. In order to edit the file (e.g. for adding plugins) set its `readonly` attribute to `false`. But be aware that the run of `npx projen` command would overwrite all local changes resetting it to default content.
+```typescript
+const tailwindConfig = project.tryFindFile('tailwind.config.js')
+if (tailwindConfig) {
+  tailwindConfig.readonly = false
+}
+```
+
 ### Apollo Server
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-apollo-server
