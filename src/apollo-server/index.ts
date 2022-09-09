@@ -1,10 +1,10 @@
+import {AssetFile} from 'common/files/AssetFile'
+import {PullRequestTest} from 'common/github'
+import {VsCodeSettings} from 'common/vscode-settings'
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {AssetFile} from 'common/files/AssetFile'
-import {PullRequestTest} from 'common/github'
-import {VsCodeSettings} from 'common/vscode-settings'
 
 export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectOptions {
   /**

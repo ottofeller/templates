@@ -71,9 +71,11 @@ project.package.addField('version', '1.1.4')
 
 // ANCHOR Set TS path aliases through JSII
 project.package.addField('jsii', {outdir: 'dist', targets: {}, tsc: {...compilerOptions, rootDir: 'src'}})
-project.tasks.tryFind('compile')?.exec(
-  'esbuild lib/index.js --bundle --platform=node --outfile=lib/index.js --external:projen --external:../package.json --allow-overwrite',
-)
+project.tasks
+  .tryFind('compile')
+  ?.exec(
+    'esbuild lib/index.js --bundle --platform=node --outfile=lib/index.js --external:projen --external:../package.json --allow-overwrite',
+  )
 
 // ANCHOR ESLint and prettier setup
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
