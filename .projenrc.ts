@@ -81,12 +81,13 @@ project.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-o
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')
-testGithubWorkflow.on({push: {paths: ['src/**']}})
+testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflows/test.yml']}})
 
 testGithubWorkflow.addJobs({
   lint: job([npmRunJob('lint')]),
   typecheck: job([npmRunJob('typecheck')]),
   test: job([npmRunJob('test')]),
+  build: job([npmRunJob('build')]),
 })
 
 const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')
