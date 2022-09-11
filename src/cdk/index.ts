@@ -12,6 +12,7 @@ export interface OttofellerCDKProjectOptions extends AwsCdkTypeScriptAppOptions 
    * @default 0.0.1
    */
   readonly initialReleaseVersion?: string
+  readonly hasDefaultGithubWorkflows?: boolean
 }
 
 /**
@@ -30,12 +31,10 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       sampleCode: false,
       eslint: false,
       jest: false,
-      dependabot: true,
+      dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
-      // Enable Github but remove all default stuff.
-      github: true,
-
+      // In case Github is enabled remove all default stuff.
       githubOptions: {mergify: false, pullRequestLint: false},
       buildWorkflow: false,
       release: false,
@@ -70,7 +69,8 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     this.addDeps('cdk-nag@2.15.45')
 
     // ANCHOR Github
-    if (this.github) {
+    const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+    if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initlaReleaseVersion: this.initialReleaseVersion})
       new PullRequestTest(this.github)
     }
