@@ -37,13 +37,14 @@
     "@types/prettier": "2.6.0",
     "@typescript-eslint/eslint-plugin": "5.10.2",
     "@typescript-eslint/parser": "^5.28.0",
+    "esbuild": "0.15.7",
     "eslint-plugin-import": "2.25.4",
     "jsii": "^1.61.0",
     "jsii-diff": "^1.61.0",
     "jsii-pacmak": "^1.61.0",
     "projen": "0.57.3",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.4"
+    "ts-node": "10.8.1",
+    "typescript": "4.7.4"
   },
   "peerDependencies": {
     "projen": "0.57.3"
@@ -64,6 +65,12 @@
     "targets": {},
     "tsc": {
       "outDir": "lib",
+      "baseUrl": "src",
+      "paths": {
+        "common/*": [
+          "./common/*"
+        ]
+      },
       "rootDir": "src"
     }
   },
