@@ -4,15 +4,14 @@ import type {NodeProject} from 'projen/lib/javascript'
 import {deepMerge} from 'projen/lib/util'
 
 export class VsCodeSettings extends JsonFile {
-  // @ts-ignore -- Even though "typecheck" does not complain, the "compile" task emits a TS18019 error and fails.
-  static readonly #fileName = '.vscode/settings.json'
+  private static readonly _FILENAME = '.vscode/settings.json'
 
   public static of(project: Project): VsCodeSettings | undefined {
-    return project.tryFindObjectFile(VsCodeSettings.#fileName) as VsCodeSettings | undefined
+    return project.tryFindObjectFile(VsCodeSettings._FILENAME) as VsCodeSettings | undefined
   }
 
   constructor(project: NodeProject, private readonly settings: Record<string, unknown> = {}) {
-    super(project, VsCodeSettings.#fileName, {
+    super(project, VsCodeSettings._FILENAME, {
       obj: () => this.settings,
       marker: true,
       newline: true,
