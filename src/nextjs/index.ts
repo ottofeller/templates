@@ -151,22 +151,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     VsCodeSettings.addToProject(this)
 
     VsCodeSettings.of(this)?.add({
-      'editor.codeActionsOnSave': {'source.fixAll': true},
       'eslint.useESLintClass': true,
       'eslint.options': {cache: true, reportUnusedDisableDirectives: 'error'},
-    })
-
-    VsCodeSettings.of(this)?.add({
-      'editor.codeActionsOnSave': {'source.organizeImports': true},
-      'editor.formatOnSave': true,
-      '[json]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      '[jsonc]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      '[yaml]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      '[typescript]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      '[javascript]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      '[svg]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      '[xml]': {'editor.defaultFormatter': 'esbenp.prettier-vscode'},
-      'prettier.documentSelectors': ['**/*.svg'],
     })
   }
 }
