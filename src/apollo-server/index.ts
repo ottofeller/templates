@@ -36,15 +36,14 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
       sampleCode: false,
       eslint: false,
-      jest: false,
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
       scripts: {
         dev: 'nodemon',
         start: 'node build/index.js',
-        format: 'ofmt .projenrc.ts && ofmt src',
-        lint: 'ofmt --lint .projenrc.ts && ofmt --lint src && olint src .projenrc.ts',
+        format: 'ofmt .projenrc.mjs && ofmt src',
+        lint: 'ofmt --lint .projenrc.mjs && ofmt --lint src && olint src .projenrc.mjs',
         typecheck: 'tsc --noEmit --project tsconfig.dev.json',
         'generate-graphql-schema': 'npx apollo schema:download',
         'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development',
@@ -93,9 +92,18 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     const assetsDir = path.join(__dirname, '..', 'src/apollo-server/assets')
     // ANCHOR Source code
-    new projen.SampleFile(this, 'src/index.ts', {
-      sourcePath: path.join(assetsDir, 'src/index.ts.sample'),
-    })
+    new projen.SampleFile(this, 'src/index.ts', {sourcePath: path.join(assetsDir, 'src/index.ts.sample')})
+    new projen.SampleFile(this, 'src/logger/index.ts', {sourcePath: path.join(assetsDir, 'src/logger/index.ts')})
+
+    // ANCHOR tests
+    const jest = options.jest ?? true
+    if (jest) {
+      new projen.SampleFile(this, 'src/logger/__tests__/index.ts', {
+        sourcePath: path.join(assetsDir, 'src/logger/__tests__/index.ts.sample'),
+      })
+    } else {
+      this.removeTask('test')
+    }
 
     // ANCHOR Environment file
     new projen.SampleFile(this, '.env.development', {
