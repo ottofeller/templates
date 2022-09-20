@@ -102,7 +102,7 @@ export interface ConfiguredOutput {
   readonly schema?: string | Array<string>
 
   /**
-   * @description Configuration object containing key => value that will be passes to the plugins.
+   * @description Configuration object containing key => value that will be passed to the plugins.
    * Specifying configuration in this level of your configuration file will pass it to all plugins, in all outputs.
    *
    * The options may vary depends on what plugins you are using.
