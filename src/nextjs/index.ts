@@ -34,7 +34,7 @@ export interface OttofellerNextjsProjectOptions extends NextJsTypeScriptProjectO
  * @pjid ottofeller-nextjs
  */
 export class OttofellerNextjsProject extends NextJsTypeScriptProject {
-  public codegenConfig?: CodegenConfigYaml
+  public codegenConfigYaml?: CodegenConfigYaml
 
   constructor(options: OttofellerNextjsProjectOptions) {
     super({
@@ -134,7 +134,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       )
 
       // ANCHOR Codegen
-      this.codegenConfig = new CodegenConfigYaml(this, codegenConfig)
+      this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
       this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
       this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.yml'})
     }

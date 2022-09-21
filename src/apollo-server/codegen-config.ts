@@ -11,7 +11,7 @@ export const codegenConfig: CodegenConfig = {
       config: {useIndexSignature: true, contextType: 'common/types/app-context#AppContext'},
     },
 
-    // Generates types and requests for hasura
+    // Generates types and requests to external services
     './generated/index.ts': {
       documents: 'src/**/!(*.generated).ts',
       plugins: [

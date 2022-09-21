@@ -24,7 +24,7 @@ export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectO
  * @pjid ottofeller-apollo-server
  */
 export class OttofellerApolloServerProject extends TypeScriptAppProject {
-  public codegenConfig?: CodegenConfigYaml
+  public codegenConfigYaml?: CodegenConfigYaml
 
   constructor(options: OttofellerApolloServerProjectOptions) {
     super({
@@ -131,7 +131,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     }
 
     // ANCHOR Codegen
-    this.codegenConfig = new CodegenConfigYaml(this, codegenConfig)
+    this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
 
     // ANCHOR Docker setup
     new AssetFile(this, '.dockerignore', {sourcePath: path.join(assetsDir, '.dockerignore')})
