@@ -5,6 +5,7 @@ export const codegenConfig: CodegenConfig = {
   overwrite: true,
   schema: './schema.json',
 
+  // The following paths and corresponding output settings are defaults for the nexjs project.
   generates: {
     'generated/types.ts': {
       documents: ['pages/**/graphql/*.{ts,tsx}'],

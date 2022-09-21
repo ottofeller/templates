@@ -4,6 +4,7 @@ import type {CodegenConfig} from '../common/codegen/types'
 export const codegenConfig: CodegenConfig = {
   schema: {'${APP_URL}': {headers: {'x-access-token': '${ACCESS_TOKEN}'}}},
 
+  // The following paths and corresponding output settings are defaults for the apollo-server project.
   generates: {
     // Generates types for local apollo server resolvers only
     './generated/resolvers.ts': {

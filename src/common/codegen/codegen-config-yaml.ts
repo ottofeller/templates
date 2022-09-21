@@ -1,6 +1,6 @@
 import type {Project, YamlFileOptions} from 'projen'
 import {YamlFile} from 'projen'
-import type {CodegenConfig, ConfiguredPlugin, Schema} from './types'
+import type {CodegenConfig, ConfiguredPlugin, MaybePlural, Schema} from './types'
 
 /**
  * A wrapper around YamlFile. Represents a codegen config file.
@@ -18,7 +18,7 @@ export class CodegenConfigYaml {
    *
    * @param value - The value. Could be a single value or an array.
    */
-  overrideSchema(value?: Schema | Array<Schema>): CodegenConfigYaml {
+  overrideSchema(value?: MaybePlural<Schema>): CodegenConfigYaml {
     this.file.addOverride('schema', value)
     return this
   }
@@ -42,8 +42,7 @@ export class CodegenConfigYaml {
    * @param documents An instance or an array of pointers to your GraphQL documents.
    */
   overrideDocumentsForOutput(outputPath: string, documents?: string | Array<string>): CodegenConfigYaml {
-    const path = `generates.${outputPath.replace(/\./g, '\\.')}.documents`
-    this.file.addOverride(path, documents)
+    this.file.addOverride(`generates.${outputPath.replace(/\./g, '\\.')}.documents`, documents)
     return this
   }
 

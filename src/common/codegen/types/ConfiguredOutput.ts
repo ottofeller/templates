@@ -1,34 +1,5 @@
-// NOTE: These types duplicate graphql-codegen types. Importing those from the original package causes jsii to fail upon building.
-
-export interface UrlSchemaWithOptions {
-  [url: string]: UrlSchemaOptions
-}
-
-export interface UrlSchemaOptions {
-  /**
-   * @description HTTP headers you wish to add to the HTTP request sent by codegen to fetch your GraphQL remote schema.
-   */
-  readonly headers?: {[headerName: string]: string}
-
-  /**
-   * @description Specify a Node module name, or a custom file, to be used instead of standard `fetch`
-   */
-  readonly customFetch?: string
-
-  /**
-   * @description HTTP Method to use, either POST (default) or GET.
-   */
-  readonly method?: string
-}
-
-/**
- * @description A URL to your GraphQL endpoint, a local path to `.graphql` file, a glob pattern to your GraphQL schema files, or a JavaScript file that exports the schema to generate code from. This can also be an array which specifies multiple schemas to generate code from. You can read more about the supported formats [here](schema-field#available-formats).
- */
-export type Schema = string | UrlSchemaWithOptions
-export type PluginConfig<T = any> = {[key: string]: T}
-export interface ConfiguredPlugin {
-  [name: string]: PluginConfig
-}
+import type {MaybePlural} from './MaybePlural'
+import type {ConfiguredPlugin, PluginConfig} from './Plugin'
 
 export interface ConfiguredOutput {
   /**
@@ -82,7 +53,7 @@ export interface ConfiguredOutput {
    *
    * For more details: https://graphql-code-generator.com/docs/config-reference/documents-field
    */
-  readonly documents?: string | Array<string>
+  readonly documents?: MaybePlural<string>
 
   /**
    * @description A pointer(s) to your GraphQL schema. This schema will be available only for this specific `generates` record.
@@ -99,7 +70,7 @@ export interface ConfiguredOutput {
    *
    * For more details: https://graphql-code-generator.com/docs/config-reference/schema-field
    */
-  readonly schema?: string | Array<string>
+  readonly schema?: MaybePlural<string>
 
   /**
    * @description Configuration object containing key => value that will be passed to the plugins.
@@ -110,39 +81,4 @@ export interface ConfiguredOutput {
    * For more details: https://graphql-code-generator.com/docs/config-reference/config-field
    */
   readonly config?: PluginConfig
-}
-
-export interface CodegenConfig {
-  /**
-   * @description A pointer(s) to your GraphQL schema. This schema will be the base schema for all your outputs.
-   * You can use one of the following:
-   *
-   * - URL pointing to a GraphQL endpoint
-   * - Path to a local `.json` file
-   * - Path to a local `.graphql` file
-   * - Glob expression pointing to multiple `.graphql` files
-   * - Path to a local code file (for example: `.js`) that exports `GraphQLSchema` object
-   * - Inline string containing GraphQL SDL schema definition
-   *
-   * You can specify either a single schema, or multiple, and GraphQL Code Generator will merge the schemas into a single schema.
-   *
-   * For more details: https://graphql-code-generator.com/docs/config-reference/schema-field
-   */
-  readonly schema?: Schema | Array<Schema>
-
-  /**
-   * @description A map where the key represents an output path for the generated code and the value represents a set of options which are relevant for that specific file.
-   *
-   * For more details: https://graphql-code-generator.com/docs/config-reference/codegen-config
-   */
-  readonly generates: {
-    [outputPath: string]: ConfiguredOutput
-  }
-
-  /**
-   * @description A flag to overwrite files if they already exist when generating code (`true` by default).
-   *
-   * For more details: https://graphql-code-generator.com/docs/config-reference/codegen-config
-   */
-  readonly overwrite?: boolean
 }
