@@ -52,10 +52,27 @@ if (tailwindConfig) {
 }
 ```
 
+#### Codegen config
+The template uses `@graphql-codegen` packages for GraphQL management. The main config is created with a custom class `CodegenConfigYaml`. The created file `codegen.yml` is not directly editable. In order to edit the config use `codegenConfig` property of the project. The class exposes methods to override restricted subset of config properties:
+```typescript
+// Set global `schema` property.
+project.codegenConfig?.overrideSchema('./schema.json')
+  // Set global `overwrite` property.
+  .overrideOverwrite(true)
+  // Set plugins for an output path within global `generates` property.
+  .overridePluginsForOutput('./generated/resolvers.ts', ['typescript', 'typescript-resolvers'])
+  // Delete plugins for an output path within global `generates` property.
+  .overridePluginsForOutput('./generated/index.ts')
+  // Set documents for an output path within global `generates` property.
+  .overrideDocumentsForOutput('./generated/index.ts', 'src/**/graphql/!(*.generated).ts')
+```
+
 ### Apollo Server
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-apollo-server
 ```
+#### Codegen config
+See the [Codegen config](#codegen-config) subsection for the [NextJS](#nextjs) template above.
 
 ### CDK
 ```sh

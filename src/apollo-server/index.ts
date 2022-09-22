@@ -5,6 +5,9 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
+import {codegenConfig} from './codegen-config'
+// eslint-disable-next-line import/no-relative-parent-imports -- types are not bundled and therefore are not correctly exported with path aliases
+import {CodegenConfigYaml} from '../common/codegen'
 
 export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectOptions {
   /**
@@ -21,6 +24,8 @@ export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectO
  * @pjid ottofeller-apollo-server
  */
 export class OttofellerApolloServerProject extends TypeScriptAppProject {
+  public codegenConfigYaml?: CodegenConfigYaml
+
   constructor(options: OttofellerApolloServerProjectOptions) {
     super({
       ...options,
@@ -93,24 +98,16 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     const assetsDir = path.join(__dirname, '..', 'src/apollo-server/assets')
     // ANCHOR Source code
-    new projen.SampleFile(this, 'src/index.ts', {
-      sourcePath: path.join(assetsDir, 'src/index.ts.sample'),
-    })
+    new projen.SampleFile(this, 'src/index.ts', {sourcePath: path.join(assetsDir, 'src/index.ts.sample')})
 
     // ANCHOR Environment file
-    new projen.SampleFile(this, '.env.development', {
-      sourcePath: path.join(assetsDir, '.env.development'),
-    })
+    new projen.SampleFile(this, '.env.development', {sourcePath: path.join(assetsDir, '.env.development')})
 
     // ANCHOR Apollo server config
-    new AssetFile(this, 'apollo.config.cjs', {
-      sourcePath: path.join(assetsDir, 'apollo.config.cjs'),
-    })
+    new AssetFile(this, 'apollo.config.cjs', {sourcePath: path.join(assetsDir, 'apollo.config.cjs')})
 
     // ANCHOR esbuild
-    new AssetFile(this, 'esbuild.config.js', {
-      sourcePath: path.join(assetsDir, 'esbuild.config.js'),
-    })
+    new AssetFile(this, 'esbuild.config.js', {sourcePath: path.join(assetsDir, 'esbuild.config.js')})
 
     // ANCHOR Nodemon
     new projen.JsonFile(this, 'nodemon.json', {
@@ -134,18 +131,11 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     }
 
     // ANCHOR Codegen
-    new AssetFile(this, 'codegen.yml', {
-      sourcePath: path.join(assetsDir, 'codegen.yml'),
-    })
+    this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
 
     // ANCHOR Docker setup
-    new AssetFile(this, '.dockerignore', {
-      sourcePath: path.join(assetsDir, '.dockerignore'),
-    })
-
-    new AssetFile(this, 'Dockerfile', {
-      sourcePath: path.join(assetsDir, 'Dockerfile'),
-    })
+    new AssetFile(this, '.dockerignore', {sourcePath: path.join(assetsDir, '.dockerignore')})
+    new AssetFile(this, 'Dockerfile', {sourcePath: path.join(assetsDir, 'Dockerfile')})
 
     // ANCHOR VSCode settings
     VsCodeSettings.addToProject(this)
