@@ -54,8 +54,7 @@ export class CodegenConfigYaml {
    * @param plugins An array of plugins.
    */
   overridePluginsForOutput(outputPath: string, plugins?: Array<string | ConfiguredPlugin>): CodegenConfigYaml {
-    const path = `generates.${outputPath.replace(/\./g, '\\.')}.plugins`
-    this.file.addOverride(path, plugins)
+    this.file.addOverride(`generates.${outputPath.replace(/\./g, '\\.')}.plugins`, plugins)
     return this
   }
 }
