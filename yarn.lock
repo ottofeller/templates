@@ -82,9 +82,22 @@
     chalk "^4.1.2"
     semver "^7.3.7"
 
-"@jsii/spec@1.65.0", "@jsii/spec@^1.65.0":
+"@jsii/check-node@1.68.0":
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.68.0.tgz#2ee6fe9a98b3427e290b9d88f25c4b8778e036ff"
+  dependencies:
+    chalk "^4.1.2"
+    semver "^7.3.7"
+
+"@jsii/spec@1.65.0":
   version "1.65.0"
   resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.65.0.tgz"
+  dependencies:
+    ajv "^8.11.0"
+
+"@jsii/spec@^1.65.0", "@jsii/spec@^1.68.0":
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.68.0.tgz#3108f176a5ab0d85b2474e533cb4b9558069d238"
   dependencies:
     ajv "^8.11.0"
 
@@ -1532,13 +1545,13 @@ js-yaml@^4.1.0:
     argparse "^2.0.1"
 
 jsii-diff@^1.61.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/jsii-diff/-/jsii-diff-1.65.0.tgz"
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.68.0.tgz#0418ed54c6485b1b9f24b500b8d3f131dfad4f00"
   dependencies:
-    "@jsii/check-node" "1.65.0"
-    "@jsii/spec" "^1.65.0"
+    "@jsii/check-node" "1.68.0"
+    "@jsii/spec" "^1.68.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.65.0"
+    jsii-reflect "^1.68.0"
     log4js "^6.6.1"
     yargs "^16.2.0"
 
@@ -1560,15 +1573,15 @@ jsii-pacmak@^1.61.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.65.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/jsii-reflect/-/jsii-reflect-1.65.0.tgz"
+jsii-reflect@^1.65.0, jsii-reflect@^1.68.0:
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.68.0.tgz#87ed8693e34cb3cbc8081c7724a384c021b1e751"
   dependencies:
-    "@jsii/check-node" "1.65.0"
-    "@jsii/spec" "^1.65.0"
+    "@jsii/check-node" "1.68.0"
+    "@jsii/spec" "^1.68.0"
     chalk "^4"
     fs-extra "^10.1.0"
-    oo-ascii-tree "^1.65.0"
+    oo-ascii-tree "^1.68.0"
     yargs "^16.2.0"
 
 jsii-rosetta@^1.65.0:
@@ -1863,9 +1876,9 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-oo-ascii-tree@^1.65.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.65.0.tgz"
+oo-ascii-tree@^1.68.0:
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.68.0.tgz#28aa8b9782bc48be06e9556476377cc8517e3d9f"
 
 optionator@^0.9.1:
   version "0.9.1"
