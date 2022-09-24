@@ -4,9 +4,7 @@ import {ApolloServer, gql} from 'apollo-server'
 import tracer from 'dd-trace'
 import dotenv from 'dotenv'
 import sourceMapSupport from 'source-map-support'
-
-// ANCHOR Logger
-const createLogger = () => ({error: console.error, info: console.log})
+import {createLogger} from './logger/create-logger'
 
 // ANCHOR Tracer
 if (process.env.NODE_ENV === 'production') {
