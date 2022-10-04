@@ -1,12 +1,9 @@
-FROM node:14
-ARG GPR_ACCESS_TOKEN
+FROM node:16-buster-slim
+
 WORKDIR /app
 
-# Put global .npmrc file in the user home folder
-RUN echo "@worldcoin:registry=https://npm.pkg.github.com/" > /root/.npmrc \
-  && echo "//npm.pkg.github.com/:_authToken=${GPR_ACCESS_TOKEN}" >> /root/.npmrc
-
-COPY . .
+COPY package*.json .npmrc ./
 RUN npm install
+COPY . .
 RUN npm run build
-CMD "npm" "run" "start"
+CMD ["npm", "start"]
