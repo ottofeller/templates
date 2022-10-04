@@ -67,7 +67,7 @@ const project = new projen.cdk.JsiiProject({
 })
 
 // REVIEW There is probably another way to manage the version property
-project.package.addField('version', '1.2.2')
+project.package.addField('version', '1.2.3')
 
 // ANCHOR Set TS path aliases through JSII
 project.package.addField('jsii', {outdir: 'dist', targets: {}, tsc: {...compilerOptions, rootDir: 'src'}})
