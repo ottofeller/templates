@@ -1,10 +1,10 @@
-import {createLogger} from '../'
+import {createLogger} from '../create-logger'
 
 it('createLogger returns a logger object with error and info methods', () => {
   const logger = createLogger()
 
   expect(typeof logger.error).toEqual('function')
-  expect(typeof logger.error).toHaveLength(8)
+  expect(logger.error).toHaveLength(1)
   expect(typeof logger.info).toEqual('function')
-  expect(typeof logger.info).toHaveLength(8)
+  expect(logger.info).toHaveLength(1)
 })

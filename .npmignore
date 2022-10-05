@@ -5,10 +5,10 @@ src/
 tsconfig.json
 tsconfig.dev.json
 /lib/tsconfig.tsbuildinfo
-/lib/**/*.js
+/lib/**/assets/**/*
 
 # Include bundled javascript and typescript declarations
-!/lib/index.js
+!*.js
 !*.d.ts
 
 # Include assets

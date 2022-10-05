@@ -1,13 +1,13 @@
-import {AssetFile} from 'common/files/AssetFile'
-import {PullRequestTest} from 'common/github'
-import {VsCodeSettings} from 'common/vscode-settings'
+/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {codegenConfig} from './codegen-config'
-// eslint-disable-next-line import/no-relative-parent-imports -- types are not bundled and therefore are not correctly exported with path aliases
 import {CodegenConfigYaml} from '../common/codegen'
+import {AssetFile} from '../common/files/AssetFile'
+import {PullRequestTest} from '../common/github'
+import {VsCodeSettings} from '../common/vscode-settings'
+import {codegenConfig} from './codegen-config'
 
 export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectOptions {
   /**
@@ -95,7 +95,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
-    const assetsDir = path.join(__dirname, '..', 'src/apollo-server/assets')
+    const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
     // ANCHOR Source code
     new projen.SampleFile(this, 'src/index.ts', {sourcePath: path.join(assetsDir, 'src/index.ts.sample')})
     new projen.SampleFile(this, 'src/logger/create-logger.ts', {
