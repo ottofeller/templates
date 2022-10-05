@@ -71,9 +71,6 @@
       "steps": [
         {
           "exec": "jsii --silence-warnings=reserved-word"
-        },
-        {
-          "exec": "esbuild lib/index.js --bundle --platform=node --outfile=lib/index.js --external:projen --external:../package.json --allow-overwrite"
         }
       ]
     },

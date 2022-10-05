@@ -1,14 +1,6 @@
 import * as projen from 'projen'
 import {job, npmRunJob} from './src/common/github'
 
-const compilerOptions: projen.javascript.TypeScriptCompilerOptions = {
-  outDir: 'lib',
-  baseUrl: 'src',
-  paths: {
-    'common/*': ['./common/*'],
-  },
-}
-
 // ANCHOR Basic setup
 const project = new projen.cdk.JsiiProject({
   author: 'ottofeller',
@@ -47,7 +39,6 @@ const project = new projen.cdk.JsiiProject({
     'eslint-plugin-import@2.25.4',
     '@typescript-eslint/eslint-plugin@5.10.2',
     '@typescript-eslint/parser',
-    'esbuild',
   ],
 
   peerDeps: ['projen'],
@@ -62,20 +53,10 @@ const project = new projen.cdk.JsiiProject({
   jest: false,
 
   eslint: false,
-
-  tsconfigDev: {compilerOptions},
 })
 
 // REVIEW There is probably another way to manage the version property
 project.package.addField('version', '1.2.3')
-
-// ANCHOR Set TS path aliases through JSII
-project.package.addField('jsii', {outdir: 'dist', targets: {}, tsc: {...compilerOptions, rootDir: 'src'}})
-project.tasks
-  .tryFind('compile')
-  ?.exec(
-    'esbuild lib/index.js --bundle --platform=node --outfile=lib/index.js --external:projen --external:../package.json --allow-overwrite',
-  )
 
 // ANCHOR ESLint and prettier setup
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
