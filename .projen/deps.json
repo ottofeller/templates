@@ -35,10 +35,6 @@
       "type": "build"
     },
     {
-      "name": "esbuild",
-      "type": "build"
-    },
-    {
       "name": "eslint-plugin-import",
       "version": "2.25.4",
       "type": "build"

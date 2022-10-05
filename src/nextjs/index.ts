@@ -1,12 +1,12 @@
-import {AssetFile} from 'common/files/AssetFile'
-import {PullRequestTest} from 'common/github'
-import {VsCodeSettings} from 'common/vscode-settings'
+/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
-// eslint-disable-next-line import/no-relative-parent-imports -- types are not bundled and therefore are not correctly exported with path aliases
 import {CodegenConfigYaml} from '../common/codegen'
+import {AssetFile} from '../common/files/AssetFile'
+import {PullRequestTest} from '../common/github'
+import {VsCodeSettings} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {tailwindStaticConfig} from './tailwind-static-config'
 
@@ -78,7 +78,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       'yaml',
     )
 
-    const assetsDir = path.join(__dirname, '..', 'src/nextjs/assets')
+    const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
     // ANCHOR Source code
     ;['_app.tsx', 'global.css', 'index.tsx'].forEach((file) => {
       new projen.SampleFile(this, `pages/${file}`, {

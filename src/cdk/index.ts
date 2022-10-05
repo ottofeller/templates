@@ -1,9 +1,9 @@
 /* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
-import {VsCodeSettings} from 'common/vscode-settings'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow} from '../common/github'
+import {VsCodeSettings} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions extends AwsCdkTypeScriptAppOptions {
   /**
