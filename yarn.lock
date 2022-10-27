@@ -384,8 +384,9 @@
     eslint-visitor-keys "^3.3.0"
 
 "@xmldom/xmldom@^0.8.2":
-  version "0.8.2"
-  resolved "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.8.2.tgz"
+  "integrity" "sha512-uRjjusqpoqfmRkTaNuLJ2VohVr67Q5YwDATW3VU7PfzTj6IRaihGrYI7zckGZjxQPBIp63nfvJbM+Yu5ICh0Bg=="
+  "resolved" "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.8.6.tgz"
+  "version" "0.8.6"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
