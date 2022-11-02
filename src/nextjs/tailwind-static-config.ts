@@ -1,5 +1,5 @@
 export const tailwindStaticConfig = {
-  content: ['./pages/**/*.tsx'],
+  content: ['./src/**/*.tsx'],
 
   theme: {
     borderRadius: {
