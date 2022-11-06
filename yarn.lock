@@ -78,9 +78,22 @@
     chalk "^4.1.2"
     semver "^7.3.7"
 
-"@jsii/spec@1.65.0", "@jsii/spec@^1.65.0":
+"@jsii/check-node@1.70.0":
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.70.0.tgz#b482e949fdd6dc0191934bb1b76ad80989cafeba"
+  dependencies:
+    chalk "^4.1.2"
+    semver "^7.3.8"
+
+"@jsii/spec@1.65.0":
   version "1.65.0"
   resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.65.0.tgz"
+  dependencies:
+    ajv "^8.11.0"
+
+"@jsii/spec@^1.65.0", "@jsii/spec@^1.70.0":
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.70.0.tgz#9c9392397fa1d1a6fccd004bef3e8c0e92b45c15"
   dependencies:
     ajv "^8.11.0"
 
@@ -669,9 +682,9 @@ cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz"
 
-date-format@^4.0.13:
-  version "4.0.13"
-  resolved "https://registry.npmjs.org/date-format/-/date-format-4.0.13.tgz"
+date-format@^4.0.14:
+  version "4.0.14"
+  resolved "https://registry.yarnpkg.com/date-format/-/date-format-4.0.14.tgz#7a8e584434fb169a521c8b7aa481f355810d9400"
 
 debug@^2.6.9:
   version "2.6.9"
@@ -1087,7 +1100,7 @@ flat-cache@^3.0.4:
     flatted "^3.1.0"
     rimraf "^3.0.2"
 
-flatted@^3.1.0, flatted@^3.2.6:
+flatted@^3.1.0, flatted@^3.2.7:
   version "3.2.7"
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.7.tgz"
 
@@ -1422,14 +1435,14 @@ js-yaml@^4.1.0:
     argparse "^2.0.1"
 
 jsii-diff@^1.61.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/jsii-diff/-/jsii-diff-1.65.0.tgz"
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.70.0.tgz#67c67f713401d82799b52d997d104f20f74d4f75"
   dependencies:
-    "@jsii/check-node" "1.65.0"
-    "@jsii/spec" "^1.65.0"
+    "@jsii/check-node" "1.70.0"
+    "@jsii/spec" "^1.70.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.65.0"
-    log4js "^6.6.1"
+    jsii-reflect "^1.70.0"
+    log4js "^6.7.0"
     yargs "^16.2.0"
 
 jsii-pacmak@^1.61.0:
@@ -1450,15 +1463,15 @@ jsii-pacmak@^1.61.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.65.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/jsii-reflect/-/jsii-reflect-1.65.0.tgz"
+jsii-reflect@^1.65.0, jsii-reflect@^1.70.0:
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.70.0.tgz#09929607ebe3380a56d5187978b9da9a8686a97d"
   dependencies:
-    "@jsii/check-node" "1.65.0"
-    "@jsii/spec" "^1.65.0"
+    "@jsii/check-node" "1.70.0"
+    "@jsii/spec" "^1.70.0"
     chalk "^4"
     fs-extra "^10.1.0"
-    oo-ascii-tree "^1.65.0"
+    oo-ascii-tree "^1.70.0"
     yargs "^16.2.0"
 
 jsii-rosetta@^1.65.0:
@@ -1574,15 +1587,15 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
 
-log4js@^6.6.1:
-  version "6.6.1"
-  resolved "https://registry.npmjs.org/log4js/-/log4js-6.6.1.tgz"
+log4js@^6.6.1, log4js@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/log4js/-/log4js-6.7.0.tgz#fff671a74b2f6e956d135c3c756c79072809a23b"
   dependencies:
-    date-format "^4.0.13"
+    date-format "^4.0.14"
     debug "^4.3.4"
-    flatted "^3.2.6"
+    flatted "^3.2.7"
     rfdc "^1.3.0"
-    streamroller "^3.1.2"
+    streamroller "^3.1.3"
 
 loose-envify@^1.4.0:
   version "1.4.0"
@@ -1753,9 +1766,9 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-oo-ascii-tree@^1.65.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.65.0.tgz"
+oo-ascii-tree@^1.70.0:
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.70.0.tgz#30ce0ee1a17b420cbba47a6989f1a69f30749d20"
 
 optionator@^0.9.1:
   version "0.9.1"
@@ -2072,6 +2085,12 @@ semver@^7.3.4, semver@^7.3.5, semver@^7.3.7:
   dependencies:
     lru-cache "^6.0.0"
 
+semver@^7.3.8:
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
+  dependencies:
+    lru-cache "^6.0.0"
+
 shebang-command@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz"
@@ -2151,11 +2170,11 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
 
-streamroller@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.npmjs.org/streamroller/-/streamroller-3.1.2.tgz"
+streamroller@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/streamroller/-/streamroller-3.1.3.tgz#d95689a8c29b30d093525d0baffe6616fd62ca7e"
   dependencies:
-    date-format "^4.0.13"
+    date-format "^4.0.14"
     debug "^4.3.4"
     fs-extra "^8.1.0"
 
