@@ -85,13 +85,7 @@
     chalk "^4.1.2"
     semver "^7.3.8"
 
-"@jsii/spec@1.65.0":
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.65.0.tgz"
-  dependencies:
-    ajv "^8.11.0"
-
-"@jsii/spec@^1.65.0", "@jsii/spec@^1.70.0":
+"@jsii/spec@1.70.0", "@jsii/spec@^1.65.0", "@jsii/spec@^1.70.0":
   version "1.70.0"
   resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.70.0.tgz#9c9392397fa1d1a6fccd004bef3e8c0e92b45c15"
   dependencies:
@@ -396,9 +390,9 @@
     "@typescript-eslint/types" "5.42.0"
     eslint-visitor-keys "^3.3.0"
 
-"@xmldom/xmldom@^0.8.2":
+"@xmldom/xmldom@^0.8.3":
   version "0.8.6"
-  resolved "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.8.6.tgz"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.6.tgz#8a1524eb5bd5e965c1e3735476f0262469f71440"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -621,9 +615,9 @@ clone@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
 
-codemaker@^1.65.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/codemaker/-/codemaker-1.65.0.tgz"
+codemaker@^1.70.0:
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.70.0.tgz#37fe0745556a65a45789a6ce3b6cf6ee77b989ce"
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
@@ -1054,6 +1048,16 @@ fast-glob@^3.2.11, fast-glob@^3.2.5, fast-glob@^3.2.9:
     merge2 "^1.3.0"
     micromatch "^4.0.4"
 
+fast-glob@^3.2.12:
+  version "3.2.12"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.12.tgz#7f39ec99c2e6ab030337142da9e0c18f37afae80"
+  dependencies:
+    "@nodelib/fs.stat" "^2.0.2"
+    "@nodelib/fs.walk" "^1.2.3"
+    glob-parent "^5.1.2"
+    merge2 "^1.3.0"
+    micromatch "^4.0.4"
+
 fast-json-stable-stringify@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz"
@@ -1446,24 +1450,24 @@ jsii-diff@^1.61.0:
     yargs "^16.2.0"
 
 jsii-pacmak@^1.61.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/jsii-pacmak/-/jsii-pacmak-1.65.0.tgz"
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.70.0.tgz#2971d3469097994b74c4bb08918b88db398bc6f6"
   dependencies:
-    "@jsii/check-node" "1.65.0"
-    "@jsii/spec" "^1.65.0"
+    "@jsii/check-node" "1.70.0"
+    "@jsii/spec" "^1.70.0"
     clone "^2.1.2"
-    codemaker "^1.65.0"
+    codemaker "^1.70.0"
     commonmark "^0.30.0"
     escape-string-regexp "^4.0.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.65.0"
-    jsii-rosetta "^1.65.0"
-    semver "^7.3.7"
+    jsii-reflect "^1.70.0"
+    jsii-rosetta "^1.70.0"
+    semver "^7.3.8"
     spdx-license-list "^6.6.0"
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.65.0, jsii-reflect@^1.70.0:
+jsii-reflect@^1.70.0:
   version "1.70.0"
   resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.70.0.tgz#09929607ebe3380a56d5187978b9da9a8686a97d"
   dependencies:
@@ -1474,23 +1478,41 @@ jsii-reflect@^1.65.0, jsii-reflect@^1.70.0:
     oo-ascii-tree "^1.70.0"
     yargs "^16.2.0"
 
-jsii-rosetta@^1.65.0:
-  version "1.65.0"
-  resolved "https://registry.npmjs.org/jsii-rosetta/-/jsii-rosetta-1.65.0.tgz"
+jsii-rosetta@^1.70.0:
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.70.0.tgz#2618c4661410638f7a7ae432359e512bede94076"
   dependencies:
-    "@jsii/check-node" "1.65.0"
-    "@jsii/spec" "1.65.0"
-    "@xmldom/xmldom" "^0.8.2"
+    "@jsii/check-node" "1.70.0"
+    "@jsii/spec" "1.70.0"
+    "@xmldom/xmldom" "^0.8.3"
     commonmark "^0.30.0"
-    fast-glob "^3.2.11"
-    jsii "1.65.0"
-    semver "^7.3.7"
+    fast-glob "^3.2.12"
+    jsii "1.70.0"
+    semver "^7.3.8"
     semver-intersect "^1.4.0"
     typescript "~3.9.10"
     workerpool "^6.2.1"
     yargs "^16.2.0"
 
-jsii@1.65.0, jsii@^1.61.0:
+jsii@1.70.0:
+  version "1.70.0"
+  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.70.0.tgz#ad5265f9d5a2f02c212deae987c2fe4426e8f73f"
+  dependencies:
+    "@jsii/check-node" "1.70.0"
+    "@jsii/spec" "^1.70.0"
+    case "^1.6.3"
+    chalk "^4"
+    fast-deep-equal "^3.1.3"
+    fs-extra "^10.1.0"
+    log4js "^6.7.0"
+    semver "^7.3.8"
+    semver-intersect "^1.4.0"
+    sort-json "^2.0.1"
+    spdx-license-list "^6.6.0"
+    typescript "~3.9.10"
+    yargs "^16.2.0"
+
+jsii@^1.61.0:
   version "1.65.0"
   resolved "https://registry.npmjs.org/jsii/-/jsii-1.65.0.tgz"
   dependencies:
@@ -2079,13 +2101,7 @@ semver@^6.3.0:
   version "6.3.0"
   resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
 
-semver@^7.3.4, semver@^7.3.5, semver@^7.3.7:
-  version "7.3.7"
-  resolved "https://registry.npmjs.org/semver/-/semver-7.3.7.tgz"
-  dependencies:
-    lru-cache "^6.0.0"
-
-semver@^7.3.8:
+semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
   dependencies:
