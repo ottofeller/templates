@@ -86,6 +86,10 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
   }
 
   postSynthesize(): void {
+    /*
+     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * Therefore an additional formatting step is required after project initialization.
+     */
     execSync('ofmt .projenrc.ts')
   }
 }
