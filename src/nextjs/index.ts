@@ -69,9 +69,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     this.addDeps('@apollo/client')
 
     this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.4.2',
-      '@ottofeller/ofmt@1.4.2',
-      '@ottofeller/prettier-config-ofmt@1.4.2',
+      '@ottofeller/eslint-config-ofmt@1.4.3',
+      '@ottofeller/ofmt@1.4.3',
+      '@ottofeller/prettier-config-ofmt@1.4.3',
       'eslint@>=8',
 
       // REVIEW Required during "npx projen new", fails without this dependency
