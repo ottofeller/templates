@@ -78,13 +78,6 @@
     chalk "^4.1.2"
     semver "^7.3.7"
 
-"@jsii/check-node@1.70.0":
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.70.0.tgz#b482e949fdd6dc0191934bb1b76ad80989cafeba"
-  dependencies:
-    chalk "^4.1.2"
-    semver "^7.3.8"
-
 "@jsii/check-node@1.71.0":
   version "1.71.0"
   resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.71.0.tgz#32e1b1abc9ace37ad58774079bed694ea0661b78"
@@ -92,13 +85,7 @@
     chalk "^4.1.2"
     semver "^7.3.8"
 
-"@jsii/spec@1.70.0":
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.70.0.tgz#9c9392397fa1d1a6fccd004bef3e8c0e92b45c15"
-  dependencies:
-    ajv "^8.11.0"
-
-"@jsii/spec@^1.65.0", "@jsii/spec@^1.70.0", "@jsii/spec@^1.71.0":
+"@jsii/spec@1.71.0", "@jsii/spec@^1.65.0", "@jsii/spec@^1.71.0":
   version "1.71.0"
   resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.71.0.tgz#d15b5f9ed9e8aa2eea9aaa9bf5d4344ab2ea5c56"
   dependencies:
@@ -403,7 +390,7 @@
     "@typescript-eslint/types" "5.42.0"
     eslint-visitor-keys "^3.3.0"
 
-"@xmldom/xmldom@^0.8.3":
+"@xmldom/xmldom@^0.8.5":
   version "0.8.6"
   resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.6.tgz#8a1524eb5bd5e965c1e3735476f0262469f71440"
 
@@ -628,9 +615,9 @@ clone@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
 
-codemaker@^1.70.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.70.0.tgz#37fe0745556a65a45789a6ce3b6cf6ee77b989ce"
+codemaker@^1.71.0:
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.71.0.tgz#f065b290f33e730c877642d9456671470d3e5c38"
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
@@ -1463,24 +1450,24 @@ jsii-diff@^1.61.0:
     yargs "^16.2.0"
 
 jsii-pacmak@^1.61.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.70.0.tgz#2971d3469097994b74c4bb08918b88db398bc6f6"
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.71.0.tgz#5b5bfebc332a2164574b182b0219f81e13cf919d"
   dependencies:
-    "@jsii/check-node" "1.70.0"
-    "@jsii/spec" "^1.70.0"
+    "@jsii/check-node" "1.71.0"
+    "@jsii/spec" "^1.71.0"
     clone "^2.1.2"
-    codemaker "^1.70.0"
+    codemaker "^1.71.0"
     commonmark "^0.30.0"
     escape-string-regexp "^4.0.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.70.0"
-    jsii-rosetta "^1.70.0"
+    jsii-reflect "^1.71.0"
+    jsii-rosetta "^1.71.0"
     semver "^7.3.8"
     spdx-license-list "^6.6.0"
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.70.0, jsii-reflect@^1.71.0:
+jsii-reflect@^1.71.0:
   version "1.71.0"
   resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.71.0.tgz#b6b3a9c68afae2e3c5bd6226cd48ef08286a994b"
   dependencies:
@@ -1491,28 +1478,28 @@ jsii-reflect@^1.70.0, jsii-reflect@^1.71.0:
     oo-ascii-tree "^1.71.0"
     yargs "^16.2.0"
 
-jsii-rosetta@^1.70.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.70.0.tgz#2618c4661410638f7a7ae432359e512bede94076"
+jsii-rosetta@^1.71.0:
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.71.0.tgz#180dd5c16bac3fe546562a343381c1341bb20850"
   dependencies:
-    "@jsii/check-node" "1.70.0"
-    "@jsii/spec" "1.70.0"
-    "@xmldom/xmldom" "^0.8.3"
+    "@jsii/check-node" "1.71.0"
+    "@jsii/spec" "1.71.0"
+    "@xmldom/xmldom" "^0.8.5"
     commonmark "^0.30.0"
     fast-glob "^3.2.12"
-    jsii "1.70.0"
+    jsii "1.71.0"
     semver "^7.3.8"
     semver-intersect "^1.4.0"
     typescript "~3.9.10"
-    workerpool "^6.2.1"
+    workerpool "^6.3.0"
     yargs "^16.2.0"
 
-jsii@1.70.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.70.0.tgz#ad5265f9d5a2f02c212deae987c2fe4426e8f73f"
+jsii@1.71.0:
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.71.0.tgz#f1725de3c89462745970b6b0c9c475c2c8580554"
   dependencies:
-    "@jsii/check-node" "1.70.0"
-    "@jsii/spec" "^1.70.0"
+    "@jsii/check-node" "1.71.0"
+    "@jsii/spec" "^1.71.0"
     case "^1.6.3"
     chalk "^4"
     fast-deep-equal "^3.1.3"
@@ -2446,9 +2433,9 @@ word-wrap@^1.2.3:
   version "1.2.3"
   resolved "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.3.tgz"
 
-workerpool@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.npmjs.org/workerpool/-/workerpool-6.2.1.tgz"
+workerpool@^6.3.0:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/workerpool/-/workerpool-6.3.1.tgz#80a9b76e70556acfb1457a3984f8637717f7cdee"
 
 wrap-ansi@^7.0.0:
   version "7.0.0"
