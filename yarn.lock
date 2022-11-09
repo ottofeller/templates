@@ -85,9 +85,22 @@
     chalk "^4.1.2"
     semver "^7.3.8"
 
-"@jsii/spec@1.70.0", "@jsii/spec@^1.65.0", "@jsii/spec@^1.70.0":
+"@jsii/check-node@1.71.0":
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.71.0.tgz#32e1b1abc9ace37ad58774079bed694ea0661b78"
+  dependencies:
+    chalk "^4.1.2"
+    semver "^7.3.8"
+
+"@jsii/spec@1.70.0":
   version "1.70.0"
   resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.70.0.tgz#9c9392397fa1d1a6fccd004bef3e8c0e92b45c15"
+  dependencies:
+    ajv "^8.11.0"
+
+"@jsii/spec@^1.65.0", "@jsii/spec@^1.70.0", "@jsii/spec@^1.71.0":
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.71.0.tgz#d15b5f9ed9e8aa2eea9aaa9bf5d4344ab2ea5c56"
   dependencies:
     ajv "^8.11.0"
 
@@ -1439,13 +1452,13 @@ js-yaml@^4.1.0:
     argparse "^2.0.1"
 
 jsii-diff@^1.61.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.70.0.tgz#67c67f713401d82799b52d997d104f20f74d4f75"
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.71.0.tgz#9a3bd3c33b62ac09d762397c0f91b284601f71fe"
   dependencies:
-    "@jsii/check-node" "1.70.0"
-    "@jsii/spec" "^1.70.0"
+    "@jsii/check-node" "1.71.0"
+    "@jsii/spec" "^1.71.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.70.0"
+    jsii-reflect "^1.71.0"
     log4js "^6.7.0"
     yargs "^16.2.0"
 
@@ -1467,15 +1480,15 @@ jsii-pacmak@^1.61.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.70.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.70.0.tgz#09929607ebe3380a56d5187978b9da9a8686a97d"
+jsii-reflect@^1.70.0, jsii-reflect@^1.71.0:
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.71.0.tgz#b6b3a9c68afae2e3c5bd6226cd48ef08286a994b"
   dependencies:
-    "@jsii/check-node" "1.70.0"
-    "@jsii/spec" "^1.70.0"
+    "@jsii/check-node" "1.71.0"
+    "@jsii/spec" "^1.71.0"
     chalk "^4"
     fs-extra "^10.1.0"
-    oo-ascii-tree "^1.70.0"
+    oo-ascii-tree "^1.71.0"
     yargs "^16.2.0"
 
 jsii-rosetta@^1.70.0:
@@ -1788,9 +1801,9 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-oo-ascii-tree@^1.70.0:
-  version "1.70.0"
-  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.70.0.tgz#30ce0ee1a17b420cbba47a6989f1a69f30749d20"
+oo-ascii-tree@^1.71.0:
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.71.0.tgz#d3e06581f2a03a6f37b2a9302a0fead63cb8d06f"
 
 optionator@^0.9.1:
   version "0.9.1"
