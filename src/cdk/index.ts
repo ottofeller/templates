@@ -61,9 +61,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Install ofmt
     this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.4.2',
-      '@ottofeller/ofmt@1.4.2',
-      '@ottofeller/prettier-config-ofmt@1.4.2',
+      '@ottofeller/eslint-config-ofmt@1.4.3',
+      '@ottofeller/ofmt@1.4.3',
+      '@ottofeller/prettier-config-ofmt@1.4.3',
     )
 
     // ANCHOR Install dependencies
