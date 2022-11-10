@@ -1,4 +1,5 @@
 /* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
+import {execSync} from 'child_process'
 import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
@@ -161,5 +162,13 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       'eslint.useESLintClass': true,
       'eslint.options': {cache: true, reportUnusedDisableDirectives: 'error'},
     })
+  }
+
+  postSynthesize(): void {
+    /*
+     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * Therefore an additional formatting step is required after project initialization.
+     */
+    execSync('ofmt .projenrc.ts')
   }
 }
