@@ -1,3 +1,5 @@
 export * from './codegen'
 export {AssetFile, AssetFileOptions} from './files/AssetFile'
+export {WithDefaultWorkflow} from './github'
+export {addLintScripts, WithCustomLintPaths} from './lint'
 export {VsCodeSettings} from './vscode-settings'

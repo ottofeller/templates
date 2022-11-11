@@ -13,7 +13,7 @@ export interface ReleaseWorkflowOptions {
 }
 
 /**
- * A GitHub workflow taht bumps the version of root package and create draft release.
+ * A GitHub workflow that bumps the version of root package and create draft release.
  */
 export class ReleaseWorkflow extends github.GithubWorkflow {
   constructor(githubInstance: github.GitHub, options: ReleaseWorkflowOptions = {initlaReleaseVersion: '0.0.1'}) {

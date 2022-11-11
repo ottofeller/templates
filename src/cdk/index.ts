@@ -3,17 +3,20 @@ import {execSync} from 'child_process'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
-import {PullRequestTest, ReleaseWorkflow} from '../common/github'
+import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
+import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
 
-export interface OttofellerCDKProjectOptions extends AwsCdkTypeScriptAppOptions {
+export interface OttofellerCDKProjectOptions
+  extends AwsCdkTypeScriptAppOptions,
+    WithDefaultWorkflow,
+    WithCustomLintPaths {
   /**
    * The base version of the very first release.
    *
    * @default 0.0.1
    */
   readonly initialReleaseVersion?: string
-  readonly hasDefaultGithubWorkflows?: boolean
 }
 
 /**
@@ -55,9 +58,8 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     this.initialReleaseVersion = options.initialReleaseVersion || this.initialReleaseVersion
 
     // ANCHOR Scripts
-    this.setScript('format', 'ofmt .projenrc.ts && ofmt src')
-    this.setScript('lint', 'ofmt --lint .projenrc.ts && ofmt --lint src && olint src .projenrc.ts')
-    this.setScript('typecheck', 'tsc --noEmit --project tsconfig.dev.json')
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    addLintScripts(this, lintPaths)
 
     // ANCHOR Install ofmt
     this.addDevDeps(
