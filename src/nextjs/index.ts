@@ -81,11 +81,13 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
     // ANCHOR Source code
-    ;['_app.tsx', 'global.css', 'index.tsx'].forEach((file) => {
-      new projen.SampleFile(this, `pages/${file}`, {
-        sourcePath: path.join(assetsDir, `pages/${file}`),
-      })
+    ;['_app.tsx', 'index.tsx'].forEach((file) => {
+      const filePath = `pages/${file}`
+      new projen.SampleFile(this, filePath, {sourcePath: path.join(assetsDir, filePath)})
     })
+
+    const globalCssPath = 'src/assets/global.css'
+    new projen.SampleFile(this, globalCssPath, {sourcePath: path.join(assetsDir, globalCssPath)})
 
     // ANCHOR NextJS config
     new AssetFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
