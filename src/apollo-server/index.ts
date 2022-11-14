@@ -6,18 +6,15 @@ import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
-import {PullRequestTest} from '../common/github'
+import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
+import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 
-export interface OttofellerApolloServerProjectOptions extends TypeScriptProjectOptions {
-  /**
-   * Include a default GitHub pull request template.
-   *
-   * @default true
-   */
-  readonly hasDefaultGithubWorkflows?: boolean
-}
+export interface OttofellerApolloServerProjectOptions
+  extends TypeScriptProjectOptions,
+    WithDefaultWorkflow,
+    WithCustomLintPaths {}
 
 /**
  * Apollo server template.
@@ -48,9 +45,6 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       scripts: {
         dev: 'nodemon',
         start: 'node build/index.js',
-        format: 'ofmt .projenrc.mjs && ofmt src',
-        lint: 'ofmt --lint .projenrc.mjs && ofmt --lint src && olint src .projenrc.mjs',
-        typecheck: 'tsc --noEmit --project tsconfig.dev.json',
         'generate-graphql-schema': 'npx apollo schema:download',
         'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development',
       },
@@ -91,6 +85,10 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       '@types/source-map-support@0.5.4',
       'nodemon@2.0.16',
     )
+
+    // ANCHOR Scripts
+    const lintPaths = options.lintPaths ?? ['.projenrc.mjs', 'src']
+    addLintScripts(this, lintPaths)
 
     this.package.addField('type', 'module')
     ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
