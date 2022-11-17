@@ -54,9 +54,9 @@ You can customize `next.config.js` in projenrc.ts, e.g:
 ```typescript
 const nextConfig = project.tryFindObjectFile('next.config.json')
 nextConfig?.addOverride('plugins', {
-  'next/mdx': {
-    foo: 'bar',
-    extension: 'RegExp(^foobar)',
+  '@next/mdx': {
+    foo: 'foo',
+    bar: 'RegExp(^bar)',
     someArray: ['require(react)'],
   },
 })
@@ -68,7 +68,7 @@ To use some js objects, you can specify their equivalents in string literals (li
 | Literal | Transpiled to |
 | - | - |
 | `"RegExp(^foobar$)"` | `/^foobar$/` |
-| `"require(react)"` | `require(react)` |
+| `"require(react)"` | `require("react")` |
 
 #### Tailwind
 
