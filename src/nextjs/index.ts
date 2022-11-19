@@ -43,6 +43,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       defaultReleaseBranch: 'main',
       name: 'nextjs',
       packageManager: NodePackageManager.NPM,
+      srcdir: options.srcdir ?? '.',
+
       tsconfig: {
         compilerOptions: {
           baseUrl: './',
