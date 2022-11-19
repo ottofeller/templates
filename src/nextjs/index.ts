@@ -43,6 +43,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       defaultReleaseBranch: 'main',
       name: 'nextjs',
       packageManager: NodePackageManager.NPM,
+      srcdir: options.srcdir ?? '.',
       tsconfig: {compilerOptions: {baseUrl: './', target: 'es6', paths: {'*': ['./src/*']}}},
       sampleCode: false,
       tailwind: false, // Tailwind has to be configured manually.
