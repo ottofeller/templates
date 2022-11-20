@@ -63,9 +63,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Install ofmt
     this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.4.3',
-      '@ottofeller/ofmt@1.4.3',
-      '@ottofeller/prettier-config-ofmt@1.4.3',
+      '@ottofeller/eslint-config-ofmt@1.5.2',
+      '@ottofeller/ofmt@1.5.2',
+      '@ottofeller/prettier-config-ofmt@1.5.2',
     )
 
     // ANCHOR Install dependencies
@@ -73,6 +73,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Github
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initlaReleaseVersion: this.initialReleaseVersion})
       new PullRequestTest(this.github)

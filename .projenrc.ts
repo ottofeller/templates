@@ -33,9 +33,9 @@ const project = new projen.cdk.JsiiProject({
     // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
     '@types/prettier@2.6.0',
 
-    '@ottofeller/eslint-config-ofmt@1.4.1',
-    '@ottofeller/ofmt@1.4.1',
-    '@ottofeller/prettier-config-ofmt@1.4.1',
+    '@ottofeller/eslint-config-ofmt@1.5.2',
+    '@ottofeller/ofmt@1.5.2',
+    '@ottofeller/prettier-config-ofmt@1.5.2',
     'eslint-plugin-import@2.25.4',
     '@typescript-eslint/eslint-plugin@5.10.2',
     '@typescript-eslint/parser',
@@ -44,8 +44,8 @@ const project = new projen.cdk.JsiiProject({
   peerDeps: ['projen'],
 
   scripts: {
-    format: 'npx ofmt .projenrc.ts && npx ofmt src',
-    lint: 'npx ofmt --lint .projenrc.ts && npx ofmt --lint src && npx olint src .projenrc.ts --ignore-pattern "!.projenrc.ts"',
+    format: 'npx ofmt ".projenrc.ts src"',
+    lint: 'npx ofmt --lint ".projenrc.ts src" && npx olint src .projenrc.ts',
     typecheck: 'tsc --noEmit --project tsconfig.dev.json',
   },
 
@@ -60,7 +60,13 @@ project.package.addField('version', '1.2.5')
 
 // ANCHOR ESLint and prettier setup
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
-project.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
+
+project.package.addField('eslintConfig', {
+  extends: [
+    '@ottofeller/eslint-config-ofmt/eslint.quality.cjs',
+    '@ottofeller/eslint-config-ofmt/eslint.formatting.cjs',
+  ],
+})
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')
