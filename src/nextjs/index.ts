@@ -69,9 +69,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     this.addDeps('@apollo/client')
 
     this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.4.3',
-      '@ottofeller/ofmt@1.4.3',
-      '@ottofeller/prettier-config-ofmt@1.4.3',
+      '@ottofeller/eslint-config-ofmt@1.5.2',
+      '@ottofeller/ofmt@1.5.2',
+      '@ottofeller/prettier-config-ofmt@1.5.2',
       'eslint@>=8',
 
       // REVIEW Required during "npx projen new", fails without this dependency
@@ -83,6 +83,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     addLintScripts(this, lintPaths)
 
     const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
+
     // ANCHOR Source code
     ;['_app.tsx', 'index.tsx'].forEach((file) => {
       const filePath = `pages/${file}`
@@ -119,12 +120,14 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR Github workflow
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+
     if (hasDefaultGithubWorkflows && this.github) {
       new PullRequestTest(this.github)
     }
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
+
     if (isGraphqlEnabled) {
       this.addDeps(
         '@graphql-codegen/add',
@@ -147,6 +150,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR Tailwind
     this.addDeps('postcss', 'tailwindcss', 'autoprefixer', '@tailwindcss/line-clamp')
+
     new projen.JsonFile(this, 'postcss.config.json', {
       obj: {plugins: {'tailwindcss/nesting': {}, tailwindcss: {}, autoprefixer: {}}},
       marker: false,

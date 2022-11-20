@@ -99,7 +99,7 @@
       "name": "format",
       "steps": [
         {
-          "exec": "npx ofmt .projenrc.ts && npx ofmt src"
+          "exec": "npx ofmt \".projenrc.ts src\""
         }
       ]
     },
@@ -107,7 +107,7 @@
       "name": "lint",
       "steps": [
         {
-          "exec": "npx ofmt --lint .projenrc.ts && npx ofmt --lint src && npx olint src .projenrc.ts --ignore-pattern \"!.projenrc.ts\""
+          "exec": "npx ofmt --lint \".projenrc.ts src\" && npx olint src .projenrc.ts"
         }
       ]
     },
