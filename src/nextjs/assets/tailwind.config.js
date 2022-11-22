@@ -13,5 +13,7 @@ module.exports = {
         '.scrollbar-hidden': {'&::-webkit-scrollbar': {display: 'none'}, scrollbarWidth: 'none'},
       }),
     ),
+
+    // User plugins
   ],
 }

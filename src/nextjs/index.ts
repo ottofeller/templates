@@ -5,7 +5,7 @@ import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
 import {CodegenConfigYaml} from '../common/codegen'
-import {AssetFile} from '../common/files/AssetFile'
+import {AssetFile, AssetFileTemplate} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
@@ -24,6 +24,12 @@ export interface OttofellerNextjsProjectOptions
    * @default true
    */
   readonly isGraphqlEnabled?: boolean
+
+  /**
+   * A list of plugins to include into tailwind config.
+   * As a list item provide any string that can be required by NodeJS.
+   */
+  readonly tailwindPlugins?: Array<string>
 }
 
 /**
@@ -157,7 +163,12 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     new projen.JsonFile(this, 'tailwind.config.json', {obj: tailwindStaticConfig})
-    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js')})
+
+    const templateString = '// User plugins'
+    const plugins = options.tailwindPlugins?.map((pkg) => `require('${pkg}')`).join(',\n    ')
+    const replacement = plugins ? `${plugins},` : templateString
+    const template: AssetFileTemplate = {templateString, replacement}
+    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js'), template})
 
     // ANCHOR Docker setup
     new projen.TextFile(this, '.dockerignore', {lines: [GENERATED_BY_PROJEN, 'node_modules', '.next']})
