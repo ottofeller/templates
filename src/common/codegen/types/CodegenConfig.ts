@@ -1,5 +1,6 @@
+/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
+import type {MaybePlural} from '../../MaybePlural'
 import type {ConfiguredOutput} from './ConfiguredOutput'
-import type {MaybePlural} from './MaybePlural'
 import type {Schema} from './Schema'
 
 export interface CodegenConfig {
