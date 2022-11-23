@@ -32,6 +32,8 @@ export interface OttofellerNextjsProjectOptions
   readonly experimental?: ExperimentalConfig
 }
 
+export * from './ExperimentalConfig'
+
 /**
  * Nextjs template with TypeScript support.
  *
