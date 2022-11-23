@@ -97,6 +97,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
     // ANCHOR Source code
     new projen.SampleFile(this, 'src/index.ts', {sourcePath: path.join(assetsDir, 'src/index.ts.sample')})
+
     new projen.SampleFile(this, 'src/logger/create-logger.ts', {
       sourcePath: path.join(assetsDir, 'src/logger/create-logger.ts'),
     })
@@ -136,6 +137,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     // ANCHOR Github workflow
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+
     if (hasDefaultGithubWorkflows && this.github) {
       new PullRequestTest(this.github)
     }

@@ -73,6 +73,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Github
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initlaReleaseVersion: this.initialReleaseVersion})
       new PullRequestTest(this.github)
