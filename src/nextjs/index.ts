@@ -163,12 +163,15 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     new projen.JsonFile(this, 'tailwind.config.json', {obj: tailwindStaticConfig})
+    const templateString = '{{ userPlugins }}'
 
-    const templateString = '// User plugins'
-    const plugins = options.tailwindPlugins?.map((pkg) => `require('${pkg}')`).join(',\n    ')
+    const plugins = options.tailwindPlugins
+      ?.map((pkgOrFn) => (/(^function)|(\) => )/.test(pkgOrFn) ? `plugin(${pkgOrFn})` : `require('${pkgOrFn}')`))
+      .join(',\n')
+
     const replacement = plugins ? `${plugins},` : templateString
     const template: AssetFileTemplate = {templateString, replacement}
-    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js'), template})
+    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js.sample'), template})
 
     // ANCHOR Docker setup
     new projen.TextFile(this, '.dockerignore', {lines: [GENERATED_BY_PROJEN, 'node_modules', '.next']})

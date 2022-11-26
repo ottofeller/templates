@@ -49,8 +49,12 @@
     "projen": "0.57.3"
   },
   "dependencies": {
+    "prettier": "2.8.0",
     "projen": "0.57.3"
   },
+  "bundledDependencies": [
+    "prettier"
+  ],
   "engines": {
     "node": ">= 16.0.0"
   },

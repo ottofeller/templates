@@ -41,6 +41,7 @@ const project = new projen.cdk.JsiiProject({
     '@typescript-eslint/parser',
   ],
 
+  bundledDeps: ['prettier'],
   peerDeps: ['projen'],
 
   scripts: {
