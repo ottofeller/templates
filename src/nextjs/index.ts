@@ -171,7 +171,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     const replacement = plugins ? `${plugins},` : templateString
     const template: AssetFileTemplate = {templateString, replacement}
-    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js.sample'), template})
+    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js.tpl'), template})
 
     // ANCHOR Docker setup
     new projen.TextFile(this, '.dockerignore', {lines: [GENERATED_BY_PROJEN, 'node_modules', '.next']})
