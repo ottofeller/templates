@@ -42,9 +42,89 @@ The template uses tailwind for CSS. The main config used by tailwind is `tailwin
 const tailwindConfig = project.tryFindObjectFile('tailwind.config.json')
 tailwindConfig?.addOverride('theme.colors.aaaaaa', '#aaaaaa')
 tailwindConfig?.addOverride('theme.fontSize.18', 'calc(18 * 1rem / 16)')
+
+tailwindConfig?.addOverride('theme.fontSize', {
+  20: 'calc(20 * 1rem / 16)',
+  28: 'calc(28 * 1rem / 16)',
+})
+
+tailwindConfig?.addOverride('theme', {
+  colors: {ffffff: '#ffffff'},
+
+  borderRadius: {
+    4   : 'calc(4 * 1rem / 16)',
+    full: '9999px',
+    none: '0',
+  },
+})
 ```
 
-Note that the `tailwind.config.js` is not editable by default. In order to edit the file (e.g. for adding plugins) set its `readonly` attribute to `false`. But be aware that the run of `npx projen` command would overwrite all local changes resetting it to default content.
+##### Plugins
+The project options contain a property `tailwindPlugins` of type `Array<string>` that allows setting plugins. There are two distinct cases:
+1. for a plugin that can be simply required from a package just include the project name.
+This project setup
+```typescript
+const project = new OttofellerNextjsProject({
+  ...
+  tailwindPlugins: ['@tailwindcss/forms', '@tailwindcss/aspect-ratio'],
+})
+```
+results in the following config:
+```javascript
+const plugin = require('tailwindcss/plugin')
+const staticConfig = require('./tailwind.config.json')
+
+module.exports = {
+  ...staticConfig,
+
+  plugins: [
+    ...defaultPlugins,
+
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
+}
+```
+2. for plugins defined as a function passed to `tailwindcss/plugin` the function shall be stringified.
+This project setup
+```typescript
+import plugin from 'tailwindcss/plugin'
+
+// NOTE: The plugin callback type is not exported
+type Plugin = Parameters<typeof plugin>[0]
+
+const span: Plugin = ({addUtilities}) =>
+  addUtilities({'.area-span-full': {gridArea: '1/1/-1/-1'}})
+
+function scroll({addUtilities}: Parameters<Plugin>[0]): ReturnType<Plugin> {
+  return addUtilities({'.scrollbar-hidden': {'&::-webkit-scrollbar': {display: 'none'}, scrollbarWidth: 'none'}})
+}
+const project = new OttofellerNextjsProject({
+  ...
+  tailwindPlugins: [`${span}`, `${scroll}`],
+})
+```
+results in the following config:
+```javascript
+const plugin = require('tailwindcss/plugin')
+const staticConfig = require('./tailwind.config.json')
+
+module.exports = {
+  ...staticConfig,
+
+  plugins: [
+    ...defaultPlugins,
+
+    plugin(({addUtilities}) => addUtilities({'.area-span-full': {gridArea: '1/1/-1/-1'}})),
+    plugin(function utilities2({addUtilities}) {
+      return addUtilities({'.scrollbar-hidden': {'&::-webkit-scrollbar': {display: 'none'}, scrollbarWidth: 'none'}})
+    }),
+  ],
+}
+```
+
+##### Manual editing (strongly discouraged)
+Note that the `tailwind.config.js` is not editable and a run of `npx projen` command would overwrite all local changes resetting it to default content. In order to edit the file (e.g. something other than adding plugins) set its `readonly` attribute to `false`. But be aware that the run of `npx projen` command would overwrite all local changes resetting it to default content.
 ```typescript
 const tailwindConfig = project.tryFindFile('tailwind.config.js')
 if (tailwindConfig) {

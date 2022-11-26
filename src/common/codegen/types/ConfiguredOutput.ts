@@ -1,4 +1,5 @@
-import type {MaybePlural} from './MaybePlural'
+/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
+import type {MaybePlural} from '../../MaybePlural'
 import type {ConfiguredPlugin, PluginConfig} from './Plugin'
 
 export interface ConfiguredOutput {

@@ -64,6 +64,10 @@
       "type": "build"
     },
     {
+      "name": "prettier",
+      "type": "bundled"
+    },
+    {
       "name": "projen",
       "type": "peer"
     },
