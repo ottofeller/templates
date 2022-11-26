@@ -57,7 +57,7 @@ const project = new projen.cdk.JsiiProject({
 })
 
 // REVIEW There is probably another way to manage the version property
-project.package.addField('version', '1.2.6')
+project.package.addField('version', '1.2.7')
 
 // ANCHOR ESLint and prettier setup
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
