@@ -169,7 +169,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       ?.map((pkgOrFn) => (/(^function)|(\) => )/.test(pkgOrFn) ? `plugin(${pkgOrFn})` : `require('${pkgOrFn}')`))
       .join(',\n')
 
-    const replacement = plugins ? `${plugins},` : templateString
+    const replacement = plugins ? `${plugins},` : ''
     const template: AssetFileTemplate = {templateString, replacement}
     new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js.tpl'), template})
 
