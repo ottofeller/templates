@@ -49,10 +49,12 @@
     "projen": "0.57.3"
   },
   "dependencies": {
+    "@ottofeller/prettier-config-ofmt": "1.5.2",
     "prettier": "2.8.0",
     "projen": "0.57.3"
   },
   "bundledDependencies": [
+    "@ottofeller/prettier-config-ofmt",
     "prettier"
   ],
   "engines": {

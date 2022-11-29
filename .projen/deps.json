@@ -64,6 +64,10 @@
       "type": "build"
     },
     {
+      "name": "@ottofeller/prettier-config-ofmt",
+      "type": "bundled"
+    },
+    {
       "name": "prettier",
       "type": "bundled"
     },
