@@ -2,6 +2,7 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
 import * as projen from 'projen'
+import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
 import {CodegenConfigYaml} from '../common/codegen'
@@ -100,25 +101,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new projen.SampleFile(this, globalCssPath, {sourcePath: path.join(assetsDir, globalCssPath)})
 
     // ANCHOR NextJS config
-    new AssetFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
-
-    new projen.JsonFile(this, 'next.config.json', {
-      obj: {
-        images: {formats: ['avif', 'webp'].map((type) => `image/${type}`)},
-        output: 'standalone',
-        poweredByHeader: false,
-
-        publicRuntimeConfig: {
-          ACCEPT_IMAGES_MIME_TYPES: ['avif', 'gif', 'jpeg', 'png', 'svg+xml', 'webp']
-            .map((type) => `image/${type}`)
-            .join(', '),
-          ITEMS_PER_PAGE: 25,
-          US_DATE_FORMAT: 'MM/DD/YYYY',
-        },
-
-        reactStrictMode: true,
-      },
-    })
+    new AssetFile(this, 'next.config.defaults.js', {sourcePath: path.join(assetsDir, 'next.config.defaults.js')})
+    new SampleFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
 
     // ANCHOR ESLint and prettier setup
     this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
