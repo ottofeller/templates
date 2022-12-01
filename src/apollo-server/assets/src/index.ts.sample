@@ -35,7 +35,8 @@ const schema = makeExecutableSchema({
 type AppContext = {
   logger: ReturnType<typeof createLogger>
 }
-;(async () => {
+
+const init = async () => {
   const logger = await createLogger()
 
   const info = await new ApolloServer({
@@ -58,4 +59,6 @@ type AppContext = {
   }).listen({port: process.env.APP_PORT || 3000})
 
   console.log(`🚀 Server ready at ${info.url}`)
-})()
+}
+
+init()

@@ -79,9 +79,9 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       '@graphql-codegen/typescript-operations@2.4.0',
       '@graphql-codegen/typescript-resolvers@2.6.4',
       '@graphql-codegen/typescript-graphql-request@4.4.8',
-      '@ottofeller/eslint-config-ofmt@1.4.3',
-      '@ottofeller/ofmt@1.4.3',
-      '@ottofeller/prettier-config-ofmt@1.4.3',
+      '@ottofeller/eslint-config-ofmt@1.5.2',
+      '@ottofeller/ofmt@1.5.2',
+      '@ottofeller/prettier-config-ofmt@1.5.2',
       '@types/source-map-support@0.5.4',
       'nodemon@2.0.16',
     )
@@ -91,7 +91,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     addLintScripts(this, lintPaths)
 
     this.package.addField('type', 'module')
-    ;['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch'].forEach(this.removeTask.bind(this))
+    const tasksToRemove = ['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch']
+    tasksToRemove.forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
     const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')

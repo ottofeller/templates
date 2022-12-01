@@ -2,10 +2,11 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
 import * as projen from 'projen'
+import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
 import {CodegenConfigYaml} from '../common/codegen'
-import {AssetFile} from '../common/files/AssetFile'
+import {AssetFile, AssetFileTemplate} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
@@ -30,6 +31,12 @@ export interface OttofellerNextjsProjectOptions
    * NextJS ExperimentalConfig
    */
   readonly experimental?: ExperimentalConfig
+
+  /**
+   * A list of plugins to include into tailwind config.
+   * As a list item provide any string that can be required by NodeJS.
+   */
+  readonly tailwindPlugins?: Array<string>
 }
 
 export * from './ExperimentalConfig'
@@ -77,9 +84,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     this.addDeps('@apollo/client')
 
     this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.4.3',
-      '@ottofeller/ofmt@1.4.3',
-      '@ottofeller/prettier-config-ofmt@1.4.3',
+      '@ottofeller/eslint-config-ofmt@1.5.2',
+      '@ottofeller/ofmt@1.5.2',
+      '@ottofeller/prettier-config-ofmt@1.5.2',
       'eslint@>=8',
 
       // REVIEW Required during "npx projen new", fails without this dependency
@@ -102,25 +109,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new projen.SampleFile(this, globalCssPath, {sourcePath: path.join(assetsDir, globalCssPath)})
 
     // ANCHOR NextJS config
-    new AssetFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
-    const typeToFormat = (type: string) => `image/${type}`
-
-    new projen.JsonFile(this, 'next.config.json', {
-      obj: {
-        experimental: options.experimental,
-        images: {formats: ['avif', 'webp'].map(typeToFormat)},
-        output: 'standalone',
-        poweredByHeader: false,
-
-        publicRuntimeConfig: {
-          ACCEPT_IMAGES_MIME_TYPES: ['avif', 'gif', 'jpeg', 'png', 'svg+xml', 'webp'].map(typeToFormat).join(', '),
-          ITEMS_PER_PAGE: 25,
-          US_DATE_FORMAT: 'MM/DD/YYYY',
-        },
-
-        reactStrictMode: true,
-      },
-    })
+    new AssetFile(this, 'next.config.defaults.js', {sourcePath: path.join(assetsDir, 'next.config.defaults.js')})
+    new SampleFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
 
     // ANCHOR ESLint and prettier setup
     this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
@@ -165,7 +155,15 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     new projen.JsonFile(this, 'tailwind.config.json', {obj: tailwindStaticConfig})
-    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js')})
+    const templateString = '{{ userPlugins }}'
+
+    const plugins = options.tailwindPlugins
+      ?.map((pkgOrFn) => (/(^function)|(\) => )/.test(pkgOrFn) ? `plugin(${pkgOrFn})` : `require('${pkgOrFn}')`))
+      .join(',\n')
+
+    const replacement = plugins ? `${plugins},` : ''
+    const template: AssetFileTemplate = {templateString, replacement}
+    new AssetFile(this, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js.tpl'), template})
 
     // ANCHOR Docker setup
     new projen.TextFile(this, '.dockerignore', {lines: [GENERATED_BY_PROJEN, 'node_modules', '.next']})

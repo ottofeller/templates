@@ -1,6 +1,8 @@
+/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import type {Project, YamlFileOptions} from 'projen'
 import {YamlFile} from 'projen'
-import type {CodegenConfig, ConfiguredPlugin, MaybePlural, Schema} from './types'
+import type {MaybePlural} from '../MaybePlural'
+import type {CodegenConfig, ConfiguredPlugin, Schema} from './types'
 
 /**
  * A wrapper around YamlFile. Represents a codegen config file.
