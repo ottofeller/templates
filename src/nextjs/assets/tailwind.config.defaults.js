@@ -6,6 +6,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/container-queries'),
-    plugin(({addUtilities}) => addUtilities({'.area-span-full': {gridArea: '1/1/-1/-1'}}, ['responsive'])),
+    plugin(({addUtilities}) => addUtilities({'.span-full': {gridArea: '1/1/-1/-1'}})),
   ],
 }
