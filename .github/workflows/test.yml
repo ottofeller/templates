@@ -7,6 +7,7 @@ on:
       - src/**
       - .projenrc.ts
       - .github/workflows/test.yml
+      - package-lock.json # Run on dependabot PRs
 jobs:
   lint:
     runs-on: ubuntu-latest
