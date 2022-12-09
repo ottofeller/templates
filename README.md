@@ -36,6 +36,11 @@ npx projen build
 npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```
 
+#### next.config.js
+The config for NextJS is separated into two parts:
+- `next.config.defaults.js` - default config options deployed with the template; the file is readonly and shall not be edited;
+- `next.config.js` - editable config that by default only imports the `next.config.defaults.js`; feel free to edit the file, add required options, or include only the needed part of the default config.
+
 #### Tailwind
 The template uses tailwind for CSS. The main config used by tailwind is `tailwind.config.js`. The file is not editable. It configures plugins which are dynamic and thus can not to be defined statically. The static part of the config resides in `tailwind.config.json`. This file can be edited via `.projenrc.ts`, e.g.:
 ```typescript
