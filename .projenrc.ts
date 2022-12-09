@@ -71,7 +71,7 @@ project.package.addField('eslintConfig', {
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')
-testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflows/test.yml']}})
+testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflows/test.yml', 'package-lock.json']}})
 
 testGithubWorkflow.addJobs({
   lint: job([npmRunJob('lint')]),
