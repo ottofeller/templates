@@ -103,6 +103,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new AssetFile(this, 'next.config.defaults.js', {sourcePath: path.join(assetsDir, 'next.config.defaults.js')})
     new SampleFile(this, 'next.config.js', {sourcePath: path.join(assetsDir, 'next.config.js')})
 
+    // ANCHOR NextJS type declarations
+    new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
+
     // ANCHOR ESLint and prettier setup
     this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
     this.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
