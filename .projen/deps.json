@@ -16,6 +16,10 @@
       "type": "build"
     },
     {
+      "name": "@types/jest",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -40,6 +44,16 @@
       "type": "build"
     },
     {
+      "name": "jest-junit",
+      "version": "^13",
+      "type": "build"
+    },
+    {
+      "name": "jest",
+      "version": "^27",
+      "type": "build"
+    },
+    {
       "name": "jsii",
       "type": "build"
     },
@@ -53,6 +67,11 @@
     },
     {
       "name": "projen",
+      "type": "build"
+    },
+    {
+      "name": "ts-jest",
+      "version": "^27",
       "type": "build"
     },
     {
