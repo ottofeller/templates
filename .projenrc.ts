@@ -67,7 +67,7 @@ project.package.addField('eslintConfig', {
   ],
 })
 
-// ANCHOR Use older version of the package that is compatible with TS 3.9 (the version used by JSII)
+// Use older version of the package that is compatible with TS 3.9 (the version used by JSII)
 project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
 
 // ANCHOR Github workflows
