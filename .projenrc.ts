@@ -50,9 +50,7 @@ const project = new projen.cdk.JsiiProject({
     typecheck: 'tsc --noEmit --project tsconfig.dev.json',
   },
 
-  // npx projen build fails if jest is enabled
-  jest: false,
-
+  jest: true,
   eslint: false,
 })
 
@@ -68,6 +66,9 @@ project.package.addField('eslintConfig', {
     '@ottofeller/eslint-config-ofmt/eslint.formatting.cjs',
   ],
 })
+
+// Use older version of the package that is compatible with TS 3.9 (the version used by JSII)
+project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')
