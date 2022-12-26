@@ -27,7 +27,7 @@ export class PullRequestTest extends Component {
     const workflow = githubInstance.addWorkflow('test')
 
     workflow.on({
-      pullRequestTarget: {types: ['opened', 'synchronize', 'reopened']},
+      pullRequest: {types: ['opened', 'synchronize', 'reopened']},
       push: {branches: ['*']},
     })
 
