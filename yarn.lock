@@ -509,9 +509,22 @@
     chalk "^4.1.2"
     semver "^7.3.8"
 
-"@jsii/spec@1.72.0", "@jsii/spec@^1.72.0":
+"@jsii/check-node@1.73.0":
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.73.0.tgz#6f9cff84ac6762a30c642c85d2d56603c299a89d"
+  dependencies:
+    chalk "^4.1.2"
+    semver "^7.3.8"
+
+"@jsii/spec@1.72.0":
   version "1.72.0"
   resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.72.0.tgz"
+  dependencies:
+    ajv "^8.11.2"
+
+"@jsii/spec@^1.72.0", "@jsii/spec@^1.73.0":
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.73.0.tgz#7ab1d42947b4cb4099f084119657c39409bc7dc8"
   dependencies:
     ajv "^8.11.2"
 
@@ -2757,13 +2770,13 @@ jsesc@^2.5.1:
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-2.5.2.tgz"
 
 jsii-diff@^1.61.0:
-  version "1.72.0"
-  resolved "https://registry.npmjs.org/jsii-diff/-/jsii-diff-1.72.0.tgz"
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.73.0.tgz#378432f9b2b4c87790d1a530bf60596b8a712aee"
   dependencies:
-    "@jsii/check-node" "1.72.0"
-    "@jsii/spec" "^1.72.0"
+    "@jsii/check-node" "1.73.0"
+    "@jsii/spec" "^1.73.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.72.0"
+    jsii-reflect "^1.73.0"
     log4js "^6.7.1"
     yargs "^16.2.0"
 
@@ -2785,15 +2798,15 @@ jsii-pacmak@^1.61.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.72.0:
-  version "1.72.0"
-  resolved "https://registry.npmjs.org/jsii-reflect/-/jsii-reflect-1.72.0.tgz"
+jsii-reflect@^1.72.0, jsii-reflect@^1.73.0:
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.73.0.tgz#df6f57d6e8065aa836b6340465f08cfd7d388253"
   dependencies:
-    "@jsii/check-node" "1.72.0"
-    "@jsii/spec" "^1.72.0"
+    "@jsii/check-node" "1.73.0"
+    "@jsii/spec" "^1.73.0"
     chalk "^4"
     fs-extra "^10.1.0"
-    oo-ascii-tree "^1.72.0"
+    oo-ascii-tree "^1.73.0"
     yargs "^16.2.0"
 
 jsii-rosetta@^1.72.0:
@@ -3179,9 +3192,9 @@ onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-oo-ascii-tree@^1.72.0:
-  version "1.72.0"
-  resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.72.0.tgz"
+oo-ascii-tree@^1.73.0:
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.73.0.tgz#124c32155395f901296d801a1461e2713696cace"
 
 optionator@^0.8.1:
   version "0.8.3"
