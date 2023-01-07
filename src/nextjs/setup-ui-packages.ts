@@ -18,18 +18,19 @@ export function setupUIPackages(
     return
   }
 
-  project.addDeps(
+  project.addDeps('@next/font', '@headlessui/react')
+
+  project.addDevDeps(
     'postcss',
     'tailwindcss',
     'autoprefixer',
     '@tailwindcss/line-clamp',
     '@tailwindcss/container-queries',
-    '@next/font',
-    '@headlessui/react',
+    'postcss-nesting',
   )
 
   new projen.JsonFile(project, 'postcss.config.json', {
-    obj: {plugins: {'tailwindcss/nesting': {}, tailwindcss: {}, autoprefixer: {}}},
+    obj: {plugins: {'tailwindcss/nesting': 'postcss-nesting', tailwindcss: {}, autoprefixer: {}}},
     marker: false,
   })
 
