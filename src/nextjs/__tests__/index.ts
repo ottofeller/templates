@@ -82,6 +82,30 @@ describe('NextJS template', () => {
     })
   })
 
+  describe('has UI-related packages', () => {
+    test('installed by default', () => {
+      const project = new TestNextJsTypeScriptProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].dependencies).toHaveProperty('@next/font')
+      expect(snapshot['package.json'].dependencies).toHaveProperty('@headlessui/react')
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('tailwindcss')
+      expect(snapshot['postcss.config.json']).toBeDefined()
+      expect(snapshot['tailwind.config.defaults.js']).toBeDefined()
+      expect(snapshot['tailwind.config.js']).toBeDefined()
+    })
+
+    test('excluded if the option is set to false', () => {
+      const project = new TestNextJsTypeScriptProject({ui: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].dependencies).not.toHaveProperty('@next/font')
+      expect(snapshot['package.json'].dependencies).not.toHaveProperty('@headlessui/react')
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('tailwindcss')
+      expect(snapshot['postcss.config.json']).not.toBeDefined()
+      expect(snapshot['tailwind.config.defaults.js']).not.toBeDefined()
+      expect(snapshot['tailwind.config.js']).not.toBeDefined()
+    })
+  })
+
   test('includes VSCode settings', () => {
     const project = new TestNextJsTypeScriptProject()
     const snapshot = synthSnapshot(project)
