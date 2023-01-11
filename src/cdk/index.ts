@@ -4,6 +4,7 @@ import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
+import {extendGitignore} from '../common/gitignore'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
 
@@ -86,6 +87,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       'eslint.useESLintClass': true,
       'eslint.options': {cache: true, reportUnusedDisableDirectives: 'error'},
     })
+
+    // ANCHOR gitignore
+    extendGitignore(this)
   }
 
   postSynthesize(): void {

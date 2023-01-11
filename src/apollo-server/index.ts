@@ -7,6 +7,7 @@ import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescr
 import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
+import {extendGitignore} from '../common/gitignore'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
@@ -157,6 +158,9 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       'eslint.useESLintClass': true,
       'eslint.options': {cache: true, reportUnusedDisableDirectives: 'error'},
     })
+
+    // ANCHOR gitignore
+    extendGitignore(this)
   }
 
   postSynthesize(): void {
