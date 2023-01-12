@@ -84,6 +84,13 @@ describe('Apollo server template', () => {
     expect(mockedExecSync).toBeCalledTimes(1)
     expect(mockedExecSync).toBeCalledWith('ofmt .projenrc.mjs')
   })
+
+  test('has gitignore file extended', () => {
+    const project = new TestApolloServerProject()
+    const snapshot = synthSnapshot(project)
+    expect(snapshot['.gitignore']).toContain('.DS_Store')
+    expect(snapshot['.gitignore']).toContain('.env.local')
+  })
 })
 
 class TestApolloServerProject extends OttofellerApolloServerProject {

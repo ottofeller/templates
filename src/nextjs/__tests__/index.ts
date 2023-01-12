@@ -119,6 +119,13 @@ describe('NextJS template', () => {
     expect(mockedExecSync).toBeCalledTimes(1)
     expect(mockedExecSync).toBeCalledWith('ofmt .projenrc.ts')
   })
+
+  test('has gitignore file extended', () => {
+    const project = new TestNextJsTypeScriptProject()
+    const snapshot = synthSnapshot(project)
+    expect(snapshot['.gitignore']).toContain('.DS_Store')
+    expect(snapshot['.gitignore']).toContain('.env.local')
+  })
 })
 
 class TestNextJsTypeScriptProject extends OttofellerNextjsProject {
