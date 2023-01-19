@@ -3,7 +3,7 @@ import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
 import {CodegenConfig, CodegenConfigYaml} from '..'
 
-describe('codegen utils', () => {
+describe('Codegen utils', () => {
   const generatedIndex = './generated/index.ts'
 
   const config: CodegenConfig = {
@@ -17,7 +17,7 @@ describe('codegen utils', () => {
     },
   }
 
-  test('add codegen.yml file with provided config', () => {
+  test('adds codegen.yml file with provided config', () => {
     const project = new TestProject()
     new CodegenConfigYaml(project, config)
     const snapshot = synthSnapshot(project)
