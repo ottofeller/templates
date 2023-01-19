@@ -2,7 +2,7 @@ import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import {addLintScripts} from '..'
 
-describe('extendGitignore function', () => {
+describe('lint function', () => {
   test('adds linting scripts for provided paths to gitignore', () => {
     const project = new TestProject()
     addLintScripts(project, ['folderPath', 'file/path.ts', 'pattern/path/*.ts'])
