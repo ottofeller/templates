@@ -4,7 +4,7 @@ import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
 import {job, npmRunJob, PullRequestTest, ReleaseWorkflow} from '..'
 
-describe('github utils', () => {
+describe('GitHub utils', () => {
   test('job function creates a job object', () => {
     const steps = [
       {name: 'first step', run: 'node firstStep.js'},
