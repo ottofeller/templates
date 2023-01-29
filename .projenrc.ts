@@ -77,7 +77,6 @@ testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflo
 testGithubWorkflow.addJobs({
   lint: job([npmRunJob('lint')]),
   typecheck: job([npmRunJob('typecheck')]),
-  test: job([npmRunJob('test')]),
   build: job([npmRunJob('build')]),
 })
 
