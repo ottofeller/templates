@@ -1,4 +1,6 @@
 # OttoFeller Projen Templates
+![Test workflow status](https://github.com/ottofeller/templates/actions/workflows/test.yml/badge.svg?branch=main)
+
 ## 📀 User guide
 In order to install a certain project (template) from `@ottofeller/templates` call `npx projen new` in the dir of the new project in the following way:
 ```sh
