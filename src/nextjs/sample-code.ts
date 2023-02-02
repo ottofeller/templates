@@ -13,8 +13,11 @@ export function sampleCode(
 ) {
   const includeUIPackages = options.ui ?? true
 
-  const indexFilePath = 'pages/index.tsx'
-  new projen.SampleFile(project, indexFilePath, {sourcePath: path.join(assetsDir, indexFilePath)})
+  const homeComponentFilePath = 'src/Home/index.tsx'
+  new projen.SampleFile(project, homeComponentFilePath, {sourcePath: path.join(assetsDir, homeComponentFilePath)})
+
+  const indexPagePath = 'pages/index.tsx'
+  new projen.SampleFile(project, indexPagePath, {sourcePath: path.join(assetsDir, indexPagePath)})
 
   const appFilePath = 'pages/_app.tsx'
   const appContents = fs.readFileSync(path.join(assetsDir, appFilePath), {encoding: 'utf-8'}).split('\n')
@@ -28,5 +31,13 @@ export function sampleCode(
   if (includeUIPackages) {
     const globalCssPath = 'src/assets/global.css'
     new projen.SampleFile(project, globalCssPath, {sourcePath: path.join(assetsDir, globalCssPath)})
+  }
+
+  const includeTests = options.jest ?? true
+
+  if (includeTests) {
+    new projen.SampleFile(project, 'src/Home/__tests__/index.tsx', {
+      sourcePath: path.join(assetsDir, 'src/Home/__tests__/index.tsx.sample'),
+    })
   }
 }
