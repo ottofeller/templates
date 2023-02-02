@@ -12,6 +12,7 @@ import {extendGitignore} from '../common/gitignore'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
+import {setupJest} from './jest'
 import {sampleCode} from './sample-code'
 import {setupUIPackages} from './setup-ui-packages'
 
@@ -65,6 +66,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       },
       sampleCode: false,
       tailwind: false, // Tailwind has to be configured manually.
+      jest: false, // Default jest config created by projen does not utilize the nextjs helper and poorly works with react.
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
@@ -137,6 +139,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
       this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
       this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.yml'})
+
+      // ANCHOR Jest
+      setupJest(this, options, assetsDir)
     }
 
     // ANCHOR Tailwind
