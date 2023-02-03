@@ -2770,13 +2770,13 @@ jsesc@^2.5.1:
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-2.5.2.tgz"
 
 jsii-diff@^1.61.0:
-  version "1.73.0"
-  resolved "https://registry.npmjs.org/jsii-diff/-/jsii-diff-1.73.0.tgz"
+  version "1.74.0"
+  resolved "https://registry.yarnpkg.com/jsii-diff/-/jsii-diff-1.74.0.tgz#d7e6f94d4c34a74604a74ba204bc6effba7a13a0"
   dependencies:
-    "@jsii/check-node" "1.73.0"
-    "@jsii/spec" "^1.73.0"
+    "@jsii/check-node" "1.74.0"
+    "@jsii/spec" "^1.74.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.73.0"
+    jsii-reflect "^1.74.0"
     log4js "^6.7.1"
     yargs "^16.2.0"
 
@@ -2798,15 +2798,15 @@ jsii-pacmak@^1.61.0:
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.73.0:
-  version "1.73.0"
-  resolved "https://registry.npmjs.org/jsii-reflect/-/jsii-reflect-1.73.0.tgz"
+jsii-reflect@^1.73.0, jsii-reflect@^1.74.0:
+  version "1.74.0"
+  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.74.0.tgz#ddc1e9780dd120337d901a4a4b72ca5a1492a2c3"
   dependencies:
-    "@jsii/check-node" "1.73.0"
-    "@jsii/spec" "^1.73.0"
+    "@jsii/check-node" "1.74.0"
+    "@jsii/spec" "^1.74.0"
     chalk "^4"
     fs-extra "^10.1.0"
-    oo-ascii-tree "^1.73.0"
+    oo-ascii-tree "^1.74.0"
     yargs "^16.2.0"
 
 jsii-rosetta@^1.73.0:
@@ -3210,9 +3210,9 @@ onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-oo-ascii-tree@^1.73.0:
-  version "1.73.0"
-  resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.73.0.tgz"
+oo-ascii-tree@^1.74.0:
+  version "1.74.0"
+  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.74.0.tgz#3581e4f95ff9de13660943e504eaddaa58bf08c0"
 
 optionator@^0.8.1:
   version "0.8.3"
