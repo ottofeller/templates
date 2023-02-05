@@ -66,6 +66,7 @@ node_modules
 /codegen.yml linguist-generated
 /Dockerfile.dev linguist-generated
 /Dockerfile.production linguist-generated
+/jest.config.defaults.js linguist-generated
 /LICENSE linguist-generated
 /next.config.defaults.js linguist-generated
 /package-lock.json linguist-generated
@@ -170,6 +171,7 @@ jspm_packages/
 !/next.config.defaults.js
 !/.github/workflows/test.yml
 !/codegen.yml
+!/jest.config.defaults.js
 !/postcss.config.json
 !/tailwind.config.defaults.js
 !/.dockerignore
@@ -224,6 +226,14 @@ tsconfig.tsbuildinfo
         "type": "build",
       },
       Object {
+        "name": "@testing-library/react",
+        "type": "build",
+      },
+      Object {
+        "name": "@types/jest",
+        "type": "build",
+      },
+      Object {
         "name": "@types/node",
         "type": "build",
         "version": "^12",
@@ -244,6 +254,14 @@ tsconfig.tsbuildinfo
         "name": "eslint",
         "type": "build",
         "version": ">=8",
+      },
+      Object {
+        "name": "jest",
+        "type": "build",
+      },
+      Object {
+        "name": "jest-environment-jsdom",
+        "type": "build",
       },
       Object {
         "name": "postcss",
@@ -356,6 +374,7 @@ tsconfig.tsbuildinfo
       "codegen.yml",
       "Dockerfile.dev",
       "Dockerfile.production",
+      "jest.config.defaults.js",
       "LICENSE",
       "next.config.defaults.js",
       "postcss.config.json",
@@ -525,6 +544,19 @@ tsconfig.tsbuildinfo
       "test": Object {
         "description": "Run tests",
         "name": "test",
+        "steps": Array [
+          Object {
+            "exec": "jest --no-cache --all",
+          },
+        ],
+      },
+      "test:watch": Object {
+        "name": "test:watch",
+        "steps": Array [
+          Object {
+            "exec": "jest --watch",
+          },
+        ],
       },
       "watch": Object {
         "description": "Watch & compile in the background",
@@ -853,6 +885,32 @@ generates:
     plugins:
       - introspection
 ",
+  "jest.config.defaults.js": "/** @type {import('@jest/types').Config.InitialOptions} */
+module.exports = {
+  coveragePathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+
+  moduleDirectories: ['node_modules', 'src'],
+  moduleFileExtensions: ['ts', 'tsx', 'js'],
+  moduleNameMapper: {'generated/(.*)': '<rootDir>/generated/$1'},
+  testEnvironment: 'jsdom',
+
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+
+  testRegex: '/__tests__/index.tsx?$',
+}
+",
+  "jest.config.js": "const nextJest = require('next/jest')
+const defaultConfig = require('./jest.config.defaults')
+
+const createJestConfig = nextJest({dir: './'})
+
+/** @type {import('@jest/types').Config.InitialOptions} */
+const customJestConfig = {
+  ...defaultConfig,
+}
+
+module.exports = createJestConfig(customJestConfig)
+",
   "next-env.d.ts": "/// <reference types=\\"next\\" />
 /// <reference types=\\"next/image-types/global\\" />
 
@@ -934,11 +992,15 @@ module.exports = {
       "@ottofeller/prettier-config-ofmt": "1.5.2",
       "@tailwindcss/container-queries": "*",
       "@tailwindcss/line-clamp": "*",
+      "@testing-library/react": "*",
+      "@types/jest": "*",
       "@types/node": "^12",
       "@types/react": "*",
       "@types/react-dom": "*",
       "autoprefixer": "*",
       "eslint": ">=8",
+      "jest": "*",
+      "jest-environment-jsdom": "*",
       "postcss": "*",
       "postcss-nesting": "*",
       "projen": "*",
@@ -977,6 +1039,7 @@ module.exports = {
       "server": "npx projen server",
       "telemetry": "npx projen telemetry",
       "test": "npx projen test",
+      "test:watch": "npx projen test:watch",
       "typecheck": "tsc --noEmit --project tsconfig.dev.json",
       "watch": "npx projen watch",
     },
@@ -989,10 +1052,32 @@ export default function App({Component, pageProps}: AppProps) {
   return <Component {...pageProps} />
 }
 ",
-  "pages/index.tsx": "import Link from 'next/link'
+  "pages/index.tsx": "import {Home} from 'Home'
+export default Home
+",
+  "postcss.config.json": Object {
+    "plugins": Object {
+      "autoprefixer": Object {},
+      "tailwindcss": Object {},
+      "tailwindcss/nesting": "postcss-nesting",
+    },
+  },
+  "src/Home/__tests__/index.tsx": "import {render} from '@testing-library/react'
+import {Home} from '..'
+
+describe('Home page', () => {
+  it('shows title', async () => {
+    const container = render(<Home cookies={{}} />)
+    const heading = container.getByText('It works!')
+    expect(heading).toBeTruthy()
+    expect(heading).toBeInstanceOf(HTMLHeadingElement)
+  })
+})
+",
+  "src/Home/index.tsx": "import Link from 'next/link'
 import {memo} from 'react'
 
-const Home = memo(function Home(props: {cookies?: Record<string, string>}) {
+export const Home = memo(function Home(props: {cookies?: Record<string, string>}) {
   return (
     <div className=\\"grid gap-y-4 place-content-center place-items-center min-h-screen\\">
       <h2 className=\\"text-24\\">It works!</h2>
@@ -1009,16 +1094,7 @@ const Home = memo(function Home(props: {cookies?: Record<string, string>}) {
     </div>
   )
 })
-
-export default Home
 ",
-  "postcss.config.json": Object {
-    "plugins": Object {
-      "autoprefixer": Object {},
-      "tailwindcss": Object {},
-      "tailwindcss/nesting": "postcss-nesting",
-    },
-  },
   "src/assets/global.css": "@tailwind base;
 @tailwind components;
 @tailwind utilities;

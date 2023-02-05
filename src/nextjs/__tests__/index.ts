@@ -126,6 +126,37 @@ describe('NextJS template', () => {
     expect(snapshot['.gitignore']).toContain('.DS_Store')
     expect(snapshot['.gitignore']).toContain('.env.local')
   })
+
+  describe('has jest and an example test', () => {
+    test('setup by default', () => {
+      const project = new TestNextJsTypeScriptProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('jest')
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('@types/jest')
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('jest-environment-jsdom')
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('@testing-library/react')
+      expect(snapshot['package.json'].scripts).toHaveProperty('test')
+      expect(snapshot['.projen/tasks.json'].tasks.test.steps).toHaveLength(1)
+      expect(snapshot['.projen/tasks.json'].tasks.test.steps[0].exec).toEqual('jest --no-cache --all')
+      expect(snapshot['package.json'].scripts).toHaveProperty('test:watch')
+      expect(snapshot['jest.config.defaults.js']).toBeDefined()
+      expect(snapshot['jest.config.js']).toBeDefined()
+    })
+
+    test('excluded if the option is set to false', () => {
+      const project = new TestNextJsTypeScriptProject({jest: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('jest')
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('@types/jest')
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('jest-environment-jsdom')
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('@testing-library/react')
+      expect(snapshot['package.json'].scripts).toHaveProperty('test')
+      expect(snapshot['.projen/tasks.json'].tasks.test).not.toHaveProperty('steps')
+      expect(snapshot['package.json'].scripts).not.toHaveProperty('test:watch')
+      expect(snapshot['jest.config.defaults.js']).not.toBeDefined()
+      expect(snapshot['jest.config.js']).not.toBeDefined()
+    })
+  })
 })
 
 class TestNextJsTypeScriptProject extends OttofellerNextjsProject {
