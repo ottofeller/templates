@@ -76,8 +76,9 @@ testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflo
 
 testGithubWorkflow.addJobs({
   lint: job([npmRunJob('lint')]),
+  test: job([npmRunJob('test')]),
   typecheck: job([npmRunJob('typecheck')]),
-  build: job([npmRunJob('build')]),
+  build: {...job([npmRunJob('build')]), needs: ['lint', 'test', 'typecheck']},
 })
 
 const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')

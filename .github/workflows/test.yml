@@ -18,6 +18,15 @@ jobs:
         with:
           node-version: 16
           command: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: ottofeller/github-actions/npm-run@main
+        with:
+          node-version: 16
+          command: npm run test
   typecheck:
     runs-on: ubuntu-latest
     permissions:
@@ -28,6 +37,10 @@ jobs:
           node-version: 16
           command: npm run typecheck
   build:
+    needs:
+      - lint
+      - test
+      - typecheck
     runs-on: ubuntu-latest
     permissions:
       contents: read
