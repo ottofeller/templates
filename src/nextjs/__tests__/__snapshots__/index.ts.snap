@@ -5,11 +5,6 @@ exports[`NextJS template has default test workflow included by default 1`] = `
 
 name: test
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
   push:
     branches:
       - \\"*\\"
@@ -91,11 +86,6 @@ updates:
 
 name: test
 on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
   push:
     branches:
       - \\"*\\"
