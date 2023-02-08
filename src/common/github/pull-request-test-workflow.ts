@@ -25,11 +25,7 @@ export class PullRequestTest extends Component {
     })
 
     const workflow = githubInstance.addWorkflow('test')
-
-    workflow.on({
-      pullRequest: {types: ['opened', 'synchronize', 'reopened']},
-      push: {branches: ['*']},
-    })
+    workflow.on({push: {branches: ['*']}})
 
     workflow.addJobs({
       lint: job('npm run lint'),
