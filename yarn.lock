@@ -509,9 +509,16 @@
     chalk "^4.1.2"
     semver "^7.3.8"
 
-"@jsii/spec@1.74.0", "@jsii/spec@^1.74.0":
-  version "1.74.0"
-  resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.74.0.tgz"
+"@jsii/check-node@1.75.0":
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/@jsii/check-node/-/check-node-1.75.0.tgz#1cfc2ab5b461c1e80d9a4c18a6e351a9a13287ce"
+  dependencies:
+    chalk "^4.1.2"
+    semver "^7.3.8"
+
+"@jsii/spec@1.75.0", "@jsii/spec@^1.74.0", "@jsii/spec@^1.75.0":
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/@jsii/spec/-/spec-1.75.0.tgz#d15a8fe7764e3d39e727e944452168de35fc2ec3"
   dependencies:
     ajv "^8.12.0"
 
@@ -1267,9 +1274,9 @@ co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.npmjs.org/co/-/co-4.6.0.tgz"
 
-codemaker@^1.74.0:
-  version "1.74.0"
-  resolved "https://registry.npmjs.org/codemaker/-/codemaker-1.74.0.tgz"
+codemaker@^1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.75.0.tgz#a54953cf590cb43629c364f62aaf53a7693fc031"
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
@@ -2768,51 +2775,69 @@ jsii-diff@^1.61.0:
     yargs "^16.2.0"
 
 jsii-pacmak@^1.61.0:
-  version "1.74.0"
-  resolved "https://registry.npmjs.org/jsii-pacmak/-/jsii-pacmak-1.74.0.tgz"
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.75.0.tgz#2ecba3c95d587003c763ee8fc7516d30997cbabf"
   dependencies:
-    "@jsii/check-node" "1.74.0"
-    "@jsii/spec" "^1.74.0"
+    "@jsii/check-node" "1.75.0"
+    "@jsii/spec" "^1.75.0"
     clone "^2.1.2"
-    codemaker "^1.74.0"
+    codemaker "^1.75.0"
     commonmark "^0.30.0"
     escape-string-regexp "^4.0.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.74.0"
-    jsii-rosetta "^1.74.0"
+    jsii-reflect "^1.75.0"
+    jsii-rosetta "^1.75.0"
     semver "^7.3.8"
     spdx-license-list "^6.6.0"
     xmlbuilder "^15.1.1"
     yargs "^16.2.0"
 
-jsii-reflect@^1.74.0:
-  version "1.74.0"
-  resolved "https://registry.npmjs.org/jsii-reflect/-/jsii-reflect-1.74.0.tgz"
+jsii-reflect@^1.74.0, jsii-reflect@^1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/jsii-reflect/-/jsii-reflect-1.75.0.tgz#136564eb8ec9a94a9fe218e3d275e80196cd6285"
   dependencies:
-    "@jsii/check-node" "1.74.0"
-    "@jsii/spec" "^1.74.0"
+    "@jsii/check-node" "1.75.0"
+    "@jsii/spec" "^1.75.0"
     chalk "^4"
     fs-extra "^10.1.0"
-    oo-ascii-tree "^1.74.0"
+    oo-ascii-tree "^1.75.0"
     yargs "^16.2.0"
 
-jsii-rosetta@^1.74.0:
-  version "1.74.0"
-  resolved "https://registry.npmjs.org/jsii-rosetta/-/jsii-rosetta-1.74.0.tgz"
+jsii-rosetta@^1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-1.75.0.tgz#85a96669fc60f69d29409608a694ed063abcadd9"
   dependencies:
-    "@jsii/check-node" "1.74.0"
-    "@jsii/spec" "1.74.0"
+    "@jsii/check-node" "1.75.0"
+    "@jsii/spec" "1.75.0"
     "@xmldom/xmldom" "^0.8.6"
     commonmark "^0.30.0"
     fast-glob "^3.2.12"
-    jsii "1.74.0"
+    jsii "1.75.0"
     semver "^7.3.8"
     semver-intersect "^1.4.0"
     typescript "~3.9.10"
     workerpool "^6.3.1"
     yargs "^16.2.0"
 
-jsii@1.74.0, jsii@^1.61.0:
+jsii@1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/jsii/-/jsii-1.75.0.tgz#e18fc8cb3ad985da93fb1513fc1e4d8ca191ff98"
+  dependencies:
+    "@jsii/check-node" "1.75.0"
+    "@jsii/spec" "^1.75.0"
+    case "^1.6.3"
+    chalk "^4"
+    fast-deep-equal "^3.1.3"
+    fs-extra "^10.1.0"
+    log4js "^6.7.1"
+    semver "^7.3.8"
+    semver-intersect "^1.4.0"
+    sort-json "^2.0.1"
+    spdx-license-list "^6.6.0"
+    typescript "~3.9.10"
+    yargs "^16.2.0"
+
+jsii@^1.61.0:
   version "1.74.0"
   resolved "https://registry.npmjs.org/jsii/-/jsii-1.74.0.tgz"
   dependencies:
@@ -3179,9 +3204,9 @@ onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-oo-ascii-tree@^1.74.0:
-  version "1.74.0"
-  resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.74.0.tgz"
+oo-ascii-tree@^1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/oo-ascii-tree/-/oo-ascii-tree-1.75.0.tgz#966b2b373b6583fb5246e19b9ead534ca9afc72f"
 
 optionator@^0.8.1:
   version "0.8.3"
