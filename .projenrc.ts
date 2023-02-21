@@ -56,10 +56,14 @@ const project = new projen.cdk.JsiiProject({
 })
 
 // REVIEW There is probably another way to manage the version property
+const versionFromEnv = process.env.PACKAGE_VERSION
+
+if (versionFromEnv !== undefined && !/^\d+\.\d+\.\d+$/.test(versionFromEnv)) {
+  throw new Error('Received invalid version from env. Please use semver format (e.g. 1.2.3).')
+}
+
 const packageJson = JSON.parse(readFileSync('package.json', {encoding: 'utf-8'}))
-const versionFromEnv = process.env.PACKAGE_VERSION || ''
-const isValidVersionFromEnv = /^\d+\.\d+\.\d+$/.test(versionFromEnv)
-const version = isValidVersionFromEnv ? versionFromEnv : packageJson.version
+const version = versionFromEnv || packageJson.version
 project.package.addField('version', version)
 
 // ANCHOR ESLint and prettier setup
