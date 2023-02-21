@@ -1,3 +1,4 @@
+import {readFileSync} from 'fs'
 import * as projen from 'projen'
 import {job, npmRunJob} from './src/common/github'
 
@@ -55,7 +56,11 @@ const project = new projen.cdk.JsiiProject({
 })
 
 // REVIEW There is probably another way to manage the version property
-project.package.addField('version', '1.3.0')
+const packageJson = JSON.parse(readFileSync('package.json', {encoding: 'utf-8'}))
+const versionFromEnv = process.env.PACKAGE_VERSION || ''
+const isValidVersionFromEnv = /^\d+\.\d+\.\d+$/.test(versionFromEnv)
+const version = isValidVersionFromEnv ? versionFromEnv : packageJson.version
+project.package.addField('version', version)
 
 // ANCHOR ESLint and prettier setup
 project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
