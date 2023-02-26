@@ -125,6 +125,11 @@ describe('NextJS template', () => {
     const snapshot = synthSnapshot(project)
     expect(snapshot['.gitignore']).toContain('.DS_Store')
     expect(snapshot['.gitignore']).toContain('.env.local')
+    expect(snapshot['.gitignore']).toContain('.next/')
+    expect(snapshot['.gitignore']).toContain('.idea/')
+    expect(snapshot['.gitignore']).toContain('debug/')
+    expect(snapshot['.gitignore']).toContain('.vscode/tasks.json')
+    expect(snapshot['.gitignore']).toContain('build/')
   })
 
   describe('has jest and an example test', () => {
