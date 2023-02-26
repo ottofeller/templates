@@ -32,9 +32,9 @@
     "organization": false
   },
   "devDependencies": {
-    "@ottofeller/eslint-config-ofmt": "1.5.2",
-    "@ottofeller/ofmt": "1.5.2",
-    "@ottofeller/prettier-config-ofmt": "1.5.2",
+    "@ottofeller/eslint-config-ofmt": "1.7.0",
+    "@ottofeller/ofmt": "1.7.0",
+    "@ottofeller/prettier-config-ofmt": "1.7.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16",
     "@types/prettier": "2.6.0",

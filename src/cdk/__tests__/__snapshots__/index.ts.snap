@@ -215,17 +215,17 @@ cdk.out/
       Object {
         "name": "@ottofeller/eslint-config-ofmt",
         "type": "build",
-        "version": "1.5.2",
+        "version": "1.7.0",
       },
       Object {
         "name": "@ottofeller/ofmt",
         "type": "build",
-        "version": "1.5.2",
+        "version": "1.7.0",
       },
       Object {
         "name": "@ottofeller/prettier-config-ofmt",
         "type": "build",
-        "version": "1.5.2",
+        "version": "1.7.0",
       },
       Object {
         "name": "@types/node",
@@ -733,9 +733,9 @@ cdk.out/
       "constructs": "^10.0.5",
     },
     "devDependencies": Object {
-      "@ottofeller/eslint-config-ofmt": "1.5.2",
-      "@ottofeller/ofmt": "1.5.2",
-      "@ottofeller/prettier-config-ofmt": "1.5.2",
+      "@ottofeller/eslint-config-ofmt": "1.7.0",
+      "@ottofeller/ofmt": "1.7.0",
+      "@ottofeller/prettier-config-ofmt": "1.7.0",
       "@types/node": "^14",
       "aws-cdk": "^2.1.0",
       "esbuild": "*",
