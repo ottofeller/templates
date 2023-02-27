@@ -162,6 +162,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR gitignore
     extendGitignore(this)
+    extendGitignore(this, ['.next/', '.idea/', 'debug/', '.vscode/tasks.json', 'build/'])
   }
 
   postSynthesize(): void {
