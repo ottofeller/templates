@@ -34,9 +34,9 @@ const project = new projen.cdk.JsiiProject({
     // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
     '@types/prettier@2.6.0',
 
-    '@ottofeller/eslint-config-ofmt@1.5.2',
-    '@ottofeller/ofmt@1.5.2',
-    '@ottofeller/prettier-config-ofmt@1.5.2',
+    '@ottofeller/eslint-config-ofmt@1.7.0',
+    '@ottofeller/ofmt@1.7.0',
+    '@ottofeller/prettier-config-ofmt@1.7.0',
     'eslint-plugin-import@2.25.4',
     '@typescript-eslint/eslint-plugin@5.10.2',
     '@typescript-eslint/parser',

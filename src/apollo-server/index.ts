@@ -80,9 +80,9 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       '@graphql-codegen/typescript-operations@2.4.0',
       '@graphql-codegen/typescript-resolvers@2.6.4',
       '@graphql-codegen/typescript-graphql-request@4.4.8',
-      '@ottofeller/eslint-config-ofmt@1.5.2',
-      '@ottofeller/ofmt@1.5.2',
-      '@ottofeller/prettier-config-ofmt@1.5.2',
+      '@ottofeller/eslint-config-ofmt@1.7.0',
+      '@ottofeller/ofmt@1.7.0',
+      '@ottofeller/prettier-config-ofmt@1.7.0',
       '@types/source-map-support@0.5.4',
       'nodemon@2.0.16',
     )
