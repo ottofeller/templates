@@ -107,19 +107,23 @@ createReleaseGithubWorkflow.on({
 })
 
 createReleaseGithubWorkflow.addJobs({
-  create: job([
-    {
-      uses: 'ottofeller/github-actions/create-release@main',
+  create: {
+    ...job([
+      {
+        uses: 'ottofeller/github-actions/create-release@main',
 
-      with: {
-        'initial-version': '1.0.0',
-        'bump-level': '${{ github.event.inputs.bump-level }}',
-        'release-branches': 'master',
-        'update-root-package_json': true,
-        'github-token': '${{ secrets.GITHUB_TOKEN }}',
+        with: {
+          'initial-version': '1.0.0',
+          'bump-level': '${{ github.event.inputs.bump-level }}',
+          'release-branches': 'master',
+          'update-root-package_json': true,
+          'github-token': '${{ secrets.GITHUB_TOKEN }}',
+        },
       },
-    },
-  ]),
+    ]),
+
+    permissions: {contents: projen.github.workflows.JobPermission.WRITE},
+  },
 })
 
 const publishReleaseGithubWorkflow = project.github!.addWorkflow('publish-release')
