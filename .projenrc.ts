@@ -114,8 +114,8 @@ createReleaseGithubWorkflow.addJobs({
 
         with: {
           'initial-version': '1.0.0',
-          'bump-level': '${{ github.event.inputs.bump-level }}',
-          'release-branches': 'master',
+          'bump-level': '${{ github.event.inputs.bump_level }}',
+          'release-branches': 'main',
           'update-root-package_json': true,
           'github-token': '${{ secrets.GITHUB_TOKEN }}',
         },
