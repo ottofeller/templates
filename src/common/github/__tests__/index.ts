@@ -91,12 +91,12 @@ describe('GitHub utils', () => {
 
     test('allows initialReleaseVersion and releaseBranch override', () => {
       const project = new TestProject({release: false})
-      const initlaReleaseVersion = 'test-version'
+      const initialReleaseVersion = 'test-version'
       const releaseBranch = 'main'
-      new ReleaseWorkflow(project.github!, {initlaReleaseVersion, releaseBranch})
+      new ReleaseWorkflow(project.github!, {initialReleaseVersion, releaseBranch})
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[releaseWorkflowPath])
-      expect(workflow.jobs.create.steps[0].with['initial-version']).toEqual(initlaReleaseVersion)
+      expect(workflow.jobs.create.steps[0].with['initial-version']).toEqual(initialReleaseVersion)
       expect(workflow.jobs.create.steps[0].with['release-branches']).toEqual(releaseBranch)
     })
 

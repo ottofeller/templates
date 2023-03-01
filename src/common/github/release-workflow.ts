@@ -9,7 +9,7 @@ export interface ReleaseWorkflowOptions {
    * The initial version to bump
    * @default 0.0.1
    */
-  readonly initlaReleaseVersion?: string
+  readonly initialReleaseVersion?: string
 
   /**
    * The branch to release from
@@ -25,7 +25,7 @@ export class ReleaseWorkflow extends github.GithubWorkflow {
   constructor(githubInstance: github.GitHub, options: ReleaseWorkflowOptions = {}) {
     super(githubInstance, 'release')
 
-    const {initlaReleaseVersion = '0.0.1', releaseBranch = 'master'} = options
+    const {initialReleaseVersion = '0.0.1', releaseBranch = 'master'} = options
 
     this.on({
       workflowDispatch: {
@@ -47,7 +47,7 @@ export class ReleaseWorkflow extends github.GithubWorkflow {
           uses: 'ottofeller/github-actions/create-release@main',
 
           with: {
-            'initial-version': initlaReleaseVersion,
+            'initial-version': initialReleaseVersion,
             'bump-level': '${{ github.event.inputs.bump-level }}',
             'release-branches': releaseBranch,
             'update-root-package_json': true,
