@@ -2,22 +2,30 @@ import {github} from 'projen'
 import {job} from './job'
 
 /**
- * Options for PullRequestLint
+ * Options for ReleaseWorkflow
  */
 export interface ReleaseWorkflowOptions {
   /**
    * The initial version to bump
    * @default 0.0.1
    */
-  readonly initlaReleaseVersion: string
+  readonly initialReleaseVersion?: string
+
+  /**
+   * The branch to release from
+   * @default 'master'
+   */
+  readonly releaseBranch?: string
 }
 
 /**
  * A GitHub workflow that bumps the version of root package and create draft release.
  */
 export class ReleaseWorkflow extends github.GithubWorkflow {
-  constructor(githubInstance: github.GitHub, options: ReleaseWorkflowOptions = {initlaReleaseVersion: '0.0.1'}) {
+  constructor(githubInstance: github.GitHub, options: ReleaseWorkflowOptions = {}) {
     super(githubInstance, 'release')
+
+    const {initialReleaseVersion = '0.0.1', releaseBranch = 'master'} = options
 
     this.on({
       workflowDispatch: {
@@ -39,9 +47,9 @@ export class ReleaseWorkflow extends github.GithubWorkflow {
           uses: 'ottofeller/github-actions/create-release@main',
 
           with: {
-            'initial-version': options.initlaReleaseVersion,
+            'initial-version': initialReleaseVersion,
             'bump-level': '${{ github.event.inputs.bump-level }}',
-            'release-branches': 'master',
+            'release-branches': releaseBranch,
             'update-root-package_json': true,
             'github-token': '${{ secrets.GITHUB_TOKEN }}',
           },
