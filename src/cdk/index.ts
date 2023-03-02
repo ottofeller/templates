@@ -6,12 +6,13 @@ import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
-import {VsCodeSettings} from '../common/vscode-settings'
+import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
   extends AwsCdkTypeScriptAppOptions,
     WithDefaultWorkflow,
-    WithCustomLintPaths {
+    WithCustomLintPaths,
+    WithVSCode {
   /**
    * The base version of the very first release.
    *
@@ -81,7 +82,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     }
 
     // ANCHOR VSCode settings
-    VsCodeSettings.addToProject(this)
+    VsCodeSettings.addToProject(this, options)
 
     VsCodeSettings.of(this)?.add({
       'eslint.useESLintClass': true,

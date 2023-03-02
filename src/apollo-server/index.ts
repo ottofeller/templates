@@ -9,13 +9,14 @@ import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
 import {addLintScripts, WithCustomLintPaths} from '../common/lint'
-import {VsCodeSettings} from '../common/vscode-settings'
+import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 
 export interface OttofellerApolloServerProjectOptions
   extends TypeScriptProjectOptions,
     WithDefaultWorkflow,
-    WithCustomLintPaths {}
+    WithCustomLintPaths,
+    WithVSCode {}
 
 /**
  * Apollo server template.
@@ -152,7 +153,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     new AssetFile(this, 'Dockerfile', {sourcePath: path.join(assetsDir, 'Dockerfile')})
 
     // ANCHOR VSCode settings
-    VsCodeSettings.addToProject(this)
+    VsCodeSettings.addToProject(this, options)
 
     VsCodeSettings.of(this)?.add({
       'eslint.useESLintClass': true,
