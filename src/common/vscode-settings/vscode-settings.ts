@@ -4,9 +4,15 @@ import type {NodeProject} from 'projen/lib/javascript'
 import {deepMerge} from 'projen/lib/util'
 import {WithVSCode} from './with-vscode'
 
+/**
+ * VSCode settings for a project.
+ */
 export class VsCodeSettings extends JsonFile {
   private static readonly _FILENAME = '.vscode/settings.json'
 
+  /**
+   * Looks for VSCode settings in the given project.
+   */
   public static of(project: Project): VsCodeSettings | undefined {
     return project.tryFindObjectFile(VsCodeSettings._FILENAME) as VsCodeSettings | undefined
   }
@@ -19,10 +25,17 @@ export class VsCodeSettings extends JsonFile {
     })
   }
 
+  /**
+   * Merges existing settings with the given object.
+   */
   add(settings: Record<string, unknown>) {
     deepMerge([this.settings, settings], true)
   }
 
+  /**
+   * Adds VsCodeSettings and a JSON file with recommended extensions to the project,
+   * unless the options object has a `hasVscode=false` property.
+   */
   static addToProject(project: NodeProject, options?: WithVSCode) {
     const hasVscode = options?.hasVscode ?? true
 
