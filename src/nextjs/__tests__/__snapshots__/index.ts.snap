@@ -5,9 +5,7 @@ exports[`NextJS template has default test workflow included by default 1`] = `
 
 name: test
 on:
-  push:
-    branches:
-      - \\"*\\"
+  push: {}
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -86,9 +84,7 @@ updates:
 
 name: test
 on:
-  push:
-    branches:
-      - \\"*\\"
+  push: {}
 jobs:
   lint:
     runs-on: ubuntu-latest

@@ -190,9 +190,7 @@ jobs:
 
 name: test
 on:
-  push:
-    branches:
-      - \\"*\\"
+  push: {}
 jobs:
   lint:
     runs-on: ubuntu-latest
