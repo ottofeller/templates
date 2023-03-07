@@ -16,7 +16,7 @@ npm install
 ```
 
 ### Synthesize
-The app itself is projen template, so it can be synthesized (a code generated out of projen's TS files). Modify the app's template in `.projenrc.ts` and run the following command:
+The app itself is based on a projen template, so it can be synthesized (a code generated out of projen's TS files). Modify the app's template in `.projenrc.ts` and run the following command:
 ```sh
 npx projen
 ```
@@ -24,12 +24,15 @@ npx projen
 > :warning: Normally you should never modify anything other than templates in `src/` dir and `.projenrc.ts`.
 
 ### Build
-The build is the process of creating [JSII](https://github.com/aws/jsii) artefacts. These are the files required to run `npx projen new --from ...` (JSII is much more powerful technology, but it is out of the scope of this project). The build creates/updates the `.jsii` file (JSII config):
+The build is the process of creating [JSII](https://github.com/aws/jsii) artifacts. These are the files required to run `npx projen new --from ...` (JSII is much more powerful technology, but it is out of the scope of this project). The build creates/updates the `.jsii` file (JSII config):
 ```sh
 npx projen build
 ```
 
 ### Publish
+Publishing is a two-step process:
+- a GitHub action bumps version (creating a new commit with appropriate tag) and creates a draft release;
+- after the release is published another GitHub action builds the artifacts and pushes them to npm.
 
 ## 🧩 Templates
 
@@ -54,7 +57,7 @@ The project contains some UI-related packages:
 These are included by default and can be excluded providing an `ui: false` option.
 
 #### Tailwind
-The template uses *tailwind* for CSS. there are two config files (similar to NextJS configuration):
+The template uses *tailwind* for CSS. There are two config files (similar to NextJS configuration):
 - `tailwind.config.defaults.js` - default config options deployed with the template; the file is readonly and shall not be edited;
 - `tailwind.config.js` - editable config that by default only imports the `tailwind.config.defaults.js`; feel free to edit the file, add required options, or include only the needed part of the default config.
 
@@ -73,6 +76,8 @@ project.codegenConfig?.overrideSchema('./schema.json')
   .overrideDocumentsForOutput('./generated/index.ts', 'src/**/graphql/!(*.generated).ts')
 ```
 
+In order to exclude the GraphQL packages from the project use the `isGraphqlEnabled: false` option.
+
 ### Apollo Server
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-apollo-server
@@ -84,3 +89,9 @@ See the [Codegen config](#codegen-config) subsection for the [NextJS](#nextjs) t
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-cdk
 ```
+
+### Other custom options
+There are a few other options specific to all the templates within this project:
+- `hasVscode` - include recommended VSCode settings, defaults to `true`;
+- `lintPaths` - an array of paths for linting and formatting;
+- `hasDefaultGithubWorkflows` - include a default GitHub pull request template, defaults to `true`;
