@@ -140,10 +140,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
       this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
       this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.yml'})
-
-      // ANCHOR Jest
-      setupJest(this, options, assetsDir)
     }
+
+    // ANCHOR Jest
+    setupJest(this, options, assetsDir)
 
     // ANCHOR Tailwind
     setupUIPackages(this, options, assetsDir)
