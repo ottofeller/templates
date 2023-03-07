@@ -7,27 +7,15 @@ const project = new projen.cdk.JsiiProject({
   author: 'ottofeller',
   authorAddress: 'https://ottofeller.com',
   defaultReleaseBranch: 'main',
-  docgen: false,
-  github: true,
-  buildWorkflow: false,
-  release: false,
-  dependabot: true,
-  depsUpgrade: false,
-  githubOptions: {mergify: false, workflows: true, pullRequestLint: false},
-  pullRequestTemplate: false,
+  repositoryUrl: 'https://github.com/ottofeller/templates.git',
   name: '@ottofeller/templates',
-
-  // FIXME A temporary solution until the assets are finally bundled in the build
-  npmignoreEnabled: false,
-
-  projenrcTs: true,
-  repositoryUrl: 'https://github.com/gvidon/templates.git',
-  sampleCode: false,
   description: 'Projen templates for OttoFeller projects',
   packageName: '@ottofeller/templates',
   packageManager: projen.javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
   deps: ['projen'],
+  bundledDeps: ['prettier', '@ottofeller/prettier-config-ofmt'],
+  peerDeps: ['projen'],
 
   devDeps: [
     // Solves the typescript > 4 problem
@@ -42,20 +30,29 @@ const project = new projen.cdk.JsiiProject({
     '@typescript-eslint/parser',
   ],
 
-  bundledDeps: ['prettier', '@ottofeller/prettier-config-ofmt'],
-  peerDeps: ['projen'],
-
   scripts: {
     format: 'npx ofmt ".projenrc.ts src"',
     lint: 'npx ofmt --lint ".projenrc.ts src" && npx olint src .projenrc.ts',
     typecheck: 'tsc --noEmit --project tsconfig.dev.json',
   },
 
+  github: true,
+  buildWorkflow: false,
+  release: false,
+  dependabot: true,
+  depsUpgrade: false,
+  githubOptions: {mergify: false, workflows: true, pullRequestLint: false},
+  pullRequestTemplate: false,
+
+  projenrcTs: true,
+  sampleCode: false,
+  docgen: false,
   jest: true,
   eslint: false,
 })
 
-// REVIEW There is probably another way to manage the version property
+// ANCHOR Pull project version from package.json (in order to make possible the version update with npm).
+// Allow an override with an environment variable
 const versionFromEnv = process.env.PACKAGE_VERSION
 
 if (versionFromEnv !== undefined && !/^\d+\.\d+\.\d+$/.test(versionFromEnv)) {
@@ -159,5 +156,9 @@ publishReleaseGithubWorkflow.addJobs({
     ]),
   },
 })
+
+// ANCHOR nmpignore
+project.npmignore!.exclude('/.projenrc.ts', '/src/**', '/lib/**/assets/**', '**/__tests__/**')
+project.npmignore!.include('/src/**/assets/**')
 
 project.synth()
