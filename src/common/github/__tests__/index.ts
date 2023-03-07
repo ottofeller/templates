@@ -41,7 +41,7 @@ describe('GitHub utils', () => {
       expect(snapshot[testWorkflowPath]).toBeDefined()
     })
 
-    test('configures the test workflow to bu run on pushes to all branches, all paths', () => {
+    test('configures the test workflow to be run on pushes to all branches, all paths', () => {
       const project = new TestProject()
       new PullRequestTest(project.github!)
       const snapshot = synthSnapshot(project)
