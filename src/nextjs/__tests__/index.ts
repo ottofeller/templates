@@ -42,9 +42,11 @@ describe('NextJS template', () => {
     expect(snapshot['package.json'].prettier).toEqual('@ottofeller/prettier-config-ofmt')
     expect(snapshot['package.json'].eslintConfig).toBeDefined()
 
-    expect(snapshot['package.json'].eslintConfig.extends).toContainEqual(
-      '@ottofeller/eslint-config-ofmt/eslint.quality.cjs',
-    )
+    const extendingConfigs = snapshot['package.json'].eslintConfig.extends
+    expect(extendingConfigs).toHaveLength(3)
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.quality.cjs')
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.formatting.cjs')
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs')
   })
 
   describe('has default test workflow', () => {
@@ -103,6 +105,10 @@ describe('NextJS template', () => {
       expect(snapshot['postcss.config.json']).not.toBeDefined()
       expect(snapshot['tailwind.config.defaults.js']).not.toBeDefined()
       expect(snapshot['tailwind.config.js']).not.toBeDefined()
+
+      expect(snapshot['package.json'].eslintConfig.extends).not.toContainEqual(
+        '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs',
+      )
     })
   })
 

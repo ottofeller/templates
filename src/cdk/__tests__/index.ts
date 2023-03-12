@@ -43,6 +43,18 @@ describe('CDK template', () => {
     })
   })
 
+  test('has prettier and eslint configs written to package.json', () => {
+    const project = new TestCDKProject()
+    const snapshot = synthSnapshot(project)
+    expect(snapshot['package.json'].prettier).toEqual('@ottofeller/prettier-config-ofmt')
+    expect(snapshot['package.json'].eslintConfig).toBeDefined()
+
+    const extendingConfigs = snapshot['package.json'].eslintConfig.extends
+    expect(extendingConfigs).toHaveLength(2)
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.quality.cjs')
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.formatting.cjs')
+  })
+
   describe('has default test workflow', () => {
     test('included by default', () => {
       const project = new TestCDKProject()

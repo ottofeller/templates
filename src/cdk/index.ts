@@ -5,7 +5,7 @@ import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk
 import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addLintScripts, WithCustomLintPaths} from '../common/lint'
+import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
@@ -72,6 +72,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Install dependencies
     this.addDeps('cdk-nag@2.15.45')
+
+    // ANCHOR ESLint and prettier setup
+    addLintConfigs(this)
 
     // ANCHOR Github
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true

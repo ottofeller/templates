@@ -739,8 +739,15 @@ cdk.out/
       "ts-node": "*",
       "typescript": "*",
     },
+    "eslintConfig": Object {
+      "extends": Array [
+        "@ottofeller/eslint-config-ofmt/eslint.quality.cjs",
+        "@ottofeller/eslint-config-ofmt/eslint.formatting.cjs",
+      ],
+    },
     "license": "Apache-2.0",
     "name": "cdk",
+    "prettier": "@ottofeller/prettier-config-ofmt",
     "scripts": Object {
       "build": "npx projen build",
       "bundle": "npx projen bundle",

@@ -9,7 +9,7 @@ import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addLintScripts, WithCustomLintPaths} from '../common/lint'
+import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {setupJest} from './jest'
@@ -109,8 +109,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
 
     // ANCHOR ESLint and prettier setup
-    this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
-    this.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
+    const extraEslintConfigs = options.ui === false ? undefined : ['@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs']
+    addLintConfigs(this, extraEslintConfigs)
 
     // ANCHOR Github workflow
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
