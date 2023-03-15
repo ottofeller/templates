@@ -97,7 +97,7 @@ describe('NextJS template', () => {
     })
 
     test('excluded if the option is set to false', () => {
-      const project = new TestNextJsTypeScriptProject({ui: false})
+      const project = new TestNextJsTypeScriptProject({isUiConfigEnabled: false})
       const snapshot = synthSnapshot(project)
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('@next/font')
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('@headlessui/react')

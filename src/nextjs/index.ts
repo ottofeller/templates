@@ -36,7 +36,7 @@ export interface OttofellerNextjsProjectOptions
    *
    * @default true
    */
-  readonly ui?: boolean
+  readonly isUiConfigEnabled?: boolean
 }
 
 /**
@@ -109,7 +109,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
 
     // ANCHOR ESLint and prettier setup
-    const extraEslintConfigs = options.ui === false ? undefined : ['@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs']
+    const extraEslintConfigs =
+      options.isUiConfigEnabled === false ? undefined : ['@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs']
+
     addLintConfigs(this, extraEslintConfigs)
 
     // ANCHOR Github workflow
