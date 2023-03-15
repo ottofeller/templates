@@ -8,6 +8,23 @@ In order to install a certain project (template) from `@ottofeller/templates` ca
 npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```
 
+### Update a project
+In order to pull template updates you need to specify the desired version of the `@ottofeller/templates` package in either `.projenrc.ts` file or in `package.json` (if the version in `.projenrc.ts` is not fixed). Then run the default projen task:
+```sh
+npx projen 
+```
+Upon completion the following changes would apply:
+- all packages with specified versions are updated (if a template does not specify a dependency version, it is not managed by projen and can be updated by simply setting the desired version in `package.json`; note that this way `package-lock.json` is not necessarily updated, thus you need to check it as well);
+- all projen-generated files are updated;
+- all sample code files are left unchanged (note that if you have deleted some sample code files they will be recreated unless you use the `sampleCode: false` option).
+
+### Eject
+To get rid of projen run this command:
+```sh
+npm run eject 
+```
+The command removes default projen task, makes projen remove its authority from all the generated files and stop tracking changes. At this moment the project is managed as a regular repository (feel fre to edit and remove files).
+
 ## 🛠 Development guide
 ### Install
 Simply install dependencies:
@@ -54,7 +71,7 @@ The project contains some UI-related packages:
 - `@next/font`;
 - `@headlessui/react`.
 
-These are included by default and can be excluded providing an `ui: false` option.
+These are included by default and can be excluded providing an `isUiConfigEnabled: false` option.
 
 #### Tailwind
 The template uses *tailwind* for CSS. There are two config files (similar to NextJS configuration):
