@@ -35,9 +35,10 @@ describe('Apollo server template', () => {
     expect(snapshot['package.json'].prettier).toEqual('@ottofeller/prettier-config-ofmt')
     expect(snapshot['package.json'].eslintConfig).toBeDefined()
 
-    expect(snapshot['package.json'].eslintConfig.extends).toContainEqual(
-      '@ottofeller/eslint-config-ofmt/eslint.quality.cjs',
-    )
+    const extendingConfigs = snapshot['package.json'].eslintConfig.extends
+    expect(extendingConfigs).toHaveLength(2)
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.quality.cjs')
+    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.formatting.cjs')
   })
 
   describe('has tests', () => {

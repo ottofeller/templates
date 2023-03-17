@@ -867,6 +867,7 @@ buildSync({
     "eslintConfig": Object {
       "extends": Array [
         "@ottofeller/eslint-config-ofmt/eslint.quality.cjs",
+        "@ottofeller/eslint-config-ofmt/eslint.formatting.cjs",
       ],
     },
     "jest": Object {

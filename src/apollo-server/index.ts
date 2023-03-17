@@ -8,7 +8,7 @@ import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addLintScripts, WithCustomLintPaths} from '../common/lint'
+import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 
@@ -135,8 +135,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     })
 
     // ANCHOR ESLint and prettier setup
-    this.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
-    this.package.addField('eslintConfig', {extends: ['@ottofeller/eslint-config-ofmt/eslint.quality.cjs']})
+    addLintConfigs(this)
 
     // ANCHOR Github workflow
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true

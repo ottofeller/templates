@@ -11,7 +11,7 @@ export function sampleCode(
   options: OttofellerNextjsProjectOptions,
   assetsDir: string,
 ) {
-  const includeUIPackages = options.ui ?? true
+  const isUiConfigEnabled = options.isUiConfigEnabled ?? true
 
   const homeComponentFilePath = 'src/Home/index.tsx'
   new projen.SampleFile(project, homeComponentFilePath, {sourcePath: path.join(assetsDir, homeComponentFilePath)})
@@ -22,13 +22,13 @@ export function sampleCode(
   const appFilePath = 'pages/_app.tsx'
   const appContents = fs.readFileSync(path.join(assetsDir, appFilePath), {encoding: 'utf-8'}).split('\n')
 
-  if (includeUIPackages) {
+  if (isUiConfigEnabled) {
     appContents.unshift("import 'assets/global.css'")
   }
 
   new projen.SampleFile(project, appFilePath, {contents: appContents.join('\n')})
 
-  if (includeUIPackages) {
+  if (isUiConfigEnabled) {
     const globalCssPath = 'src/assets/global.css'
     new projen.SampleFile(project, globalCssPath, {sourcePath: path.join(assetsDir, globalCssPath)})
   }

@@ -12,9 +12,9 @@ export function setupUIPackages(
   options: OttofellerNextjsProjectOptions,
   assetsDir: string,
 ) {
-  const includeUIPackages = options.ui ?? true
+  const isUiConfigEnabled = options.isUiConfigEnabled ?? true
 
-  if (!includeUIPackages) {
+  if (!isUiConfigEnabled) {
     return
   }
 
