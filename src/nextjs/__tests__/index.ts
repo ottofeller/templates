@@ -168,6 +168,28 @@ describe('NextJS template', () => {
       expect(snapshot['jest.config.js']).not.toBeDefined()
     })
   })
+
+  describe('has sample code', () => {
+    test('included by default', () => {
+      const project = new TestNextJsTypeScriptProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['src/Home/index.tsx']).toBeDefined()
+      expect(snapshot['pages/index.tsx']).toBeDefined()
+      expect(snapshot['pages/_app.tsx']).toBeDefined()
+      expect(snapshot['src/assets/global.css']).toBeDefined()
+      expect(snapshot['src/Home/__tests__/index.tsx']).toBeDefined()
+    })
+
+    test('excluded with an option', () => {
+      const project = new TestNextJsTypeScriptProject({sampleCode: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['src/Home/index.tsx']).not.toBeDefined()
+      expect(snapshot['pages/index.tsx']).not.toBeDefined()
+      expect(snapshot['pages/_app.tsx']).not.toBeDefined()
+      expect(snapshot['src/assets/global.css']).not.toBeDefined()
+      expect(snapshot['src/Home/__tests__/index.tsx']).not.toBeDefined()
+    })
+  })
 })
 
 class TestNextJsTypeScriptProject extends OttofellerNextjsProject {

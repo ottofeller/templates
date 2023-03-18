@@ -11,6 +11,10 @@ export function sampleCode(
   options: OttofellerNextjsProjectOptions,
   assetsDir: string,
 ) {
+  if (options.sampleCode === false) {
+    return
+  }
+
   const isUiConfigEnabled = options.isUiConfigEnabled ?? true
 
   const homeComponentFilePath = 'src/Home/index.tsx'
