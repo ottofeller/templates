@@ -18,7 +18,7 @@ export function setupUIPackages(
     return
   }
 
-  project.addDeps('@next/font', '@headlessui/react')
+  project.addDeps('@headlessui/react')
 
   project.addDevDeps(
     'postcss',
