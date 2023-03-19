@@ -80,8 +80,6 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     // ANCHOR Add required dependencies
-    this.addDeps('@apollo/client')
-
     this.addDevDeps(
       '@ottofeller/eslint-config-ofmt@1.7.0',
       '@ottofeller/ofmt@1.7.0',
@@ -126,6 +124,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     if (isGraphqlEnabled) {
       this.addDeps(
+        '@apollo/client',
         '@graphql-codegen/add',
         '@graphql-codegen/cli',
         '@graphql-codegen/import-types-preset',

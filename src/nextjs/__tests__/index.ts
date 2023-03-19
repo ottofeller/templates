@@ -68,6 +68,7 @@ describe('NextJS template', () => {
     test('enabled by default', () => {
       const project = new TestNextJsTypeScriptProject()
       const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].dependencies).toHaveProperty('@apollo/client')
       expect(snapshot['package.json'].dependencies).toHaveProperty('graphql')
       expect(snapshot['package.json'].scripts).toHaveProperty('generate-graphql-schema')
       expect(snapshot['package.json'].scripts).toHaveProperty('gql-to-ts')
@@ -77,6 +78,7 @@ describe('NextJS template', () => {
     test('disabled with an option', () => {
       const project = new TestNextJsTypeScriptProject({isGraphqlEnabled: false})
       const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].dependencies).not.toHaveProperty('@apollo/client')
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('graphql')
       expect(snapshot['package.json'].scripts).not.toHaveProperty('generate-graphql-schema')
       expect(snapshot['package.json'].scripts).not.toHaveProperty('gql-to-ts')
