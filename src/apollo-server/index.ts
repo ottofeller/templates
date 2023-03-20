@@ -11,6 +11,7 @@ import {extendGitignore} from '../common/gitignore'
 import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
+import {sampleCode} from './sample-code'
 
 export interface OttofellerApolloServerProjectOptions
   extends TypeScriptProjectOptions,
@@ -97,20 +98,11 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     tasksToRemove.forEach(this.removeTask.bind(this))
     this.addTask('build', {exec: 'node esbuild.config.js'})
 
-    const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
     // ANCHOR Source code
-    new projen.SampleFile(this, 'src/index.ts', {sourcePath: path.join(assetsDir, 'src/index.ts.sample')})
+    const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
+    sampleCode(this, options, assetsDir)
 
-    new projen.SampleFile(this, 'src/logger/create-logger.ts', {
-      sourcePath: path.join(assetsDir, 'src/logger/create-logger.ts'),
-    })
-
-    // ANCHOR tests
-    if (options.jest ?? true) {
-      new projen.SampleFile(this, 'src/logger/__tests__/index.ts', {
-        sourcePath: path.join(assetsDir, 'src/logger/__tests__/index.ts.sample'),
-      })
-    } else {
+    if (options.jest === false) {
       this.removeTask('test')
     }
 

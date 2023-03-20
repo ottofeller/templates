@@ -92,6 +92,24 @@ describe('Apollo server template', () => {
     expect(snapshot['.gitignore']).toContain('.DS_Store')
     expect(snapshot['.gitignore']).toContain('.env.local')
   })
+
+  describe('has sample code', () => {
+    test('included by default', () => {
+      const project = new TestApolloServerProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['src/index.ts']).toBeDefined()
+      expect(snapshot['src/logger/create-logger.ts']).toBeDefined()
+      expect(snapshot['src/logger/__tests__/index.ts']).toBeDefined()
+    })
+
+    test('excluded with an option', () => {
+      const project = new TestApolloServerProject({sampleCode: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['src/index.ts']).not.toBeDefined()
+      expect(snapshot['src/logger/create-logger.ts']).not.toBeDefined()
+      expect(snapshot['src/logger/__tests__/index.ts']).not.toBeDefined()
+    })
+  })
 })
 
 class TestApolloServerProject extends OttofellerApolloServerProject {
