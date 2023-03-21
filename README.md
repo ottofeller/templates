@@ -51,7 +51,6 @@ The project contains some UI-related packages:
 - `tailwindcss` (along with a few plugins);
 - `postcss`;
 - `autoprefixer`;
-- `@next/font`;
 - `@headlessui/react`.
 
 These are included by default and can be excluded providing an `ui: false` option.
