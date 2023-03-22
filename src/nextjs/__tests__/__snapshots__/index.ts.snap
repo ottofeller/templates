@@ -327,10 +327,6 @@ tsconfig.tsbuildinfo
         "type": "runtime",
       },
       Object {
-        "name": "@next/font",
-        "type": "runtime",
-      },
-      Object {
         "name": "graphql",
         "type": "runtime",
       },
@@ -971,7 +967,6 @@ module.exports = {
       "@graphql-codegen/typescript-operations": "*",
       "@graphql-codegen/typescript-react-apollo": "*",
       "@headlessui/react": "*",
-      "@next/font": "*",
       "graphql": "*",
       "next": "*",
       "react": "*",
