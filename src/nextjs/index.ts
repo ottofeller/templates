@@ -9,7 +9,7 @@ import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
+import {addOfmt, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {setupJest} from './jest'
@@ -80,23 +80,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     })
 
     // ANCHOR Add required dependencies
-    this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.7.0',
-      '@ottofeller/ofmt@1.7.0',
-      '@ottofeller/prettier-config-ofmt@1.7.0',
-      'eslint@>=8',
-
-      // REVIEW Required during "npx projen new", fails without this dependency
-      'yaml',
-    )
-
-    // ANCHOR scripts
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'pages', 'src']
-    addLintScripts(this, lintPaths)
-
-    const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
+    this.addDevDeps('yaml') // REVIEW Required during "npx projen new", fails without this dependency
 
     // ANCHOR Source code
+    const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
     sampleCode(this, options, assetsDir)
 
     // ANCHOR NextJS config
@@ -107,10 +94,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
 
     // ANCHOR ESLint and prettier setup
-    const extraEslintConfigs =
-      options.isUiConfigEnabled === false ? undefined : ['@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs']
-
-    addLintConfigs(this, extraEslintConfigs)
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'pages', 'src']
+    const eslintTailwindConfig = '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs'
+    const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintTailwindConfig]
+    addOfmt(this, lintPaths, extraEslintConfigs)
 
     // ANCHOR Github workflow
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
