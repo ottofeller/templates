@@ -9,6 +9,12 @@ export interface PullRequestTestOptions {
    * @default ['ubuntu-latest']
    */
   readonly runsOn?: string[]
+
+  /**
+   * The workflow name
+   * @default 'test'
+   */
+  readonly name?: string
 }
 
 /**
@@ -24,7 +30,8 @@ export class PullRequestTest extends Component {
       steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {nodeVersion: 16, command}}],
     })
 
-    const workflow = githubInstance.addWorkflow('test')
+    const workflowName = options.name ?? 'test'
+    const workflow = githubInstance.addWorkflow(workflowName)
     workflow.on({push: {}})
 
     workflow.addJobs({
