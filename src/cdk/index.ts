@@ -5,7 +5,7 @@ import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk
 import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
+import {addOfmt, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
@@ -59,22 +59,12 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     this.initialReleaseVersion = options.initialReleaseVersion || this.initialReleaseVersion
 
-    // ANCHOR Scripts
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
-    addLintScripts(this, lintPaths)
-
-    // ANCHOR Install ofmt
-    this.addDevDeps(
-      '@ottofeller/eslint-config-ofmt@1.7.0',
-      '@ottofeller/ofmt@1.7.0',
-      '@ottofeller/prettier-config-ofmt@1.7.0',
-    )
-
     // ANCHOR Install dependencies
     this.addDeps('cdk-nag@2.15.45')
 
     // ANCHOR ESLint and prettier setup
-    addLintConfigs(this)
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    addOfmt(this, lintPaths)
 
     // ANCHOR Github
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true

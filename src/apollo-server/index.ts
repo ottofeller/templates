@@ -8,7 +8,7 @@ import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addLintConfigs, addLintScripts, WithCustomLintPaths} from '../common/lint'
+import {addOfmt, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {sampleCode} from './sample-code'
@@ -82,17 +82,11 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       '@graphql-codegen/typescript-operations@2.4.0',
       '@graphql-codegen/typescript-resolvers@2.6.4',
       '@graphql-codegen/typescript-graphql-request@4.4.8',
-      '@ottofeller/eslint-config-ofmt@1.7.0',
-      '@ottofeller/ofmt@1.7.0',
-      '@ottofeller/prettier-config-ofmt@1.7.0',
       '@types/source-map-support@0.5.4',
       'nodemon@2.0.16',
     )
 
     // ANCHOR Scripts
-    const lintPaths = options.lintPaths ?? ['.projenrc.mjs', 'src']
-    addLintScripts(this, lintPaths)
-
     this.package.addField('type', 'module')
     const tasksToRemove = ['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch']
     tasksToRemove.forEach(this.removeTask.bind(this))
@@ -127,7 +121,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     })
 
     // ANCHOR ESLint and prettier setup
-    addLintConfigs(this)
+    const lintPaths = options.lintPaths ?? ['.projenrc.mjs', 'src']
+    addOfmt(this, lintPaths)
 
     // ANCHOR Github workflow
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true

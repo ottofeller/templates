@@ -196,17 +196,17 @@ tsconfig.tsbuildinfo
       Object {
         "name": "@ottofeller/eslint-config-ofmt",
         "type": "build",
-        "version": "1.7.0",
+        "version": "1.7.2",
       },
       Object {
         "name": "@ottofeller/ofmt",
         "type": "build",
-        "version": "1.7.0",
+        "version": "1.7.2",
       },
       Object {
         "name": "@ottofeller/prettier-config-ofmt",
         "type": "build",
-        "version": "1.7.0",
+        "version": "1.7.2",
       },
       Object {
         "name": "@tailwindcss/container-queries",
@@ -973,9 +973,9 @@ module.exports = {
       "react-dom": "*",
     },
     "devDependencies": Object {
-      "@ottofeller/eslint-config-ofmt": "1.7.0",
-      "@ottofeller/ofmt": "1.7.0",
-      "@ottofeller/prettier-config-ofmt": "1.7.0",
+      "@ottofeller/eslint-config-ofmt": "1.7.2",
+      "@ottofeller/ofmt": "1.7.2",
+      "@ottofeller/prettier-config-ofmt": "1.7.2",
       "@tailwindcss/container-queries": "*",
       "@tailwindcss/line-clamp": "*",
       "@testing-library/react": "*",

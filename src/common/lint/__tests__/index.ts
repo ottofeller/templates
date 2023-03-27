@@ -1,6 +1,6 @@
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
-import {addLintConfigs, addLintScripts} from '..'
+import {addLintConfigs, addLintScripts, addOfmt} from '..'
 
 describe('addLintScripts function', () => {
   test('adds linting scripts for provided paths to gitignore', () => {
@@ -61,6 +61,19 @@ describe('addLintConfigs function', () => {
     const extendingConfigs = snapshot['package.json'].eslintConfig.extends
     expect(extendingConfigs).toHaveLength(1)
     expect(extendingConfigs).toEqual([extraConfig])
+  })
+})
+
+describe('addOfmt function', () => {
+  test('installs ofmt packages and eslint as devDependencies', () => {
+    const project = new TestProject()
+    addOfmt(project, ['src'])
+    const snapshot = synthSnapshot(project)
+    const devDependencies = Object.keys(snapshot['package.json'].devDependencies)
+    expect(devDependencies).toContain('@ottofeller/eslint-config-ofmt')
+    expect(devDependencies).toContain('@ottofeller/ofmt')
+    expect(devDependencies).toContain('@ottofeller/prettier-config-ofmt')
+    expect(devDependencies).toContain('eslint')
   })
 })
 
