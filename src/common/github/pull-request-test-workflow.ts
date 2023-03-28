@@ -1,4 +1,5 @@
-import {Component, github} from 'projen'
+import {Component, github, javascript} from 'projen'
+import {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
  * Options for PullRequestLint
@@ -15,6 +16,11 @@ export interface PullRequestTestOptions {
    * @default 'test'
    */
   readonly name?: string
+
+  /**
+   * Relative output directory of the project.
+   */
+  readonly outdir?: string
 }
 
 /**
@@ -24,20 +30,52 @@ export class PullRequestTest extends Component {
   constructor(githubInstance: github.GitHub, options: PullRequestTestOptions = {}) {
     super(githubInstance.project)
 
+    const workflowName = options.name ?? 'test'
+    const directory = options.outdir
+    const paths = directory ? [`${directory}/**`] : undefined
+    const workflow = githubInstance.addWorkflow(workflowName)
+    workflow.on({push: {paths}})
+
     const job = (command: string): github.workflows.Job => ({
       runsOn: options.runsOn ?? ['ubuntu-latest'],
       permissions: {contents: github.workflows.JobPermission.READ},
-      steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command}}],
+      steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command, directory}}],
     })
-
-    const workflowName = options.name ?? 'test'
-    const workflow = githubInstance.addWorkflow(workflowName)
-    workflow.on({push: {}})
 
     workflow.addJobs({
       lint: job('npm run lint'),
       typecheck: job('npm run typecheck'),
       test: job('npm run test'),
     })
+  }
+
+  /**
+   * Optionally creates a workflow within the given project
+   * or within the project parent (for subprojects).
+   *
+   * `hasDefaultGithubWorkflows` option disables workflow creation making the method a simple noop.
+   *
+   * NOTE: Use this method if the described conditional logic is needed.
+   * Otherwise just use the constructor.
+   */
+  static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
+    const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+
+    if (!hasDefaultGithubWorkflows) {
+      return
+    }
+
+    if (project.github) {
+      new PullRequestTest(project.github)
+      return
+    }
+
+    if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
+      new PullRequestTest(project.parent.github, {
+        runsOn: options.runsOn,
+        name: `test-${options.name}`,
+        outdir: options.outdir,
+      })
+    }
   }
 }

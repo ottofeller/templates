@@ -100,11 +100,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     addOfmt(this, lintPaths, extraEslintConfigs)
 
     // ANCHOR Github workflow
-    const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
-
-    if (hasDefaultGithubWorkflows && this.github) {
-      new PullRequestTest(this.github)
-    }
+    PullRequestTest.addToProject(this, options)
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true

@@ -125,11 +125,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     addOfmt(this, lintPaths)
 
     // ANCHOR Github workflow
-    const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
-
-    if (hasDefaultGithubWorkflows && this.github) {
-      new PullRequestTest(this.github)
-    }
+    PullRequestTest.addToProject(this, options)
 
     // ANCHOR Codegen
     this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)

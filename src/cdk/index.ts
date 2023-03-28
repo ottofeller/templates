@@ -71,7 +71,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initialReleaseVersion: this.initialReleaseVersion})
-      new PullRequestTest(this.github)
+      PullRequestTest.addToProject(this, options)
     }
 
     // ANCHOR VSCode settings
