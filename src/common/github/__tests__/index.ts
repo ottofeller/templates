@@ -90,7 +90,7 @@ describe('GitHub utils', () => {
         expect(snapshot[testWorkflowPath]).not.toBeDefined()
       })
 
-      test('add a PullRequestTest component to the project with github by default', () => {
+      test('adds a PullRequestTest component to the project with github by default', () => {
         const project = new TestProjectWithTestWorkflow()
         const snapshot = synthSnapshot(project)
         expect(snapshot[testWorkflowPath]).toBeDefined()
