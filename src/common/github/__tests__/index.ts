@@ -41,12 +41,29 @@ describe('GitHub utils', () => {
       expect(snapshot[testWorkflowPath]).toBeDefined()
     })
 
-    test('configures the test workflow to be run on pushes to all branches, all paths', () => {
+    test('configures the test workflow to be run on pull requests and pushes to main branch, all paths', () => {
       const project = new TestProject()
       new PullRequestTest(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
-      expect(workflow.on).toEqual({push: {}})
+
+      expect(workflow.on).toEqual({
+        pull_request: {types: ['opened', 'synchronize']},
+        push: {branches: ['main']},
+      })
+    })
+
+    test('allows to be run on pushes to specified branches', () => {
+      const project = new TestProject()
+      const branches = ['main', 'dev']
+      new PullRequestTest(project.github!, {triggerOnPushToBranches: branches})
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+      expect(workflow.on).toEqual({
+        pull_request: {types: ['opened', 'synchronize']},
+        push: {branches},
+      })
     })
 
     test('adds basic checks to the test workflow', () => {
@@ -109,13 +126,21 @@ describe('GitHub utils', () => {
 
       test('for subprojects creates a test workflow within the parent project', () => {
         const parent = new TestProjectWithTestWorkflow()
-        const subproject = new TestProjectWithTestWorkflow({parent, outdir: 'sub', name})
+        const outdir = 'sub'
+        const subproject = new TestProjectWithTestWorkflow({parent, outdir, name})
         const subprojectSnapshot = synthSnapshot(subproject)
         const parentSnapshot = synthSnapshot(parent)
         expect(subprojectSnapshot[testWorkflowPath]).not.toBeDefined()
         expect(subprojectSnapshot[subprojectTestWorkflowPath]).not.toBeDefined()
         expect(parentSnapshot[testWorkflowPath]).toBeDefined()
         expect(parentSnapshot[subprojectTestWorkflowPath]).toBeDefined()
+        const subprojectWorkflow = YAML.parse(parentSnapshot[subprojectTestWorkflowPath])
+        const paths = [`${outdir}/**`]
+
+        expect(subprojectWorkflow.on).toEqual({
+          pull_request: {paths, types: ['opened', 'synchronize']},
+          push: {paths, branches: ['main']},
+        })
       })
     })
   })

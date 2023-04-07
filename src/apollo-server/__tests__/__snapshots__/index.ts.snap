@@ -5,7 +5,13 @@ exports[`Apollo server template has default test workflow included by default 1`
 
 name: test
 on:
-  push: {}
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - main
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -96,7 +102,13 @@ updates:
 
 name: test
 on:
-  push: {}
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - main
 jobs:
   lint:
     runs-on: ubuntu-latest

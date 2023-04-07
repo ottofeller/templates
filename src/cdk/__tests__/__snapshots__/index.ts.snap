@@ -5,7 +5,13 @@ exports[`CDK template has default test workflow included by default 1`] = `
 
 name: test
 on:
-  push: {}
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - main
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -105,7 +111,13 @@ jobs:
 
 name: test
 on:
-  push: {}
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - main
 jobs:
   lint:
     runs-on: ubuntu-latest
