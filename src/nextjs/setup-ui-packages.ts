@@ -34,9 +34,17 @@ export function setupUIPackages(
     marker: false,
   })
 
-  new AssetFile(project, 'tailwind.config.defaults.js', {
-    sourcePath: path.join(assetsDir, 'tailwind.config.defaults.js'),
+  new AssetFile(project, 'tailwind.config.defaults.ts', {
+    sourcePath: path.join(assetsDir, 'tailwind.config.defaults.ts.sample'),
   })
 
-  new projen.SampleFile(project, 'tailwind.config.js', {sourcePath: path.join(assetsDir, 'tailwind.config.js')})
+  new projen.SampleFile(project, 'tailwind.config.ts', {sourcePath: path.join(assetsDir, 'tailwind.config.ts.sample')})
+
+  const tsConfigs = ['tsconfig.json', 'tsconfig.dev.json']
+
+  tsConfigs.forEach((config) => {
+    project
+      .tryFindObjectFile(config)
+      ?.addOverride('compilerOptions.paths.tailwind\\.config\\.ts', ['./tailwind.config.ts'])
+  })
 }

@@ -14,11 +14,11 @@ describe('NextJS template', () => {
   test('has tailwind enabled', () => {
     const project = new TestNextJsTypeScriptProject()
     const snapshot = synthSnapshot(project)
-    expect(snapshot['tailwind.config.js']).toBeDefined()
-    expect(snapshot['tailwind.config.defaults.js']).toBeDefined()
+    expect(snapshot['tailwind.config.ts']).toBeDefined()
+    expect(snapshot['tailwind.config.defaults.ts']).toBeDefined()
     expect(snapshot['postcss.config.json']).toBeDefined()
 
-    expect(snapshot['tsconfig.json'].compilerOptions.paths).toHaveProperty(['tailwind.config.js', 0])
+    expect(snapshot['tsconfig.json'].compilerOptions.paths).toHaveProperty(['tailwind.config.ts', 0])
   })
 
   test('includes two NextJS config files', () => {
@@ -93,8 +93,8 @@ describe('NextJS template', () => {
       expect(snapshot['package.json'].dependencies).toHaveProperty('@headlessui/react')
       expect(snapshot['package.json'].devDependencies).toHaveProperty('tailwindcss')
       expect(snapshot['postcss.config.json']).toBeDefined()
-      expect(snapshot['tailwind.config.defaults.js']).toBeDefined()
-      expect(snapshot['tailwind.config.js']).toBeDefined()
+      expect(snapshot['tailwind.config.defaults.ts']).toBeDefined()
+      expect(snapshot['tailwind.config.ts']).toBeDefined()
     })
 
     test('excluded if the option is set to false', () => {
@@ -103,8 +103,9 @@ describe('NextJS template', () => {
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('@headlessui/react')
       expect(snapshot['package.json'].devDependencies).not.toHaveProperty('tailwindcss')
       expect(snapshot['postcss.config.json']).not.toBeDefined()
-      expect(snapshot['tailwind.config.defaults.js']).not.toBeDefined()
-      expect(snapshot['tailwind.config.js']).not.toBeDefined()
+      expect(snapshot['tailwind.config.defaults.ts']).not.toBeDefined()
+      expect(snapshot['tailwind.config.ts']).not.toBeDefined()
+      expect(snapshot['tsconfig.json'].compilerOptions.paths).not.toHaveProperty(['tailwind.config.ts', 0])
 
       expect(snapshot['package.json'].eslintConfig.extends).not.toContainEqual(
         '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs',
