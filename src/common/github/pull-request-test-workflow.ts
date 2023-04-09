@@ -21,6 +21,12 @@ export interface PullRequestTestOptions {
    * Relative output directory of the project.
    */
   readonly outdir?: string
+
+  /**
+   * A list of branches on pushes to which the workflow will run.
+   * @default ['main']
+   */
+  readonly triggerOnPushToBranches?: Array<string>
 }
 
 /**
@@ -34,7 +40,12 @@ export class PullRequestTest extends Component {
     const directory = options.outdir
     const paths = directory ? [`${directory}/**`] : undefined
     const workflow = githubInstance.addWorkflow(workflowName)
-    workflow.on({push: {paths}})
+    const branches = options.triggerOnPushToBranches ?? ['main']
+
+    workflow.on({
+      pullRequest: {paths, types: ['opened', 'synchronize']},
+      push: {paths, branches},
+    })
 
     const job = (command: string): github.workflows.Job => ({
       runsOn: options.runsOn ?? ['ubuntu-latest'],
