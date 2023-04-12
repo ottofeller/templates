@@ -27,7 +27,7 @@ export function sampleCode(
   const appContents = fs.readFileSync(path.join(assetsDir, appFilePath), {encoding: 'utf-8'}).split('\n')
 
   if (isUiConfigEnabled) {
-    appContents.unshift("import 'assets/global.css'")
+    appContents.unshift("import 'src/assets/global.css'")
   }
 
   new projen.SampleFile(project, appFilePath, {contents: appContents.join('\n')})
