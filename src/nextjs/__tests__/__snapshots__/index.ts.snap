@@ -267,6 +267,10 @@ tsconfig.tsbuildinfo
         "type": "build",
       },
       Object {
+        "name": "jscodeshift",
+        "type": "build",
+      },
+      Object {
         "name": "postcss",
         "type": "build",
       },
@@ -1017,6 +1021,7 @@ module.exports = {
       "eslint": ">=8",
       "jest": "*",
       "jest-environment-jsdom": "*",
+      "jscodeshift": "*",
       "postcss": "*",
       "postcss-nesting": "*",
       "projen": "*",
@@ -1041,6 +1046,7 @@ module.exports = {
     "scripts": Object {
       "build": "npx projen build",
       "clobber": "npx projen clobber",
+      "codemod:add-src-to-imports": "jscodeshift -t ./node_modules/@ottofeller/templates/lib/nextjs/add-src-reference-codemode.js --extensions=js,jsx,ts,tsx src pages",
       "compile": "npx projen compile",
       "default": "npx projen default",
       "dev": "npx projen dev",
@@ -1166,9 +1172,6 @@ module.exports = {
       "noUnusedLocals": true,
       "noUnusedParameters": true,
       "paths": Object {
-        "*": Array [
-          "./src/*",
-        ],
         "tailwind.config.js": Array [
           "./tailwind.config.js",
         ],
@@ -1225,9 +1228,6 @@ module.exports = {
       "noUnusedParameters": true,
       "outDir": "lib",
       "paths": Object {
-        "*": Array [
-          "./src/*",
-        ],
         "tailwind.config.js": Array [
           "./tailwind.config.js",
         ],

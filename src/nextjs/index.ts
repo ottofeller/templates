@@ -62,7 +62,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
         compilerOptions: {
           baseUrl: './',
           target: 'es6',
-          paths: {'*': ['./src/*'], 'tailwind.config.js': ['./tailwind.config.js']},
+          paths: {'tailwind.config.js': ['./tailwind.config.js']},
         },
       },
       sampleCode: false,
@@ -148,6 +148,16 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     // ANCHOR gitignore
     extendGitignore(this)
     extendGitignore(this, ['.next/', '.idea/', 'debug/', '.vscode/tasks.json', 'build/'])
+
+    // ANCHOR Codemod
+    this.addDevDeps('jscodeshift')
+    const addSrcTransform = '-t ./node_modules/@ottofeller/templates/lib/nextjs/add-src-reference-codemode.js'
+    const extensions = '--extensions=js,jsx,ts,tsx'
+    const foldersToProcess = 'src pages'
+
+    this.addScripts({
+      'codemod:add-src-to-imports': `jscodeshift ${addSrcTransform} ${extensions} ${foldersToProcess}`,
+    })
   }
 
   postSynthesize(): void {
