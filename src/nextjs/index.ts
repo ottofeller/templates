@@ -9,9 +9,10 @@ import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addOfmt, WithCustomLintPaths} from '../common/lint'
+import {addLinters, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
+import {eslintConfigTailwind} from './eslint-config-tailwind'
 import {setupJest} from './jest'
 import {sampleCode} from './sample-code'
 import {setupUIPackages} from './setup-ui-packages'
@@ -94,9 +95,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'pages', 'src']
-    const eslintTailwindConfig = '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs'
-    const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintTailwindConfig]
-    addOfmt(this, lintPaths, extraEslintConfigs)
+    const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintConfigTailwind]
+    addLinters({project: this, lintPaths, extraEslintConfigs})
 
     // ANCHOR Github workflow
     PullRequestTest.addToProject(this, options)
@@ -164,9 +164,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
      * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      *
-     * The pages/_app.tsx file has optional content which is easier to format after the synthezis,
-     * instead of trying to arrange the file lines programatically.
+     * The pages/_app.tsx file has optional content which is easier to format after the synthesis,
+     * instead of trying to arrange the file lines programmatically.
      */
-    execSync('ofmt ".projenrc.ts pages/_app.tsx"')
+    execSync('prettier --write .projenrc.ts')
+    execSync('eslint --fix .projenrc.ts')
   }
 }

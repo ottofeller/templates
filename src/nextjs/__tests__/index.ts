@@ -26,17 +26,11 @@ describe('NextJS template', () => {
     expect(snapshot['tsconfig.json'].compilerOptions.module).toEqual('CommonJS')
   })
 
-  test('has prettier and eslint configs written to package.json', () => {
+  test('has prettier and eslint configs', () => {
     const project = new TestNextJsTypeScriptProject()
     const snapshot = synthSnapshot(project)
-    expect(snapshot['package.json'].prettier).toEqual('@ottofeller/prettier-config-ofmt')
-    expect(snapshot['package.json'].eslintConfig).toBeDefined()
-
-    const extendingConfigs = snapshot['package.json'].eslintConfig.extends
-    expect(extendingConfigs).toHaveLength(3)
-    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.quality.cjs')
-    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.formatting.cjs')
-    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs')
+    expect(snapshot['.prettierrc.json']).toBeDefined()
+    expect(snapshot['.eslintrc.json']).toBeDefined()
   })
 
   describe('has default test workflow', () => {
@@ -85,6 +79,7 @@ describe('NextJS template', () => {
       expect(snapshot['postcss.config.json']).toBeDefined()
       expect(snapshot['tailwind.config.defaults.ts']).toBeDefined()
       expect(snapshot['tailwind.config.ts']).toBeDefined()
+      expect(snapshot['.eslintrc.json'].plugins).toContain('tailwindcss')
     })
 
     test('excluded if the option is set to false', () => {
@@ -95,10 +90,7 @@ describe('NextJS template', () => {
       expect(snapshot['postcss.config.json']).not.toBeDefined()
       expect(snapshot['tailwind.config.defaults.ts']).not.toBeDefined()
       expect(snapshot['tailwind.config.ts']).not.toBeDefined()
-
-      expect(snapshot['package.json'].eslintConfig.extends).not.toContainEqual(
-        '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs',
-      )
+      expect(snapshot['.eslintrc.json'].plugins).not.toContain('tailwindcss')
     })
   })
 
@@ -112,8 +104,9 @@ describe('NextJS template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestNextJsTypeScriptProject()
     project.postSynthesize()
-    expect(mockedExecSync).toBeCalledTimes(1)
-    expect(mockedExecSync).toBeCalledWith('ofmt ".projenrc.ts pages/_app.tsx"')
+    expect(mockedExecSync).toBeCalledTimes(2)
+    expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.ts')
+    expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
   })
 
   test('has gitignore file extended', () => {

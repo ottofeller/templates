@@ -8,7 +8,7 @@ import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addOfmt, WithCustomLintPaths} from '../common/lint'
+import {addLinters, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {sampleCode} from './sample-code'
@@ -122,7 +122,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.mjs', 'src']
-    addOfmt(this, lintPaths)
+    addLinters({project: this, lintPaths})
 
     // ANCHOR Github workflow
     PullRequestTest.addToProject(this, options)
@@ -151,6 +151,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
      * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      */
-    execSync('ofmt .projenrc.mjs')
+    execSync('prettier --write .projenrc.mjs')
+    execSync('eslint --fix .projenrc.mjs')
   }
 }

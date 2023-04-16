@@ -43,16 +43,11 @@ describe('CDK template', () => {
     })
   })
 
-  test('has prettier and eslint configs written to package.json', () => {
+  test('has prettier and eslint configs', () => {
     const project = new TestCDKProject()
     const snapshot = synthSnapshot(project)
-    expect(snapshot['package.json'].prettier).toEqual('@ottofeller/prettier-config-ofmt')
-    expect(snapshot['package.json'].eslintConfig).toBeDefined()
-
-    const extendingConfigs = snapshot['package.json'].eslintConfig.extends
-    expect(extendingConfigs).toHaveLength(2)
-    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.quality.cjs')
-    expect(extendingConfigs).toContainEqual('@ottofeller/eslint-config-ofmt/eslint.formatting.cjs')
+    expect(snapshot['.prettierrc.json']).toBeDefined()
+    expect(snapshot['.eslintrc.json']).toBeDefined()
   })
 
   describe('has default test workflow', () => {
@@ -87,8 +82,9 @@ describe('CDK template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestCDKProject()
     project.postSynthesize()
-    expect(mockedExecSync).toBeCalledTimes(1)
-    expect(mockedExecSync).toBeCalledWith('ofmt .projenrc.ts')
+    expect(mockedExecSync).toBeCalledTimes(2)
+    expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.ts')
+    expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
   })
 })
 

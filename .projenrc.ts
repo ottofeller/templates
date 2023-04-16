@@ -14,7 +14,7 @@ const project = new projen.cdk.JsiiProject({
   packageManager: projen.javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
   deps: ['projen'],
-  bundledDeps: ['prettier', '@ottofeller/prettier-config-ofmt'],
+  bundledDeps: ['prettier', 'eslint'],
   peerDeps: ['projen'],
 
   devDeps: [
@@ -25,6 +25,7 @@ const project = new projen.cdk.JsiiProject({
     '@ottofeller/eslint-config-ofmt@1.7.2',
     '@ottofeller/ofmt@1.7.2',
     '@ottofeller/prettier-config-ofmt@1.7.2',
+    '@types/eslint',
     'eslint-plugin-import@2.25.4',
     '@typescript-eslint/eslint-plugin@5.10.2',
     '@typescript-eslint/parser',

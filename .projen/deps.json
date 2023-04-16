@@ -16,6 +16,10 @@
       "type": "build"
     },
     {
+      "name": "@types/eslint",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27",
       "type": "build"
@@ -89,7 +93,7 @@
       "type": "build"
     },
     {
-      "name": "@ottofeller/prettier-config-ofmt",
+      "name": "eslint",
       "type": "bundled"
     },
     {

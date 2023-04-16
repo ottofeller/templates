@@ -34,6 +34,7 @@
     "@ottofeller/eslint-config-ofmt": "1.7.2",
     "@ottofeller/ofmt": "1.7.2",
     "@ottofeller/prettier-config-ofmt": "1.7.2",
+    "@types/eslint": "^8.37.0",
     "@types/jest": "^27",
     "@types/jscodeshift": "^0.11.6",
     "@types/node": "^16",
@@ -55,12 +56,12 @@
     "projen": "^0.70.15"
   },
   "dependencies": {
-    "@ottofeller/prettier-config-ofmt": "1.5.2",
+    "eslint": "^8.18.0",
     "prettier": "2.8.0",
     "projen": "^0.70.15"
   },
   "bundledDependencies": [
-    "@ottofeller/prettier-config-ofmt",
+    "eslint",
     "prettier"
   ],
   "engines": {
