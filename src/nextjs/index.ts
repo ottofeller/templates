@@ -62,7 +62,6 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
         compilerOptions: {
           baseUrl: './',
           target: 'es6',
-          paths: {'tailwind.config.js': ['./tailwind.config.js']},
         },
       },
       sampleCode: false,
