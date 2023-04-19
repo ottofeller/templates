@@ -94,6 +94,20 @@ project.codegenConfig?.overrideSchema('./schema.json')
 
 In order to exclude the GraphQL packages from the project use the `isGraphqlEnabled: false` option.
 
+#### Codemods
+##### Add `src` reference to imports
+After update to `next@13.2.4` the typescript alias `"*" : ["./src/*"]` no longer works with `jest`/`swc`. The simplest solution is to get rid of the alias and update all imports - the codemod does exactly this. To run the codemod an npm script is added to the project: `codemod:add-src-to-imports`. The script run `jscodeshift` on `src` and `pages` folders. Feel free to add any arguments acceptable by `jscodeshift`.
+
+Examples:
+```sh
+# Default: run the codemod on contents of src and pages folders
+npm run codemod:add-src-to-imports
+```
+```sh
+# Run the codemod in dry mode to see the extent of modification
+npm run codemod:add-src-to-imports -- --dry
+```
+
 ### Apollo Server
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-apollo-server

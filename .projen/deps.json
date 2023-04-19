@@ -21,6 +21,10 @@
       "type": "build"
     },
     {
+      "name": "@types/jscodeshift",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"

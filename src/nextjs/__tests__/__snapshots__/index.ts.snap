@@ -267,6 +267,10 @@ tsconfig.tsbuildinfo
         "type": "build",
       },
       Object {
+        "name": "jscodeshift",
+        "type": "build",
+      },
+      Object {
         "name": "postcss",
         "type": "build",
       },
@@ -1017,6 +1021,7 @@ module.exports = {
       "eslint": ">=8",
       "jest": "*",
       "jest-environment-jsdom": "*",
+      "jscodeshift": "*",
       "postcss": "*",
       "postcss-nesting": "*",
       "projen": "*",
@@ -1041,6 +1046,7 @@ module.exports = {
     "scripts": Object {
       "build": "npx projen build",
       "clobber": "npx projen clobber",
+      "codemod:add-src-to-imports": "jscodeshift -t ./node_modules/@ottofeller/templates/lib/nextjs/add-src-reference-codemode.js --extensions=js,jsx,ts,tsx src pages",
       "compile": "npx projen compile",
       "default": "npx projen default",
       "dev": "npx projen dev",
@@ -1063,14 +1069,14 @@ module.exports = {
     },
     "version": "0.0.0",
   },
-  "pages/_app.tsx": "import 'assets/global.css'
+  "pages/_app.tsx": "import 'src/assets/global.css'
 import {AppProps} from 'next/app'
 
 export default function App({Component, pageProps}: AppProps) {
   return <Component {...pageProps} />
 }
 ",
-  "pages/index.tsx": "import {Home} from 'Home'
+  "pages/index.tsx": "import {Home} from 'src/Home'
 export default Home
 ",
   "postcss.config.json": Object {
@@ -1170,9 +1176,6 @@ export default config
       "noUnusedLocals": true,
       "noUnusedParameters": true,
       "paths": Object {
-        "*": Array [
-          "./src/*",
-        ],
         "tailwind.config.ts": Array [
           "./tailwind.config.ts",
         ],
@@ -1229,9 +1232,6 @@ export default config
       "noUnusedParameters": true,
       "outDir": "lib",
       "paths": Object {
-        "*": Array [
-          "./src/*",
-        ],
         "tailwind.config.ts": Array [
           "./tailwind.config.ts",
         ],

@@ -28,6 +28,7 @@ const project = new projen.cdk.JsiiProject({
     'eslint-plugin-import@2.25.4',
     '@typescript-eslint/eslint-plugin@5.10.2',
     '@typescript-eslint/parser',
+    '@types/jscodeshift',
   ],
 
   scripts: {

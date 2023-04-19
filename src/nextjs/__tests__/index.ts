@@ -105,7 +105,7 @@ describe('NextJS template', () => {
       expect(snapshot['postcss.config.json']).not.toBeDefined()
       expect(snapshot['tailwind.config.defaults.ts']).not.toBeDefined()
       expect(snapshot['tailwind.config.ts']).not.toBeDefined()
-      expect(snapshot['tsconfig.json'].compilerOptions.paths).not.toHaveProperty(['tailwind.config.ts', 0])
+      expect(snapshot['tsconfig.json'].compilerOptions).not.toHaveProperty('paths')
 
       expect(snapshot['package.json'].eslintConfig.extends).not.toContainEqual(
         '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs',
