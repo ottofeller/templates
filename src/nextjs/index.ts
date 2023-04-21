@@ -163,7 +163,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     /*
      * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
+     *
+     * The pages/_app.tsx file has optional content which is easier to format after the synthezis,
+     * instead of trying to arrange the file lines programatically.
      */
-    execSync('ofmt .projenrc.ts')
+    execSync('ofmt ".projenrc.ts pages/_app.tsx"')
   }
 }

@@ -124,7 +124,7 @@ describe('NextJS template', () => {
     const project = new TestNextJsTypeScriptProject()
     project.postSynthesize()
     expect(mockedExecSync).toBeCalledTimes(1)
-    expect(mockedExecSync).toBeCalledWith('ofmt .projenrc.ts')
+    expect(mockedExecSync).toBeCalledWith('ofmt ".projenrc.ts pages/_app.tsx"')
   })
 
   test('has gitignore file extended', () => {
