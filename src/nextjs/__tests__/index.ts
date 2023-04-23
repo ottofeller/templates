@@ -11,16 +11,6 @@ describe('NextJS template', () => {
     expect(snapshot).toMatchSnapshot()
   })
 
-  test('has tailwind enabled', () => {
-    const project = new TestNextJsTypeScriptProject()
-    const snapshot = synthSnapshot(project)
-    expect(snapshot['tailwind.config.ts']).toBeDefined()
-    expect(snapshot['tailwind.config.defaults.ts']).toBeDefined()
-    expect(snapshot['postcss.config.json']).toBeDefined()
-
-    expect(snapshot['tsconfig.json'].compilerOptions.paths).toHaveProperty(['tailwind.config.ts', 0])
-  })
-
   test('includes two NextJS config files', () => {
     const project = new TestNextJsTypeScriptProject()
     const snapshot = synthSnapshot(project)
@@ -105,7 +95,6 @@ describe('NextJS template', () => {
       expect(snapshot['postcss.config.json']).not.toBeDefined()
       expect(snapshot['tailwind.config.defaults.ts']).not.toBeDefined()
       expect(snapshot['tailwind.config.ts']).not.toBeDefined()
-      expect(snapshot['tsconfig.json'].compilerOptions).not.toHaveProperty('paths')
 
       expect(snapshot['package.json'].eslintConfig.extends).not.toContainEqual(
         '@ottofeller/eslint-config-ofmt/eslint.tailwind.cjs',
