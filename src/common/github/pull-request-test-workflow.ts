@@ -1,5 +1,6 @@
 import {Component, github, javascript} from 'projen'
 import {WithDefaultWorkflow} from './with-default-workflow'
+import {JobStep} from 'projen/lib/github/workflows-model'
 
 /**
  * Options for PullRequestLint
@@ -27,6 +28,13 @@ export interface PullRequestTestOptions {
    * @default ['main']
    */
   readonly triggerOnPushToBranches?: Array<string>
+
+  /**
+   * Setup Lighthouse audit job.
+   *
+   * @default true
+   */
+  readonly lighthouse?: boolean
 }
 
 /**
@@ -53,11 +61,36 @@ export class PullRequestTest extends Component {
       steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command, directory}}],
     })
 
+    const customJob = (steps: JobStep[]): github.workflows.Job => ({
+      runsOn: options.runsOn ?? ['ubuntu-latest'],
+      permissions: {contents: github.workflows.JobPermission.READ},
+      steps,
+    })
+
     workflow.addJobs({
       lint: job('npm run lint'),
       typecheck: job('npm run typecheck'),
       test: job('npm run test'),
     })
+
+    if (options.lighthouse) {
+      workflow.addJobs({
+        lighthouse: customJob([
+          {uses: 'actions/checkout@v3'},
+          {uses: 'actions/setup-node@v3', with: {'node-version': 16}},
+          {name: 'Install dependencies', run: 'npm instapp'},
+          {name: 'Copy environment variables', run: 'cp .env.development .env.local'},
+          {name: 'Build Next.js application', run: 'npm run build'},
+          {name: 'Run Lighthouse audit', run: 'npm run lighthouse'},
+          {
+            name: 'Save Lighthouse report as an artifact',
+            uses: 'actions/upload-artifact@v3',
+            if: 'always()',
+            with: {name: 'lighthouse-report', path: '.lighthouseci/'},
+          },
+        ]),
+      })
+    }
   }
 
   /**
@@ -86,6 +119,7 @@ export class PullRequestTest extends Component {
         runsOn: options.runsOn,
         name: `test-${options.name}`,
         outdir: options.outdir,
+        lighthouse: options.lighthouse,
       })
     }
   }
