@@ -1,6 +1,6 @@
 import {Component, github, javascript} from 'projen'
-import {WithDefaultWorkflow} from './with-default-workflow'
 import {JobStep} from 'projen/lib/github/workflows-model'
+import {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
  * Options for PullRequestLint

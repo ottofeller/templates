@@ -137,7 +137,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     if (lighthouse) {
       this.addDeps('@lhci/cli')
-      this.addScripts({'lighthouse': 'lhci autorun'})
+      this.addScripts({lighthouse: 'lhci autorun'})
       new AssetFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})
     }
 
