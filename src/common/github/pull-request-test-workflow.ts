@@ -55,30 +55,39 @@ export class PullRequestTest extends Component {
       push: {paths, branches},
     })
 
-    const job = (command: string): github.workflows.Job => ({
-      runsOn: options.runsOn ?? ['ubuntu-latest'],
-      permissions: {contents: github.workflows.JobPermission.READ},
-      steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command, directory}}],
-    })
-
-    const customJob = (steps: JobStep[]): github.workflows.Job => ({
+    const job = (steps: Array<JobStep>): github.workflows.Job => ({
       runsOn: options.runsOn ?? ['ubuntu-latest'],
       permissions: {contents: github.workflows.JobPermission.READ},
       steps,
     })
 
     workflow.addJobs({
-      lint: job('npm run lint'),
-      typecheck: job('npm run typecheck'),
-      test: job('npm run test'),
+      lint: job([
+        {
+          uses: 'ottofeller/github-actions/npm-run@main',
+          with: {'node-version': 16, command: 'npm run lint', directory},
+        },
+      ]),
+      typecheck: job([
+        {
+          uses: 'ottofeller/github-actions/npm-run@main',
+          with: {'node-version': 16, command: 'npm run typecheck', directory},
+        },
+      ]),
+      test: job([
+        {
+          uses: 'ottofeller/github-actions/npm-run@main',
+          with: {'node-version': 16, command: 'npm run test', directory},
+        },
+      ]),
     })
 
     if (options.lighthouse) {
       workflow.addJobs({
-        lighthouse: customJob([
+        lighthouse: job([
           {uses: 'actions/checkout@v3'},
           {uses: 'actions/setup-node@v3', with: {'node-version': 16}},
-          {name: 'Install dependencies', run: 'npm instapp'},
+          {name: 'Install dependencies', run: 'npm install'},
           {name: 'Copy environment variables', run: 'cp .env.development .env.local'},
           {name: 'Build Next.js application', run: 'npm run build'},
           {name: 'Run Lighthouse audit', run: 'npm run lighthouse'},
