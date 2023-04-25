@@ -1175,11 +1175,6 @@ export default config
       "noImplicitThis": true,
       "noUnusedLocals": true,
       "noUnusedParameters": true,
-      "paths": Object {
-        "tailwind.config.ts": Array [
-          "./tailwind.config.ts",
-        ],
-      },
       "resolveJsonModule": true,
       "skipLibCheck": true,
       "strict": false,
@@ -1231,11 +1226,6 @@ export default config
       "noUnusedLocals": true,
       "noUnusedParameters": true,
       "outDir": "lib",
-      "paths": Object {
-        "tailwind.config.ts": Array [
-          "./tailwind.config.ts",
-        ],
-      },
       "resolveJsonModule": true,
       "rootDir": ".",
       "skipLibCheck": true,

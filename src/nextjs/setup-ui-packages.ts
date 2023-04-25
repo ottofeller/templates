@@ -39,12 +39,4 @@ export function setupUIPackages(
   })
 
   new projen.SampleFile(project, 'tailwind.config.ts', {sourcePath: path.join(assetsDir, 'tailwind.config.ts.sample')})
-
-  const tsConfigs = ['tsconfig.json', 'tsconfig.dev.json']
-
-  tsConfigs.forEach((config) => {
-    project
-      .tryFindObjectFile(config)
-      ?.addOverride('compilerOptions.paths.tailwind\\.config\\.ts', ['./tailwind.config.ts'])
-  })
 }
