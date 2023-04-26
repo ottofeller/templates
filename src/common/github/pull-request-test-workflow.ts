@@ -85,17 +85,18 @@ export class PullRequestTest extends Component {
     if (options.lighthouse) {
       workflow.addJobs({
         lighthouse: job([
-          {uses: 'actions/checkout@v3'},
-          {uses: 'actions/setup-node@v3', with: {'node-version': 16}},
-          {name: 'Install dependencies', run: 'npm install'},
-          {name: 'Copy environment variables', run: 'cp .env.development .env.local'},
-          {name: 'Build Next.js application', run: 'npm run build'},
-          {name: 'Run Lighthouse audit', run: 'npm run lighthouse'},
+          {uses: 'actions/checkout@v3', workingDirectory: directory},
+          {uses: 'actions/setup-node@v3', with: {'node-version': 16}, workingDirectory: directory},
+          {name: 'Install dependencies', run: 'npm install', workingDirectory: directory},
+          {name: 'Copy environment variables', run: 'cp .env.development .env.local', workingDirectory: directory},
+          {name: 'Build Next.js application', run: 'npm run build', workingDirectory: directory},
+          {name: 'Run Lighthouse audit', run: 'npm run lighthouse', workingDirectory: directory},
           {
             name: 'Save Lighthouse report as an artifact',
             uses: 'actions/upload-artifact@v3',
             if: 'always()',
             with: {name: 'lighthouse-report', path: '.lighthouseci/'},
+            workingDirectory: directory,
           },
         ]),
       })
