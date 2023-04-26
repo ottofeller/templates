@@ -39,7 +39,7 @@ export interface OttofellerNextjsProjectOptions
   readonly isUiConfigEnabled?: boolean
 
   /**
-   * Setup Lighthouse audit script & job.
+   * Setup Lighthouse audit script & GitHub job.
    *
    * @default true
    */
