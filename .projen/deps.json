@@ -1,18 +1,8 @@
 {
   "dependencies": [
     {
-      "name": "@ottofeller/eslint-config-ofmt",
-      "version": "1.7.2",
-      "type": "build"
-    },
-    {
-      "name": "@ottofeller/ofmt",
-      "version": "1.7.2",
-      "type": "build"
-    },
-    {
-      "name": "@ottofeller/prettier-config-ofmt",
-      "version": "1.7.2",
+      "name": "@ottofeller/eslint-plugin-ottofeller",
+      "version": "0.1.3",
       "type": "build"
     },
     {
@@ -40,16 +30,47 @@
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "5.10.2",
+      "version": "5.58.0",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
+      "version": "5.58.0",
+      "type": "build"
+    },
+    {
+      "name": "@typescript-eslint/typescript-estree",
+      "version": "5.58.0",
+      "type": "build"
+    },
+    {
+      "name": "eslint-plugin-eslint-comments",
+      "version": "3.2.0",
       "type": "build"
     },
     {
       "name": "eslint-plugin-import",
-      "version": "2.25.4",
+      "version": "2.27.5",
+      "type": "build"
+    },
+    {
+      "name": "eslint-plugin-react-hooks",
+      "version": "4.6.0",
+      "type": "build"
+    },
+    {
+      "name": "eslint-plugin-react",
+      "version": "7.32.2",
+      "type": "build"
+    },
+    {
+      "name": "eslint-plugin-tailwindcss",
+      "version": "3.11.0",
+      "type": "build"
+    },
+    {
+      "name": "eslint",
+      "version": "8",
       "type": "build"
     },
     {
@@ -73,6 +94,16 @@
     {
       "name": "jsii",
       "version": "1.x",
+      "type": "build"
+    },
+    {
+      "name": "prettier-plugin-organize-imports",
+      "version": "3.2.2",
+      "type": "build"
+    },
+    {
+      "name": "prettier",
+      "version": "2.8.7",
       "type": "build"
     },
     {

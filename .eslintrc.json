@@ -1,0 +1,192 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
+  "ignorePatterns": "!.projenrc.ts",
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "rules": {
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "any",
+        "prev": "*",
+        "next": "*"
+      },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "multiline-block-like"
+      },
+      {
+        "blankLine": "always",
+        "prev": "multiline-block-like",
+        "next": "*"
+      },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "multiline-const"
+      },
+      {
+        "blankLine": "always",
+        "prev": "multiline-const",
+        "next": "*"
+      },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "multiline-expression"
+      },
+      {
+        "blankLine": "always",
+        "prev": "multiline-expression",
+        "next": "*"
+      },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "multiline-let"
+      },
+      {
+        "blankLine": "always",
+        "prev": "multiline-let",
+        "next": "*"
+      }
+    ],
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": "allow-with-description",
+        "ts-ignore": "allow-with-description"
+      }
+    ],
+    "@typescript-eslint/no-duplicate-imports": [
+      "error"
+    ],
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "@typescript-eslint/no-unused-expressions": [
+      "error"
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "curly": [
+      "error"
+    ],
+    "import/no-relative-parent-imports": [
+      "error"
+    ],
+    "no-negated-condition": [
+      "error"
+    ],
+    "no-nested-ternary": [
+      "error"
+    ],
+    "eslint-comments/disable-enable-pair": [
+      "error",
+      {
+        "allowWholeFile": true
+      }
+    ],
+    "eslint-comments/no-aggregating-enable": [
+      "error"
+    ],
+    "eslint-comments/no-duplicate-disable": [
+      "error"
+    ],
+    "eslint-comments/no-unlimited-disable": [
+      "error"
+    ],
+    "eslint-comments/no-unused-disable": [
+      "error"
+    ],
+    "eslint-comments/no-unused-enable": [
+      "error"
+    ],
+    "eslint-comments/no-use": [
+      "error",
+      {
+        "allow": [
+          "eslint-disable",
+          "eslint-disable-next-line",
+          "eslint-enable"
+        ]
+      }
+    ],
+    "eslint-comments/require-description": [
+      "error",
+      {
+        "ignore": [
+          "eslint-enable"
+        ]
+      }
+    ],
+    "react-hooks/exhaustive-deps": [
+      "error"
+    ],
+    "react-hooks/rules-of-hooks": [
+      "error"
+    ],
+    "react/jsx-key": [
+      "error",
+      {
+        "checkFragmentShorthand": true
+      }
+    ],
+    "react/jsx-uses-vars": [
+      "error"
+    ],
+    "react/prefer-stateless-function": [
+      "error"
+    ],
+    "@ottofeller/ottofeller/require-comment-before-useeffect": [
+      "error"
+    ]
+  },
+  "extends": [
+    "plugin:import/typescript"
+  ],
+  "globals": {
+    "document": "readonly",
+    "navigator": "readonly",
+    "window": "readonly"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/*"
+      ],
+      "rules": {
+        "import/no-relative-parent-imports": "off"
+      }
+    }
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-comments",
+    "import",
+    "react-hooks",
+    "react",
+    "@ottofeller/ottofeller"
+  ],
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "17"
+    }
+  }
+}

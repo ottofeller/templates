@@ -1,6 +1,7 @@
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
 import {job, npmRunJob} from './src/common/github'
+import {addLinters} from './src/common/lint'
 
 // ANCHOR Basic setup
 const project = new projen.cdk.JsiiProject({
@@ -17,26 +18,7 @@ const project = new projen.cdk.JsiiProject({
   bundledDeps: ['prettier', 'eslint'],
   peerDeps: ['projen'],
 
-  devDeps: [
-    // Solves the typescript > 4 problem
-    // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
-    '@types/prettier@2.6.0',
-
-    '@ottofeller/eslint-config-ofmt@1.7.2',
-    '@ottofeller/ofmt@1.7.2',
-    '@ottofeller/prettier-config-ofmt@1.7.2',
-    '@types/eslint',
-    'eslint-plugin-import@2.25.4',
-    '@typescript-eslint/eslint-plugin@5.10.2',
-    '@typescript-eslint/parser',
-    '@types/jscodeshift',
-  ],
-
-  scripts: {
-    format: 'npx ofmt ".projenrc.ts src"',
-    lint: 'npx ofmt --lint ".projenrc.ts src" && npx olint src .projenrc.ts',
-    typecheck: 'tsc --noEmit --project tsconfig.dev.json',
-  },
+  devDeps: ['@types/eslint', '@types/jscodeshift'],
 
   github: true,
   buildWorkflow: false,
@@ -65,18 +47,15 @@ const packageJson = JSON.parse(readFileSync('package.json', {encoding: 'utf-8'})
 const version = versionFromEnv || packageJson.version
 project.package.addField('version', version)
 
-// ANCHOR ESLint and prettier setup
-project.package.addField('prettier', '@ottofeller/prettier-config-ofmt')
-
-project.package.addField('eslintConfig', {
-  extends: [
-    '@ottofeller/eslint-config-ofmt/eslint.quality.cjs',
-    '@ottofeller/eslint-config-ofmt/eslint.formatting.cjs',
-  ],
-})
-
 // Use older version of the package that is compatible with TS 3.9 (the version used by JSII)
 project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
+
+// ANCHOR ESLint and prettier setup
+addLinters({project, lintPaths: ['.projenrc.ts', 'src']})
+
+// Solves the typescript > 4 problem
+// https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
+project.addDevDeps('@types/prettier@2.6.0')
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')
@@ -160,7 +139,15 @@ publishReleaseGithubWorkflow.addJobs({
 })
 
 // ANCHOR nmpignore
-project.npmignore!.exclude('/.projenrc.ts', '/src/**', '/lib/**/assets/**', '**/__tests__/**')
+project.npmignore!.exclude(
+  '/.eslintrc.json',
+  '/.prettierrc.json',
+  '/.projenrc.ts',
+  '/src/**',
+  '/lib/**/assets/**',
+  '**/__tests__/**',
+)
+
 project.npmignore!.include('/src/**/assets/**')
 
 project.synth()

@@ -7,7 +7,7 @@ import {eslintConfigQuality} from './configs/eslint-config-quality'
 import {prettierConfig} from './configs/prettier'
 
 const arrayEslintConfigProperties = ['extends', 'overrides', 'plugins'] as const
-type LinterConfigArrayProperties = Pick<Linter.Config, typeof arrayEslintConfigProperties[number]>
+type LinterConfigArrayProperties = Pick<Linter.Config, (typeof arrayEslintConfigProperties)[number]>
 
 type AddLintersProps = {
   readonly project: NodeProject

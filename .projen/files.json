@@ -1,11 +1,13 @@
 {
   "files": [
+    ".eslintrc.json",
     ".gitattributes",
     ".github/dependabot.yml",
     ".github/workflows/create-release.yml",
     ".github/workflows/publish-release.yml",
     ".github/workflows/test.yml",
     ".gitignore",
+    ".prettierrc.json",
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",

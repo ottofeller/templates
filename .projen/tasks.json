@@ -99,7 +99,10 @@
       "name": "format",
       "steps": [
         {
-          "exec": "npx ofmt \".projenrc.ts src\""
+          "exec": "prettier --write .projenrc.ts src"
+        },
+        {
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx .projenrc.ts src --fix"
         }
       ]
     },
@@ -125,7 +128,10 @@
       "name": "lint",
       "steps": [
         {
-          "exec": "npx ofmt --lint \".projenrc.ts src\" && npx olint src .projenrc.ts"
+          "exec": "prettier --check .projenrc.ts src"
+        },
+        {
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx .projenrc.ts src"
         }
       ]
     },
