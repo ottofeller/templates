@@ -114,13 +114,14 @@ export class PullRequestTest extends Component {
    */
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+    const lighthouse = options.lighthouse ?? true
 
     if (!hasDefaultGithubWorkflows) {
       return
     }
 
     if (project.github) {
-      new PullRequestTest(project.github)
+      new PullRequestTest(project.github, {lighthouse})
       return
     }
 
@@ -129,7 +130,7 @@ export class PullRequestTest extends Component {
         runsOn: options.runsOn,
         name: `test-${options.name}`,
         outdir: options.outdir,
-        lighthouse: options.lighthouse,
+        lighthouse,
       })
     }
   }
