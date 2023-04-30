@@ -1,8 +1,8 @@
 /* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
-import * as prettierConfig from '@ottofeller/prettier-config-ofmt'
 import * as fs from 'fs'
-import {format, Options} from 'prettier'
+import {format} from 'prettier'
 import {Project, TextFile, TextFileOptions} from 'projen'
+import {prettierConfig} from '../lint/configs/prettier'
 import {MaybePlural} from '../MaybePlural'
 
 /**
@@ -61,7 +61,7 @@ export class AssetFile extends TextFile {
       )
 
       if (/\.(j|t)sx?$/.test(filePath)) {
-        lines = format(lines.join('\n'), prettierConfig as Options).split('\n')
+        lines = format(lines.join('\n'), prettierConfig).split('\n')
       }
     }
 

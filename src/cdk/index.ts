@@ -5,7 +5,7 @@ import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk
 import {NodePackageManager} from 'projen/lib/javascript'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {extendGitignore} from '../common/gitignore'
-import {addOfmt, WithCustomLintPaths} from '../common/lint'
+import {addLinters, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
@@ -64,7 +64,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
-    addOfmt(this, lintPaths)
+    addLinters({project: this, lintPaths})
 
     // ANCHOR Github
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
@@ -91,6 +91,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
      * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      */
-    execSync('ofmt .projenrc.ts')
+    execSync('prettier --write .projenrc.ts')
+    execSync('eslint --fix .projenrc.ts')
   }
 }

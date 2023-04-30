@@ -17,6 +17,8 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 !.jsii
+/.eslintrc.json
+/.prettierrc.json
 /.projenrc.ts
 /src/**
 /lib/**/assets/**
