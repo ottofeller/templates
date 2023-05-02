@@ -38,6 +38,13 @@ export interface OttofellerNextjsProjectOptions
    * @default true
    */
   readonly isUiConfigEnabled?: boolean
+
+  /**
+   * Setup Lighthouse audit script & GitHub job.
+   *
+   * @default true
+   */
+  readonly lighthouse?: boolean
 }
 
 /**
@@ -123,6 +130,15 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
       this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
       this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.yml'})
+    }
+
+    // ANCHOR Set up Lighthouse audit
+    const lighthouse = options.lighthouse ?? true
+
+    if (lighthouse) {
+      this.addDeps('@lhci/cli')
+      this.addScripts({lighthouse: 'lhci autorun'})
+      new SampleFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})
     }
 
     // ANCHOR Jest

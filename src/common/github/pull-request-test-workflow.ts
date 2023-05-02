@@ -1,4 +1,5 @@
 import {Component, github, javascript} from 'projen'
+import {JobStep} from 'projen/lib/github/workflows-model'
 import {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
@@ -27,6 +28,13 @@ export interface PullRequestTestOptions {
    * @default ['main']
    */
   readonly triggerOnPushToBranches?: Array<string>
+
+  /**
+   * Setup Lighthouse audit job.
+   *
+   * @default true
+   */
+  readonly lighthouse?: boolean
 }
 
 /**
@@ -47,17 +55,52 @@ export class PullRequestTest extends Component {
       push: {paths, branches},
     })
 
-    const job = (command: string): github.workflows.Job => ({
+    const job = (steps: Array<JobStep>): github.workflows.Job => ({
       runsOn: options.runsOn ?? ['ubuntu-latest'],
       permissions: {contents: github.workflows.JobPermission.READ},
-      steps: [{uses: 'ottofeller/github-actions/npm-run@main', with: {'node-version': 16, command, directory}}],
+      steps,
     })
 
     workflow.addJobs({
-      lint: job('npm run lint'),
-      typecheck: job('npm run typecheck'),
-      test: job('npm run test'),
+      lint: job([
+        {
+          uses: 'ottofeller/github-actions/npm-run@main',
+          with: {'node-version': 16, command: 'npm run lint', directory},
+        },
+      ]),
+      typecheck: job([
+        {
+          uses: 'ottofeller/github-actions/npm-run@main',
+          with: {'node-version': 16, command: 'npm run typecheck', directory},
+        },
+      ]),
+      test: job([
+        {
+          uses: 'ottofeller/github-actions/npm-run@main',
+          with: {'node-version': 16, command: 'npm run test', directory},
+        },
+      ]),
     })
+
+    if (options.lighthouse) {
+      workflow.addJobs({
+        lighthouse: job([
+          {uses: 'actions/checkout@v3', workingDirectory: directory},
+          {uses: 'actions/setup-node@v3', with: {'node-version': 16}, workingDirectory: directory},
+          {name: 'Install dependencies', run: 'npm install', workingDirectory: directory},
+          {name: 'Copy environment variables', run: 'cp .env.development .env.local', workingDirectory: directory},
+          {name: 'Build Next.js application', run: 'npm run build', workingDirectory: directory},
+          {name: 'Run Lighthouse audit', run: 'npm run lighthouse', workingDirectory: directory},
+          {
+            name: 'Save Lighthouse report as an artifact',
+            uses: 'actions/upload-artifact@v3',
+            if: 'always()',
+            with: {name: 'lighthouse-report', path: '.lighthouseci/'},
+            workingDirectory: directory,
+          },
+        ]),
+      })
+    }
   }
 
   /**
@@ -71,13 +114,14 @@ export class PullRequestTest extends Component {
    */
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+    const lighthouse = options.lighthouse ?? true
 
     if (!hasDefaultGithubWorkflows) {
       return
     }
 
     if (project.github) {
-      new PullRequestTest(project.github)
+      new PullRequestTest(project.github, {lighthouse})
       return
     }
 
@@ -86,6 +130,7 @@ export class PullRequestTest extends Component {
         runsOn: options.runsOn,
         name: `test-${options.name}`,
         outdir: options.outdir,
+        lighthouse,
       })
     }
   }
