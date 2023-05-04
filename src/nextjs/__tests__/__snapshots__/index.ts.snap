@@ -270,6 +270,7 @@ node_modules
         "callees": Array [
           "cn",
         ],
+        "config": "tailwind-config.js",
       },
     },
   },
@@ -1445,6 +1446,10 @@ export const Home = memo(function Home(props: {cookies?: Record<string, string>}
   "src/assets/global.css": "@tailwind base;
 @tailwind components;
 @tailwind utilities;
+",
+  "tailwind-config.js": "const jiti = require('jiti')()
+jiti.register()
+module.exports = require('./tailwind.config').default
 ",
   "tailwind.config.defaults.ts": "import plugin from 'tailwindcss/plugin'
 import {Config} from 'tailwindcss/types/config'

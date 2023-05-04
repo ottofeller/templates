@@ -39,4 +39,9 @@ export function setupUIPackages(
   })
 
   new projen.SampleFile(project, 'tailwind.config.ts', {sourcePath: path.join(assetsDir, 'tailwind.config.ts.sample')})
+
+  // FIXME This following code is a workaround needed until eslint-plugin-tailwindcss adds typescript support for the config.
+  const customConfig = 'tailwind-config.js'
+  new projen.SampleFile(project, customConfig, {sourcePath: path.join(assetsDir, customConfig)})
+  project.tryFindObjectFile('.eslintrc.json')!.addOverride('settings.tailwindcss.config', customConfig)
 }
