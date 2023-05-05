@@ -44,4 +44,5 @@ export function setupUIPackages(
   const customConfig = 'tailwind-config.js'
   new projen.SampleFile(project, customConfig, {sourcePath: path.join(assetsDir, customConfig)})
   project.tryFindObjectFile('.eslintrc.json')!.addOverride('settings.tailwindcss.config', customConfig)
+  project.addDevDeps('jiti')
 }
