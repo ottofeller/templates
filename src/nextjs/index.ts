@@ -63,7 +63,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       projenrcJs: false,
       defaultReleaseBranch: 'main',
       name: 'nextjs',
-      packageManager: NodePackageManager.NPM,
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
       srcdir: options.srcdir ?? '.',
 
       tsconfig: {
