@@ -32,7 +32,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
   constructor(options: OttofellerCDKProjectOptions) {
     super({
       // Default options
-      packageManager: NodePackageManager.NPM,
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
       sampleCode: false,
       eslint: false,
