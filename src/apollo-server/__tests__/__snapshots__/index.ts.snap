@@ -256,6 +256,13 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
       "react-hooks/rules-of-hooks": Array [
         "error",
       ],
+      "react/jsx-curly-brace-presence": Array [
+        "error",
+        Object {
+          "children": "never",
+          "props": "never",
+        },
+      ],
       "react/jsx-key": Array [
         "error",
         Object {
