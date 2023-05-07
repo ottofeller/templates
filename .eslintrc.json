@@ -135,6 +135,10 @@
         ]
       }
     ],
+    "jsx-quotes": [
+      "error",
+      "prefer-double"
+    ],
     "react-hooks/exhaustive-deps": [
       "error"
     ],

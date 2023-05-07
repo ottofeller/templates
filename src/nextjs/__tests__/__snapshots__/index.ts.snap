@@ -184,6 +184,10 @@ node_modules
       "import/no-relative-parent-imports": Array [
         "error",
       ],
+      "jsx-quotes": Array [
+        "error",
+        "prefer-double",
+      ],
       "no-negated-condition": Array [
         "error",
       ],
