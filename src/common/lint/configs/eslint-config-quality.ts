@@ -50,6 +50,7 @@ export const eslintConfigQuality: Linter.Config = {
     'eslint-comments/require-description': ['error', {ignore: ['eslint-enable']}],
 
     // React specific rules
+    'jsx-quotes': ['error', 'prefer-double'],
     'react-hooks/exhaustive-deps': ['error'],
     'react-hooks/rules-of-hooks': ['error'],
     'react/jsx-key': ['error', {checkFragmentShorthand: true}],

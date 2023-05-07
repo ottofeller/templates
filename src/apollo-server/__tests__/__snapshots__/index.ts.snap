@@ -196,6 +196,10 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
       "import/no-relative-parent-imports": Array [
         "error",
       ],
+      "jsx-quotes": Array [
+        "error",
+        "prefer-double",
+      ],
       "no-negated-condition": Array [
         "error",
       ],
