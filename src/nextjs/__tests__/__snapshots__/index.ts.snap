@@ -595,6 +595,10 @@ tsconfig.tsbuildinfo
         "type": "build",
       },
       Object {
+        "name": "jiti",
+        "type": "build",
+      },
+      Object {
         "name": "jscodeshift",
         "type": "build",
       },
@@ -1419,6 +1423,7 @@ module.exports = {
       "eslint-plugin-tailwindcss": "3.11.0",
       "jest": "*",
       "jest-environment-jsdom": "*",
+      "jiti": "*",
       "jscodeshift": "*",
       "postcss": "*",
       "postcss-nesting": "*",
