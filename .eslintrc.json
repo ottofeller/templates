@@ -141,6 +141,10 @@
     "react-hooks/rules-of-hooks": [
       "error"
     ],
+    "react/jsx-boolean-value": [
+      "error",
+      "never"
+    ],
     "react/jsx-key": [
       "error",
       {

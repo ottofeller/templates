@@ -240,6 +240,10 @@ Object {
       "react-hooks/rules-of-hooks": Array [
         "error",
       ],
+      "react/jsx-boolean-value": Array [
+        "error",
+        "never",
+      ],
       "react/jsx-key": Array [
         "error",
         Object {

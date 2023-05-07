@@ -256,6 +256,10 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
       "react-hooks/rules-of-hooks": Array [
         "error",
       ],
+      "react/jsx-boolean-value": Array [
+        "error",
+        "never",
+      ],
       "react/jsx-key": Array [
         "error",
         Object {
