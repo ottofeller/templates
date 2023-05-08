@@ -54,6 +54,7 @@ export interface OttofellerNextjsProjectOptions
  */
 export class OttofellerNextjsProject extends NextJsTypeScriptProject {
   public codegenConfigYaml?: CodegenConfigYaml
+  public postSynthFormattingPaths = ['.projenrc.ts']
 
   constructor(options: OttofellerNextjsProjectOptions) {
     super({
@@ -183,7 +184,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
      * The pages/_app.tsx file has optional content which is easier to format after the synthesis,
      * instead of trying to arrange the file lines programmatically.
      */
-    execSync('prettier --write .projenrc.ts')
-    execSync('eslint --fix .projenrc.ts')
+    const formattingPaths = this.postSynthFormattingPaths.join(' ')
+    execSync(`prettier --write ${formattingPaths}`)
+    execSync(`eslint --fix ${formattingPaths}`)
   }
 }

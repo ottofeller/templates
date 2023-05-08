@@ -91,6 +91,7 @@ describe('NextJS template', () => {
       expect(snapshot['tailwind.config.defaults.ts']).not.toBeDefined()
       expect(snapshot['tailwind.config.ts']).not.toBeDefined()
       expect(snapshot['.eslintrc.json'].plugins).not.toContain('tailwindcss')
+      expect(project.postSynthFormattingPaths).not.toContain('pages/_app.tsx')
     })
   })
 
@@ -103,10 +104,12 @@ describe('NextJS template', () => {
   test('formats ".projenrc.ts" file after synthesis', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestNextJsTypeScriptProject()
+    expect(project.postSynthFormattingPaths).toHaveLength(2)
+    const formattingPaths = project.postSynthFormattingPaths.join(' ')
     project.postSynthesize()
     expect(mockedExecSync).toBeCalledTimes(2)
-    expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.ts')
-    expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
+    expect(mockedExecSync).toBeCalledWith(`prettier --write ${formattingPaths}`)
+    expect(mockedExecSync).toBeCalledWith(`eslint --fix ${formattingPaths}`)
   })
 
   test('has gitignore file extended', () => {

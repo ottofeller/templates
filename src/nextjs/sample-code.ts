@@ -28,6 +28,7 @@ export function sampleCode(
 
   if (isUiConfigEnabled) {
     appContents.unshift("import 'src/assets/global.css'")
+    project.postSynthFormattingPaths.push(appFilePath)
   }
 
   new projen.SampleFile(project, appFilePath, {contents: appContents.join('\n')})
