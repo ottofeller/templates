@@ -184,6 +184,10 @@ node_modules
       "import/no-relative-parent-imports": Array [
         "error",
       ],
+      "jsx-quotes": Array [
+        "error",
+        "prefer-double",
+      ],
       "no-negated-condition": Array [
         "error",
       ],
@@ -247,6 +251,13 @@ node_modules
       "react/jsx-boolean-value": Array [
         "error",
         "never",
+      ],
+      "react/jsx-curly-brace-presence": Array [
+        "error",
+        Object {
+          "children": "never",
+          "props": "never",
+        },
       ],
       "react/jsx-key": Array [
         "error",
@@ -596,6 +607,10 @@ tsconfig.tsbuildinfo
       },
       Object {
         "name": "jest-environment-jsdom",
+        "type": "build",
+      },
+      Object {
+        "name": "jiti",
         "type": "build",
       },
       Object {
@@ -1423,6 +1438,7 @@ module.exports = {
       "eslint-plugin-tailwindcss": "3.11.0",
       "jest": "*",
       "jest-environment-jsdom": "*",
+      "jiti": "*",
       "jscodeshift": "*",
       "postcss": "*",
       "postcss-nesting": "*",

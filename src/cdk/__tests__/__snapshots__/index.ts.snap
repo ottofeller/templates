@@ -180,6 +180,10 @@ Object {
       "import/no-relative-parent-imports": Array [
         "error",
       ],
+      "jsx-quotes": Array [
+        "error",
+        "prefer-double",
+      ],
       "no-negated-condition": Array [
         "error",
       ],
@@ -243,6 +247,13 @@ Object {
       "react/jsx-boolean-value": Array [
         "error",
         "never",
+      ],
+      "react/jsx-curly-brace-presence": Array [
+        "error",
+        Object {
+          "children": "never",
+          "props": "never",
+        },
       ],
       "react/jsx-key": Array [
         "error",
