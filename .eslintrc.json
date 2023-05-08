@@ -152,6 +152,10 @@
         "children": "never"
       }
     ],
+    "react/jsx-boolean-value": [
+      "error",
+      "never"
+    ],
     "react/jsx-key": [
       "error",
       {
