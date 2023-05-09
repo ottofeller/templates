@@ -106,6 +106,22 @@ describe('Apollo server template', () => {
       expect(snapshot['src/logger/__tests__/index.ts']).not.toBeDefined()
     })
   })
+
+  describe('has docker integration', () => {
+    test('included by default', () => {
+      const project = new TestApolloServerProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.dockerignore']).toBeDefined()
+      expect(snapshot['Dockerfile']).toBeDefined()
+    })
+
+    test('excluded with an option', () => {
+      const project = new TestApolloServerProject({hasDocker: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.dockerignore']).not.toBeDefined()
+      expect(snapshot['Dockerfile']).not.toBeDefined()
+    })
+  })
 })
 
 class TestApolloServerProject extends OttofellerApolloServerProject {

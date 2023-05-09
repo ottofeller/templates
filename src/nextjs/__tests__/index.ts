@@ -173,6 +173,24 @@ describe('NextJS template', () => {
       expect(snapshot['src/Home/__tests__/index.tsx']).not.toBeDefined()
     })
   })
+
+  describe('has docker integration', () => {
+    test('included by default', () => {
+      const project = new TestNextJsTypeScriptProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.dockerignore']).toBeDefined()
+      expect(snapshot['Dockerfile.dev']).toBeDefined()
+      expect(snapshot['Dockerfile.production']).toBeDefined()
+    })
+
+    test('excluded with an option', () => {
+      const project = new TestNextJsTypeScriptProject({hasDocker: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.dockerignore']).not.toBeDefined()
+      expect(snapshot['Dockerfile.dev']).not.toBeDefined()
+      expect(snapshot['Dockerfile.production']).not.toBeDefined()
+    })
+  })
 })
 
 class TestNextJsTypeScriptProject extends OttofellerNextjsProject {
