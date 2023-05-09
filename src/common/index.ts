@@ -1,4 +1,5 @@
 export * from './codegen'
+export {WithDocker} from './docker/with-docker'
 export {AssetFile, AssetFileOptions, AssetFileTemplate} from './files/AssetFile'
 export {WithDefaultWorkflow} from './github'
 export {extendGitignore} from './gitignore'

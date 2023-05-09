@@ -4,6 +4,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
+import {WithDocker} from '../common'
 import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
@@ -15,6 +16,7 @@ import {sampleCode} from './sample-code'
 
 export interface OttofellerApolloServerProjectOptions
   extends TypeScriptProjectOptions,
+    WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
     WithVSCode {}
@@ -131,8 +133,10 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
 
     // ANCHOR Docker setup
-    new AssetFile(this, '.dockerignore', {sourcePath: path.join(assetsDir, '.dockerignore')})
-    new AssetFile(this, 'Dockerfile', {sourcePath: path.join(assetsDir, 'Dockerfile')})
+    if (options.hasDocker ?? true) {
+      new AssetFile(this, '.dockerignore', {sourcePath: path.join(assetsDir, '.dockerignore')})
+      new AssetFile(this, 'Dockerfile', {sourcePath: path.join(assetsDir, 'Dockerfile')})
+    }
 
     // ANCHOR VSCode settings
     VsCodeSettings.addToProject(this, options)
