@@ -18,28 +18,67 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: ottofeller/github-actions/npm-run@main
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-          command: npm run lint
-  typecheck:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: ottofeller/github-actions/npm-run@main
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
         with:
-          node-version: 16
-          command: npm run typecheck
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
+      - name: Install dependencies
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Execute the command
+        run: npm run lint
   test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: ottofeller/github-actions/npm-run@main
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-          command: npm run test
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
+      - name: Install dependencies
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Execute the command
+        run: npm run test
+  typecheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
+      - name: Install dependencies
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Execute the command
+        run: npm run typecheck
   lighthouse:
     runs-on: ubuntu-latest
     permissions:
@@ -356,28 +395,67 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: ottofeller/github-actions/npm-run@main
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-          command: npm run lint
-  typecheck:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: ottofeller/github-actions/npm-run@main
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
         with:
-          node-version: 16
-          command: npm run typecheck
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
+      - name: Install dependencies
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Execute the command
+        run: npm run lint
   test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: ottofeller/github-actions/npm-run@main
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-          command: npm run test
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
+      - name: Install dependencies
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Execute the command
+        run: npm run test
+  typecheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
+      - name: Install dependencies
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Execute the command
+        run: npm run typecheck
   lighthouse:
     runs-on: ubuntu-latest
     permissions:

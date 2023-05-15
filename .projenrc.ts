@@ -1,6 +1,6 @@
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
-import {job, npmRunJob} from './src/common/github'
+import {job, npmRunJobStep} from './src/common/github'
 import {addLinters} from './src/common/lint'
 
 // ANCHOR Basic setup
@@ -62,10 +62,10 @@ const testGithubWorkflow = project.github!.addWorkflow('test')
 testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflows/test.yml', 'package-lock.json']}})
 
 testGithubWorkflow.addJobs({
-  lint: job([npmRunJob('lint')]),
-  test: job([npmRunJob('test')]),
-  typecheck: job([npmRunJob('typecheck')]),
-  build: {...job([npmRunJob('build')]), needs: ['lint', 'test', 'typecheck']},
+  lint: job([npmRunJobStep('lint')]),
+  test: job([npmRunJobStep('test')]),
+  typecheck: job([npmRunJobStep('typecheck')]),
+  build: {...job([npmRunJobStep('build')]), needs: ['lint', 'test', 'typecheck']},
 })
 
 const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')
@@ -116,9 +116,9 @@ publishReleaseGithubWorkflow.addJobs({
     },
   ]),
 
-  lint: {needs: ['set-commit-hash'], ...job([npmRunJob('lint')])},
-  typecheck: {needs: ['set-commit-hash'], ...job([npmRunJob('typecheck')])},
-  test: {needs: ['set-commit-hash'], ...job([npmRunJob('test')])},
+  lint: {needs: ['set-commit-hash'], ...job([npmRunJobStep('lint')])},
+  typecheck: {needs: ['set-commit-hash'], ...job([npmRunJobStep('typecheck')])},
+  test: {needs: ['set-commit-hash'], ...job([npmRunJobStep('test')])},
 
   publish: {
     needs: ['set-commit-hash', 'lint', 'typecheck', 'test'],

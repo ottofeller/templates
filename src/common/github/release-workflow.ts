@@ -42,19 +42,17 @@ export class ReleaseWorkflow extends github.GithubWorkflow {
     })
 
     this.addJobs({
-      create: job([
-        {
-          uses: 'ottofeller/github-actions/create-release@main',
+      create: job({
+        uses: 'ottofeller/github-actions/create-release@main',
 
-          with: {
-            'initial-version': initialReleaseVersion,
-            'bump-level': '${{ github.event.inputs.bump-level }}',
-            'release-branches': releaseBranch,
-            'update-root-package_json': true,
-            'github-token': '${{ secrets.GITHUB_TOKEN }}',
-          },
+        with: {
+          'initial-version': initialReleaseVersion,
+          'bump-level': '${{ github.event.inputs.bump-level }}',
+          'release-branches': releaseBranch,
+          'update-root-package_json': true,
+          'github-token': '${{ secrets.GITHUB_TOKEN }}',
         },
-      ]),
+      }),
     })
   }
 }
