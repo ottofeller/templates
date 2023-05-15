@@ -1,8 +1,10 @@
 import * as projen from 'projen'
-import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
+import {JavaProject} from 'projen/lib/java'
+import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
-import {job, npmRunJob, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
+import {job, npmRunJobStep, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
+import {runScriptJob} from '../run-script-job'
 
 describe('GitHub utils', () => {
   test('job function creates a job object', () => {
@@ -20,18 +22,186 @@ describe('GitHub utils', () => {
     })
   })
 
-  test('npmRunJob function creates a job object', () => {
+  describe('npmRunJobStep function', () => {
     const command = 'command'
-    const jobObject = npmRunJob(command)
 
-    expect(jobObject).toStrictEqual({
-      uses: 'ottofeller/github-actions/npm-run@main',
-      with: {'node-version': 16, command: `npm run ${command}`},
+    test('creates a job object with undefined directory field', () => {
+      const jobObject = npmRunJobStep(command)
+
+      expect(jobObject).toStrictEqual({
+        uses: 'ottofeller/github-actions/npm-run@main',
+        with: {'node-version': 16, command: `npm run ${command}`, directory: undefined},
+      })
+    })
+
+    test('creates a job object with the directory specified', () => {
+      const directory = 'testDir'
+      const jobObject = npmRunJobStep(command, directory)
+
+      expect(jobObject).toStrictEqual({
+        uses: 'ottofeller/github-actions/npm-run@main',
+        with: {'node-version': 16, command: `npm run ${command}`, directory},
+      })
+    })
+  })
+
+  describe('runScriptJob function', () => {
+    const command = 'testCommand'
+
+    test('creates a job object with default setup', () => {
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+      })
+
+      expect(jobObject.steps.map((step) => step.uses)).toStrictEqual([
+        'actions/checkout@v3',
+        'actions/setup-node@v3',
+        'actions/cache@v3',
+        undefined,
+        undefined,
+      ])
+
+      expect(jobObject.steps.map((step) => step.run)).toStrictEqual([
+        undefined,
+        undefined,
+        undefined,
+        'npm ci',
+        `npm run ${command}`,
+      ])
+    })
+
+    test('allows setting runsOn', () => {
+      const runsOn = ['osx']
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        runsOn,
+      })
+
+      expect(jobObject.runsOn).toEqual(runsOn)
+    })
+
+    test('allows setting ref', () => {
+      const ref = 'testRef'
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        ref,
+      })
+
+      const checkoutStep = jobObject.steps[0]
+      expect(checkoutStep.with!.ref).toEqual(ref)
+    })
+
+    test('allows setting nodeVersion', () => {
+      const nodeVersion = 20
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        nodeVersion,
+      })
+
+      const setupNodeStep = jobObject.steps[1]
+      expect(setupNodeStep.with!['node-version']).toEqual(nodeVersion)
+    })
+
+    test('allows setting registryUrl', () => {
+      const registryUrl = 'testRegistryUrl'
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        registryUrl,
+      })
+
+      const setupNodeStep = jobObject.steps[1]
+      expect(setupNodeStep.with!['registry-url']).toEqual(registryUrl)
+    })
+
+    test('allows setting scope', () => {
+      const scope = 'testScope'
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        scope,
+      })
+
+      const setupNodeStep = jobObject.steps[1]
+      expect(setupNodeStep.with!.scope).toEqual(scope)
+    })
+
+    test('allows setting workingDirectory', () => {
+      const workingDirectory = 'testDir'
+      const project = new TestProject()
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        workingDirectory,
+      })
+
+      jobObject.steps.forEach((step) => {
+        expect(step.workingDirectory).toEqual(workingDirectory)
+      })
+    })
+
+    test('allows setting projectPackage to pnpm', () => {
+      const project = new TestProject({packageManager: NodePackageManager.PNPM})
+
+      const jobObject = runScriptJob({
+        command,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+      })
+
+      expect(jobObject.steps.map((step) => step.uses)).toStrictEqual([
+        'actions/checkout@v3',
+        'actions/setup-node@v3',
+        'pnpm/action-setup@v2',
+        undefined,
+        'actions/cache@v3',
+        undefined,
+        undefined,
+      ])
+
+      expect(jobObject.steps.map((step) => step.run)).toStrictEqual([
+        undefined,
+        undefined,
+        undefined,
+        'echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT',
+        undefined,
+        'pnpm i --frozen-lockfile',
+        `pnpm run ${command}`,
+      ])
     })
   })
 
   describe('PullRequestTest', () => {
     const testWorkflowPath = '.github/workflows/test.yml'
+
+    test('throws if called with a project not derived from NodeProject', () => {
+      const project = new JavaProject({name: 'java', groupId: 'java', artifactId: 'app', version: '0', github: true})
+      expect(() => new PullRequestTest(project.github!)).toThrow()
+    })
 
     test('creates a test workflow', () => {
       const project = new TestProject()
@@ -72,11 +242,24 @@ describe('GitHub utils', () => {
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
 
-      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps[0].with!.command)
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
       expect(jobs).toHaveLength(3)
       expect(jobs).toContain('npm run typecheck')
       expect(jobs).toContain('npm run lint')
       expect(jobs).toContain('npm run test')
+    })
+
+    test('allows setting pnpm as a package manager', () => {
+      const project = new TestProject({packageManager: NodePackageManager.PNPM})
+      new PullRequestTest(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
+      expect(jobs).toHaveLength(3)
+      expect(jobs).toContain('pnpm run typecheck')
+      expect(jobs).toContain('pnpm run lint')
+      expect(jobs).toContain('pnpm run test')
     })
 
     test('allows runsOn override', () => {
@@ -191,6 +374,8 @@ class TestProject extends NodeProject {
       ...options,
       name: 'test-project',
       defaultReleaseBranch: 'main',
+      github: true,
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
     })
   }
 }
@@ -200,6 +385,7 @@ class TestProjectWithTestWorkflow extends NodeProject {
     super({
       name: 'test-project-with-test-workflow',
       defaultReleaseBranch: 'main',
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
       ...options,
     })
 
