@@ -470,6 +470,7 @@ jspm_packages/
 !/.vscode/extensions.json
 .DS_Store
 .env.local
+target/
 .next/
 .idea/
 debug/

@@ -12,6 +12,8 @@ describe('extendGitignore function', () => {
     expect(snapshot[gitignoreFilePath]).toBeDefined()
     expect(snapshot[gitignoreFilePath]).toContain('.DS_Store')
     expect(snapshot[gitignoreFilePath]).toContain('.env.local')
+    expect(snapshot[gitignoreFilePath]).toContain('target/')
+    expect(snapshot[gitignoreFilePath]).toContain('.idea/')
   })
 
   test('adds provided patterns to gitignore', () => {
