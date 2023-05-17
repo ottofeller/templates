@@ -471,8 +471,8 @@ jspm_packages/
 .DS_Store
 .env.local
 target/
-.next/
 .idea/
+.next/
 debug/
 .vscode/tasks.json
 build/
