@@ -23,6 +23,9 @@ export function sampleCode(
   const indexPagePath = 'pages/index.tsx'
   new projen.SampleFile(project, indexPagePath, {sourcePath: path.join(assetsDir, indexPagePath)})
 
+  const documentPagePath = 'pages/_document.tsx'
+  new projen.SampleFile(project, documentPagePath, {sourcePath: path.join(assetsDir, documentPagePath)})
+
   const appFilePath = 'pages/_app.tsx'
   const appContents = fs.readFileSync(path.join(assetsDir, appFilePath), {encoding: 'utf-8'}).split('\n')
 
