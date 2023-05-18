@@ -171,7 +171,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR gitignore
     extendGitignore(this)
-    extendGitignore(this, ['.next/', 'debug/', '.vscode/tasks.json', 'build/'])
+    extendGitignore(this, ['.next/', 'debug/', '.vscode/tasks.json', 'build/', '.lighthouseci/'])
 
     // ANCHOR Codemod
     this.addDevDeps('jscodeshift')
