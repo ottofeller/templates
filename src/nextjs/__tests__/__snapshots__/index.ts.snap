@@ -930,9 +930,9 @@ tsconfig.tsbuildinfo
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
       },
-      "server": Object {
+      "start": Object {
         "description": "Starts the Next.js application in production mode",
-        "name": "server",
+        "name": "start",
         "steps": Array [
           Object {
             "exec": "next start",
@@ -1474,7 +1474,7 @@ module.exports = {
       "post-compile": "npx projen post-compile",
       "pre-compile": "npx projen pre-compile",
       "projen": "npx projen",
-      "server": "npx projen server",
+      "start": "npx projen start",
       "telemetry": "npx projen telemetry",
       "test": "npx projen test",
       "test:watch": "npx projen test:watch",

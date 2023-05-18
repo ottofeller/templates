@@ -194,6 +194,13 @@ describe('NextJS template', () => {
       expect(snapshot['Dockerfile.production']).not.toBeDefined()
     })
   })
+
+  test('has "start" task instead of "server"', () => {
+    const project = new TestNextJsTypeScriptProject()
+    const snapshot = synthSnapshot(project)
+    expect(snapshot['.projen/tasks.json'].tasks).not.toHaveProperty('server')
+    expect(snapshot['.projen/tasks.json'].tasks).toHaveProperty('start')
+  })
 })
 
 class TestNextJsTypeScriptProject extends OttofellerNextjsProject {
