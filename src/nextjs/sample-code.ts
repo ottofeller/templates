@@ -45,4 +45,7 @@ export function sampleCode(
       sourcePath: path.join(assetsDir, 'src/Home/__tests__/index.tsx.sample'),
     })
   }
+
+  const envDevelopmentPath = '.env.development'
+  new projen.SampleFile(project, envDevelopmentPath, {sourcePath: path.join(assetsDir, envDevelopmentPath)})
 }
