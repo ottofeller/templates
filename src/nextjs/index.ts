@@ -89,7 +89,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       pullRequestTemplate: false,
     })
 
-    //ANCHOR Rename "server" task with "start"
+    // ANCHOR Rename "server" task with "start"
     const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}
     this.addTask('start', {steps, description})
 
