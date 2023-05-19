@@ -1,8 +1,10 @@
+import {ApolloServer} from '@apollo/server'
+import {startStandaloneServer} from '@apollo/server/standalone'
 import {mergeResolvers, mergeTypeDefs} from '@graphql-tools/merge'
 import {makeExecutableSchema} from '@graphql-tools/schema'
-import {ApolloServer, gql} from 'apollo-server'
 import tracer from 'dd-trace'
 import dotenv from 'dotenv'
+import {gql} from 'graphql-tag'
 import sourceMapSupport from 'source-map-support'
 import {createLogger} from './logger/create-logger'
 
@@ -38,9 +40,9 @@ type AppContext = {
 
 const init = async () => {
   const logger = await createLogger()
+  const server = new ApolloServer<AppContext>({schema, introspection: true})
 
-  const info = await new ApolloServer({
-    // Context function is called every request
+  const {url} = await startStandaloneServer(server, {
     context: async (params): Promise<AppContext> => {
       if (params.req.headers['x-access-token'] !== process.env.ACCESS_TOKEN) {
         throw new Error('Wrong or missing x-access-token header.')
@@ -50,15 +52,10 @@ const init = async () => {
         logger,
       }
     },
+    listen: {port: Number(process.env.APP_PORT) || 3000},
+  })
 
-    csrfPrevention: true,
-
-    // Hasura's remote schema requires introspection enabled
-    introspection: true,
-    schema,
-  }).listen({port: process.env.APP_PORT || 3000})
-
-  console.log(`🚀 Server ready at ${info.url}`)
+  console.log(`🚀 Server ready at ${url}`)
 }
 
 init()
