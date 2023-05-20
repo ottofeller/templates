@@ -89,6 +89,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       pullRequestTemplate: false,
     })
 
+    // ANCHOR Rename "server" task to "start"
+    const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}
+    this.addTask('start', {steps, description})
+
     // ANCHOR Add required dependencies
     this.addDevDeps('yaml') // REVIEW Required during "npx projen new", fails without this dependency
 
@@ -167,7 +171,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR gitignore
     extendGitignore(this)
-    extendGitignore(this, ['.next/', 'debug/', '.vscode/tasks.json', 'build/'])
+    extendGitignore(this, ['.next/', 'debug/', '.vscode/tasks.json', 'build/', '.lighthouseci/'])
 
     // ANCHOR Codemod
     this.addDevDeps('jscodeshift')

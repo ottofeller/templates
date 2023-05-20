@@ -3,7 +3,7 @@ import {Home} from '..'
 
 describe('Home page', () => {
   it('shows title', async () => {
-    const container = render(<Home cookies={{}} />)
+    const container = render(<Home />)
     const heading = container.getByText('It works!')
     expect(heading).toBeTruthy()
     expect(heading).toBeInstanceOf(HTMLHeadingElement)
