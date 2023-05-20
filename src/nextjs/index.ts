@@ -8,8 +8,8 @@ import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/li
 import {WithDocker} from '../common'
 import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
+import {addHusky, extendGitignore, WithGitHooks} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
-import {extendGitignore} from '../common/gitignore'
 import {addLinters, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
@@ -25,6 +25,7 @@ export interface OttofellerNextjsProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
+    WithGitHooks,
     WithVSCode {
   /**
    * Set up GraphQL dependencies and supplementary script.
@@ -111,6 +112,11 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'pages', 'src']
     const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintConfigTailwind]
     addLinters({project: this, lintPaths, extraEslintConfigs})
+
+    // ANCHOR Setup git hooks with Husky
+    if (options.hasGitHooks ?? false) {
+      addHusky(this, options)
+    }
 
     // ANCHOR Github workflow
     PullRequestTest.addToProject(this, options)

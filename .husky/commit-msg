@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+head -1 $@ | grep -Eq "^\w{2,4}-\d+\s.+" || \
+{ 
+  echo "Malformed commit message. Prepend the message with the task ID (e.g. pla-123)."; \
+  exit 1;
+}

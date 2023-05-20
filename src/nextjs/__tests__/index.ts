@@ -33,6 +33,24 @@ describe('NextJS template', () => {
     expect(snapshot['.eslintrc.json']).toBeDefined()
   })
 
+  describe('has husky', () => {
+    const commitMsgFileName = '.husky/commit-msg'
+
+    test('omitted by default', () => {
+      const project = new TestNextJsTypeScriptProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('husky')
+      expect(snapshot[commitMsgFileName]).not.toBeDefined()
+    })
+
+    test('set up if enabled with hasGitHooks option', () => {
+      const project = new TestNextJsTypeScriptProject({hasGitHooks: true})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+      expect(snapshot[commitMsgFileName]).toBeDefined()
+    })
+  })
+
   describe('has default test workflow', () => {
     test('included by default', () => {
       const project = new TestNextJsTypeScriptProject()

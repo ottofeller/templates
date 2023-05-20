@@ -170,6 +170,14 @@
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
     },
+    "prepare": {
+      "name": "prepare",
+      "steps": [
+        {
+          "exec": "husky install"
+        }
+      ]
+    },
     "test": {
       "name": "test",
       "description": "Run tests",

@@ -1,5 +1,6 @@
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
+import {addHusky} from './src/common/git'
 import {job, npmRunJob} from './src/common/github'
 import {addLinters} from './src/common/lint'
 
@@ -56,6 +57,9 @@ addLinters({project, lintPaths: ['.projenrc.ts', 'src']})
 // Solves the typescript > 4 problem
 // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
 project.addDevDeps('@types/prettier@2.6.0')
+
+// ANCHOR Setup git hooks with Husky
+addHusky(project, {})
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')

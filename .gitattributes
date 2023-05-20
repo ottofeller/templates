@@ -8,6 +8,7 @@
 /.github/workflows/publish-release.yml linguist-generated
 /.github/workflows/test.yml linguist-generated
 /.gitignore linguist-generated
+/.husky/commit-msg linguist-generated
 /.npmignore linguist-generated
 /.prettierrc.json linguist-generated
 /.projen/** linguist-generated

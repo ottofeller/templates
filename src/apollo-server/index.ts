@@ -7,8 +7,8 @@ import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescr
 import {WithDocker} from '../common'
 import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
+import {addHusky, extendGitignore, WithGitHooks} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
-import {extendGitignore} from '../common/gitignore'
 import {addLinters, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
@@ -19,6 +19,7 @@ export interface OttofellerApolloServerProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
+    WithGitHooks,
     WithVSCode {}
 
 /**
@@ -121,6 +122,11 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
         watch: ['src'],
       },
     })
+
+    // ANCHOR Setup git hooks with Husky
+    if (options.hasGitHooks ?? false) {
+      addHusky(this, options)
+    }
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.mjs', 'src']
