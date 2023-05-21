@@ -19,6 +19,24 @@ describe('CDK template', () => {
     expect(snapshot['tsconfig.json'].compilerOptions.module).toEqual('CommonJS')
   })
 
+  describe('has husky', () => {
+    const commitMsgFileName = '.husky/commit-msg'
+
+    test('omitted by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('husky')
+      expect(snapshot[commitMsgFileName]).not.toBeDefined()
+    })
+
+    test('set up if enabled with hasGitHooks option', () => {
+      const project = new TestCDKProject({hasGitHooks: true})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+      expect(snapshot[commitMsgFileName]).toBeDefined()
+    })
+  })
+
   test('has cdk-nag package installed', () => {
     const project = new TestCDKProject()
     const snapshot = synthSnapshot(project)

@@ -3,8 +3,8 @@ import {execSync} from 'child_process'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
+import {addHusky, extendGitignore, WithGitHooks} from '../common/git'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
-import {extendGitignore} from '../common/gitignore'
 import {addLinters, WithCustomLintPaths} from '../common/lint'
 import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
 
@@ -12,6 +12,7 @@ export interface OttofellerCDKProjectOptions
   extends AwsCdkTypeScriptAppOptions,
     WithDefaultWorkflow,
     WithCustomLintPaths,
+    WithGitHooks,
     WithVSCode {
   /**
    * The base version of the very first release.
@@ -61,6 +62,11 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR Install dependencies
     this.addDeps('cdk-nag@2.15.45')
+
+    // ANCHOR Setup git hooks with Husky
+    if (options.hasGitHooks ?? false) {
+      addHusky(this, options)
+    }
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']

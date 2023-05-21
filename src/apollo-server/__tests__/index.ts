@@ -17,6 +17,24 @@ describe('Apollo server template', () => {
     expect(snapshot['package.json'].type).toEqual('module')
   })
 
+  describe('has husky', () => {
+    const commitMsgFileName = '.husky/commit-msg'
+
+    test('omitted by default', () => {
+      const project = new TestApolloServerProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('husky')
+      expect(snapshot[commitMsgFileName]).not.toBeDefined()
+    })
+
+    test('set up if enabled with hasGitHooks option', () => {
+      const project = new TestApolloServerProject({hasGitHooks: true})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+      expect(snapshot[commitMsgFileName]).toBeDefined()
+    })
+  })
+
   test('has GraphQL-related packages and scripts', () => {
     const project = new TestApolloServerProject()
     const snapshot = synthSnapshot(project)

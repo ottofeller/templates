@@ -74,6 +74,10 @@
       "type": "build"
     },
     {
+      "name": "husky",
+      "type": "build"
+    },
+    {
       "name": "jest-junit",
       "version": "^15",
       "type": "build"

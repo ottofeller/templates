@@ -43,6 +43,7 @@ junit.xml
 tsconfig.json
 !/.prettierrc.json
 !/.eslintrc.json
+!/.husky/commit-msg
 !/.github/workflows/test.yml
 !/.github/workflows/create-release.yml
 !/.github/workflows/publish-release.yml
