@@ -20,8 +20,9 @@ describe('Apollo server template', () => {
   test('has GraphQL-related packages and scripts', () => {
     const project = new TestApolloServerProject()
     const snapshot = synthSnapshot(project)
-    expect(snapshot['package.json'].dependencies).toHaveProperty('apollo-server')
+    expect(snapshot['package.json'].dependencies).toHaveProperty('@apollo/server')
     expect(snapshot['package.json'].dependencies).toHaveProperty('graphql')
+    expect(snapshot['package.json'].dependencies).toHaveProperty('graphql-tag')
     expect(snapshot['package.json'].devDependencies).toHaveProperty('@graphql-codegen/cli')
     expect(snapshot['package.json'].scripts).toHaveProperty('generate-graphql-schema')
     expect(snapshot['package.json'].scripts).toHaveProperty('gql-to-ts')
