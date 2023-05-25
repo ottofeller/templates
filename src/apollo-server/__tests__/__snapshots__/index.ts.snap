@@ -85,11 +85,20 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
       - name: Install dependencies
-        run: npm install
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
       - name: Copy environment variables
         run: cp .env.development .env.local
       - name: Build Next.js application
@@ -453,11 +462,20 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          key: \${{ hashFiles('./package-lock.json') }}
+          path: ./node_modules
       - name: Install dependencies
-        run: npm install
+        if: \${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        run: npm ci
       - name: Copy environment variables
         run: cp .env.development .env.local
       - name: Build Next.js application

@@ -1,7 +1,6 @@
 import {Component, github, javascript} from 'projen'
 import {NodeProject} from 'projen/lib/javascript'
-import {job} from './job'
-import {runScriptJob, RunScriptJobProps} from './run-script-job'
+import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
@@ -64,7 +63,7 @@ export class PullRequestTest extends Component {
       push: {paths, branches},
     })
 
-    const commonJobProps: Omit<RunScriptJobProps, 'command'> = {
+    const commonJobProps: NodeJobOptions = {
       runsOn: options.runsOn,
       workingDirectory,
       projectPackage: project.package,
@@ -78,23 +77,7 @@ export class PullRequestTest extends Component {
     })
 
     if (options.lighthouse) {
-      workflow.addJobs({
-        lighthouse: job([
-          {uses: 'actions/checkout@v3', workingDirectory},
-          {uses: 'actions/setup-node@v3', with: {'node-version': 16}, workingDirectory},
-          {name: 'Install dependencies', run: 'npm install', workingDirectory},
-          {name: 'Copy environment variables', run: 'cp .env.development .env.local', workingDirectory},
-          {name: 'Build Next.js application', run: 'npm run build', workingDirectory},
-          {name: 'Run Lighthouse audit', run: 'npm run lighthouse', workingDirectory},
-          {
-            name: 'Save Lighthouse report as an artifact',
-            uses: 'actions/upload-artifact@v3',
-            if: 'always()',
-            with: {name: 'lighthouse-report', path: '.lighthouseci/'},
-            workingDirectory,
-          },
-        ]),
-      })
+      workflow.addJobs({lighthouse: lighthouseJob(commonJobProps)})
     }
   }
 

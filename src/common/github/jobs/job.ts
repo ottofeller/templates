@@ -1,7 +1,7 @@
 /* eslint-disable import/no-relative-parent-imports -- types are not bundled and therefore are not correctly exported with path aliases */
 import * as projen from 'projen'
 import type {Job, JobStep} from 'projen/lib/github/workflows-model'
-import type {MaybePlural} from '../MaybePlural'
+import type {MaybePlural} from '../../MaybePlural'
 
 /**
  * Create basic GitHub workflow job.

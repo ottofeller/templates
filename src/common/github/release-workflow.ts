@@ -1,5 +1,5 @@
 import {github} from 'projen'
-import {job} from './job'
+import {job} from './jobs'
 
 /**
  * Options for ReleaseWorkflow

@@ -1,13 +1,7 @@
-import type {Job, JobStep} from 'projen/lib/github/workflows-model'
+import type {JobStep} from 'projen/lib/github/workflows-model'
 import {NodePackage, NodePackageManager} from 'projen/lib/javascript'
-import {job} from './job'
 
-export interface RunScriptJobProps {
-  /**
-   * Script name to run. E.g. command === "build" will result in "npm run build"
-   */
-  readonly command: string
-
+export interface SetupNodeOptions {
   /**
    * Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0
    * @default 16
@@ -35,16 +29,6 @@ export interface RunScriptJobProps {
   readonly registryUrl?: string
 
   /**
-   * The command to use to run the script (e.g. `yarn run` or `npm run` depending on the package manager).
-   */
-  readonly runScriptCommand: string
-
-  /**
-   * @param runsOn An array of one or more types of machine to run the job on.
-   */
-  readonly runsOn?: string[]
-
-  /**
    * Optional scope for authenticating against scoped registries.
    */
   readonly scope?: string
@@ -57,19 +41,17 @@ export interface RunScriptJobProps {
 }
 
 /**
- * Create GitHub workflow job which runs a node.js script with a given setup.
+ * Create an array of GitHub workflow jobs which set up node.js for the specified package manager.
+ * The steps include dependency installation and caching.
  */
-export const runScriptJob = ({
-  command,
+export const setupNode = ({
   nodeVersion = 16,
   projectPackage,
-  registryUrl,
-  runScriptCommand,
   ref,
-  runsOn,
+  registryUrl,
   scope,
   workingDirectory,
-}: RunScriptJobProps): Job => {
+}: SetupNodeOptions): Array<JobStep> => {
   const {installCommand, lockFile, packageManager} = projectPackage
   const isPnpm = packageManager === NodePackageManager.PNPM
   const directory = workingDirectory || '.'
@@ -120,8 +102,5 @@ export const runScriptJob = ({
     },
   )
 
-  // ANCHOR Execute the command
-  steps.push({name: 'Execute the command', run: `${runScriptCommand} ${command}`, workingDirectory})
-
-  return job(steps, runsOn)
+  return steps
 }

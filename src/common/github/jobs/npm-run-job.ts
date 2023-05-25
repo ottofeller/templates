@@ -1,4 +1,4 @@
-import {JobStep} from 'projen/lib/github/workflows-model'
+import type {JobStep} from 'projen/lib/github/workflows-model'
 
 /**
  * Create GitHub workflow which runs npm script using ottofeller/github-actions/npm-run@main action.
