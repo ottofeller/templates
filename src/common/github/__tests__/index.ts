@@ -1,37 +1,18 @@
 import * as projen from 'projen'
-import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
+import {JavaProject} from 'projen/lib/java'
+import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
-import {job, npmRunJob, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
+import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
 
 describe('GitHub utils', () => {
-  test('job function creates a job object', () => {
-    const steps = [
-      {name: 'first step', run: 'node firstStep.js'},
-      {name: 'second step', run: 'node secondStep.js'},
-    ]
-
-    const jobObject = job(steps)
-
-    expect(jobObject).toStrictEqual({
-      runsOn: ['ubuntu-latest'],
-      permissions: {contents: 'read'},
-      steps,
-    })
-  })
-
-  test('npmRunJob function creates a job object', () => {
-    const command = 'command'
-    const jobObject = npmRunJob(command)
-
-    expect(jobObject).toStrictEqual({
-      uses: 'ottofeller/github-actions/npm-run@main',
-      with: {'node-version': 16, command: `npm run ${command}`},
-    })
-  })
-
   describe('PullRequestTest', () => {
     const testWorkflowPath = '.github/workflows/test.yml'
+
+    test('throws if called with a project not derived from NodeProject', () => {
+      const project = new JavaProject({name: 'java', groupId: 'java', artifactId: 'app', version: '0', github: true})
+      expect(() => new PullRequestTest(project.github!)).toThrow()
+    })
 
     test('creates a test workflow', () => {
       const project = new TestProject()
@@ -72,11 +53,24 @@ describe('GitHub utils', () => {
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
 
-      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps[0].with!.command)
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
       expect(jobs).toHaveLength(3)
       expect(jobs).toContain('npm run typecheck')
       expect(jobs).toContain('npm run lint')
       expect(jobs).toContain('npm run test')
+    })
+
+    test('allows setting pnpm as a package manager', () => {
+      const project = new TestProject({packageManager: NodePackageManager.PNPM})
+      new PullRequestTest(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
+      expect(jobs).toHaveLength(3)
+      expect(jobs).toContain('pnpm run typecheck')
+      expect(jobs).toContain('pnpm run lint')
+      expect(jobs).toContain('pnpm run test')
     })
 
     test('allows runsOn override', () => {
@@ -191,6 +185,8 @@ class TestProject extends NodeProject {
       ...options,
       name: 'test-project',
       defaultReleaseBranch: 'main',
+      github: true,
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
     })
   }
 }
@@ -200,6 +196,7 @@ class TestProjectWithTestWorkflow extends NodeProject {
     super({
       name: 'test-project-with-test-workflow',
       defaultReleaseBranch: 'main',
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
       ...options,
     })
 

@@ -1,11 +1,14 @@
 import {Component, github, javascript} from 'projen'
-import {JobStep} from 'projen/lib/github/workflows-model'
-import {WithDefaultWorkflow} from './with-default-workflow'
+import {NodeProject} from 'projen/lib/javascript'
+import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
+import type {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
  * Options for PullRequestLint
  */
-export interface PullRequestTestOptions {
+export interface PullRequestTestOptions
+  extends Partial<Pick<javascript.NodeProject, 'runScriptCommand'>>,
+    Partial<Pick<javascript.NodePackage, 'installCommand'>> {
   /**
    * Github Runner selection labels
    * @default ['ubuntu-latest']
@@ -43,10 +46,15 @@ export interface PullRequestTestOptions {
 export class PullRequestTest extends Component {
   constructor(githubInstance: github.GitHub, options: PullRequestTestOptions = {}) {
     super(githubInstance.project)
+    const {project} = githubInstance
+
+    if (!(project instanceof NodeProject)) {
+      throw new Error('PullRequestTest works only with instances of NodeProject.')
+    }
 
     const workflowName = options.name ?? 'test'
-    const directory = options.outdir
-    const paths = directory ? [`${directory}/**`] : undefined
+    const workingDirectory = options.outdir
+    const paths = workingDirectory ? [`${workingDirectory}/**`] : undefined
     const workflow = githubInstance.addWorkflow(workflowName)
     const branches = options.triggerOnPushToBranches ?? ['main']
 
@@ -55,51 +63,21 @@ export class PullRequestTest extends Component {
       push: {paths, branches},
     })
 
-    const job = (steps: Array<JobStep>): github.workflows.Job => ({
-      runsOn: options.runsOn ?? ['ubuntu-latest'],
-      permissions: {contents: github.workflows.JobPermission.READ},
-      steps,
-    })
+    const commonJobProps: NodeJobOptions = {
+      runsOn: options.runsOn,
+      workingDirectory,
+      projectPackage: project.package,
+      runScriptCommand: project.runScriptCommand,
+    }
 
     workflow.addJobs({
-      lint: job([
-        {
-          uses: 'ottofeller/github-actions/npm-run@main',
-          with: {'node-version': 16, command: 'npm run lint', directory},
-        },
-      ]),
-      typecheck: job([
-        {
-          uses: 'ottofeller/github-actions/npm-run@main',
-          with: {'node-version': 16, command: 'npm run typecheck', directory},
-        },
-      ]),
-      test: job([
-        {
-          uses: 'ottofeller/github-actions/npm-run@main',
-          with: {'node-version': 16, command: 'npm run test', directory},
-        },
-      ]),
+      lint: runScriptJob({command: 'lint', ...commonJobProps}),
+      test: runScriptJob({command: 'test', ...commonJobProps}),
+      typecheck: runScriptJob({command: 'typecheck', ...commonJobProps}),
     })
 
     if (options.lighthouse) {
-      workflow.addJobs({
-        lighthouse: job([
-          {uses: 'actions/checkout@v3', workingDirectory: directory},
-          {uses: 'actions/setup-node@v3', with: {'node-version': 16}, workingDirectory: directory},
-          {name: 'Install dependencies', run: 'npm install', workingDirectory: directory},
-          {name: 'Copy environment variables', run: 'cp .env.development .env.local', workingDirectory: directory},
-          {name: 'Build Next.js application', run: 'npm run build', workingDirectory: directory},
-          {name: 'Run Lighthouse audit', run: 'npm run lighthouse', workingDirectory: directory},
-          {
-            name: 'Save Lighthouse report as an artifact',
-            uses: 'actions/upload-artifact@v3',
-            if: 'always()',
-            with: {name: 'lighthouse-report', path: '.lighthouseci/'},
-            workingDirectory: directory,
-          },
-        ]),
-      })
+      workflow.addJobs({lighthouse: lighthouseJob(commonJobProps)})
     }
   }
 
@@ -121,16 +99,17 @@ export class PullRequestTest extends Component {
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {lighthouse})
+      new PullRequestTest(project.github, {lighthouse, runsOn: options.runsOn})
+
       return
     }
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
       new PullRequestTest(project.parent.github, {
-        runsOn: options.runsOn,
+        lighthouse,
         name: `test-${options.name}`,
         outdir: options.outdir,
-        lighthouse,
+        runsOn: options.runsOn,
       })
     }
   }
