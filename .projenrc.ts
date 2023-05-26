@@ -57,12 +57,6 @@ addLinters({
   lintPaths: ['.projenrc.ts', 'src'],
   extraEslintConfigs: [
     {
-      overrides: [
-        {
-          files: ['./src/apollo-server/codegen-config.ts', './src/nextjs/codegen-config.ts'],
-          rules: {'eslint-comments/no-unused-disable': ['off']},
-        },
-      ],
       rules: {
         'import/no-relative-parent-imports': ['off'],
       },
