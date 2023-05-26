@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import {execSync} from 'child_process'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'

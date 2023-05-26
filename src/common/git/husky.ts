@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import * as path from 'path'
 import type {NodeProject} from 'projen/lib/javascript'
 import {AssetFile} from '../files/AssetFile'

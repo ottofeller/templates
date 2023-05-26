@@ -88,7 +88,7 @@
       "error"
     ],
     "import/no-relative-parent-imports": [
-      "error"
+      "off"
     ],
     "no-negated-condition": [
       "error"

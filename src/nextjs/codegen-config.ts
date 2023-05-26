@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-relative-parent-imports -- types are not bundled and therefore are not correctly exported with path aliases
 import type {CodegenConfig} from '../common/codegen/types'
 
 export const codegenConfig: CodegenConfig = {

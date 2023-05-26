@@ -52,7 +52,17 @@ project.package.addField('version', version)
 project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
 
 // ANCHOR ESLint and prettier setup
-addLinters({project, lintPaths: ['.projenrc.ts', 'src']})
+addLinters({
+  project,
+  lintPaths: ['.projenrc.ts', 'src'],
+  extraEslintConfigs: [
+    {
+      rules: {
+        'import/no-relative-parent-imports': ['off'],
+      },
+    },
+  ],
+})
 
 // Solves the typescript > 4 problem
 // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
