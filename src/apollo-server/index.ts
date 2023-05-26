@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import {execSync} from 'child_process'
 import * as path from 'path'
 import * as projen from 'projen'

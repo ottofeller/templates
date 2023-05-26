@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import type {Project, YamlFileOptions} from 'projen'
 import {YamlFile} from 'projen'
 import type {MaybePlural} from '../MaybePlural'

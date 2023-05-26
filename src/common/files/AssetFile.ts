@@ -1,4 +1,3 @@
-/* eslint-disable import/no-relative-parent-imports -- JSII project rewrites tsconfig thus always overriding introduced aliases */
 import * as fs from 'fs'
 import {format} from 'prettier'
 import {Project, TextFile, TextFileOptions} from 'projen'

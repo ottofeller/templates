@@ -88,7 +88,7 @@
       "error"
     ],
     "import/no-relative-parent-imports": [
-      "error"
+      "off"
     ],
     "no-negated-condition": [
       "error"
@@ -187,6 +187,17 @@
       ],
       "rules": {
         "import/no-relative-parent-imports": "off"
+      }
+    },
+    {
+      "files": [
+        "./src/apollo-server/codegen-config.ts",
+        "./src/nextjs/codegen-config.ts"
+      ],
+      "rules": {
+        "eslint-comments/no-unused-disable": [
+          "off"
+        ]
       }
     }
   ],
