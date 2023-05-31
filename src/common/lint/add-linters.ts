@@ -16,7 +16,7 @@ type AddLintersProps = {
 }
 
 export const linterDependencies = [
-  '@ottofeller/eslint-plugin-ottofeller@0.1.3',
+  '@ottofeller/eslint-plugin-ottofeller@0.1.4',
   '@typescript-eslint/eslint-plugin@5.58.0',
   '@typescript-eslint/parser@5.58.0',
   '@typescript-eslint/typescript-estree@5.58.0',
