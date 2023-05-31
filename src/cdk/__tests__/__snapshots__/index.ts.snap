@@ -600,7 +600,7 @@ cdk.out/
       Object {
         "name": "@ottofeller/eslint-plugin-ottofeller",
         "type": "build",
-        "version": "0.1.3",
+        "version": "0.1.4",
       },
       Object {
         "name": "@types/node",
@@ -1215,7 +1215,7 @@ cdk.out/
       "constructs": "^10.0.5",
     },
     "devDependencies": Object {
-      "@ottofeller/eslint-plugin-ottofeller": "0.1.3",
+      "@ottofeller/eslint-plugin-ottofeller": "0.1.4",
       "@types/node": "^16",
       "@typescript-eslint/eslint-plugin": "5.58.0",
       "@typescript-eslint/parser": "5.58.0",
