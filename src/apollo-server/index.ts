@@ -64,16 +64,17 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     // ANCHOR Add required dependencies
     this.addDeps(
-      'apollo-server@3.7.0',
-      'axios@0.27.2',
+      '@apollo/server@4.7.1',
+      'axios@1.4.0',
       'dd-trace@2.7.1',
-      'dotenv@16.0.0',
-      'esbuild@0.14.39',
-      'graphql@16.5.0',
+      'dotenv@16.0.3',
+      'esbuild@0.17.19',
+      'graphql@16.6.0',
+      'graphql-tag@2.12.6',
       'source-map-support@0.5.21',
-      'yup@0.32.11',
-      '@graphql-tools/merge@8.2.11',
-      '@graphql-tools/schema@8.3.13',
+      'yup@1.1.1',
+      '@graphql-tools/merge@9.0.0',
+      '@graphql-tools/schema@10.0.0',
     )
 
     this.addDevDeps(
