@@ -124,8 +124,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
 
     if (isGraphqlEnabled) {
-      this.addDeps(
-        '@apollo/client',
+      this.addDevDeps(
         '@graphql-codegen/add',
         '@graphql-codegen/cli',
         '@graphql-codegen/import-types-preset',
@@ -135,8 +134,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
         '@graphql-codegen/typescript-graphql-request',
         '@graphql-codegen/typescript-operations',
         '@graphql-codegen/typescript-react-apollo',
-        'graphql',
       )
+
+      this.addDeps('@apollo/client', 'graphql')
 
       // ANCHOR Codegen
       this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
@@ -148,7 +148,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     const lighthouse = options.lighthouse ?? true
 
     if (lighthouse) {
-      this.addDeps('@lhci/cli')
+      this.addDevDeps('@lhci/cli')
       this.addScripts({lighthouse: 'lhci autorun'})
       new SampleFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})
     }
