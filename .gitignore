@@ -34,6 +34,7 @@ jspm_packages/
 junit.xml
 /coverage/
 !/.github/dependabot.yml
+!/.npmrc
 !/test/
 !/tsconfig.dev.json
 !/src/

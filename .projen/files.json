@@ -7,6 +7,7 @@
     ".github/workflows/publish-release.yml",
     ".github/workflows/test.yml",
     ".gitignore",
+    ".npmrc",
     ".prettierrc.json",
     ".projen/deps.json",
     ".projen/files.json",

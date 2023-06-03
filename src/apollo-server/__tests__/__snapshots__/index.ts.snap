@@ -349,6 +349,7 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
 /.github/workflows/test.yml linguist-generated
 /.gitignore linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.prettierrc.json linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
@@ -525,6 +526,7 @@ jspm_packages/
 junit.xml
 /coverage/
 !/.github/dependabot.yml
+!/.npmrc
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
@@ -797,6 +799,7 @@ tsconfig.tsbuildinfo
       ".github/workflows/test.yml",
       ".gitignore",
       ".npmignore",
+      ".npmrc",
       ".prettierrc.json",
       ".projen/deps.json",
       ".projen/files.json",
