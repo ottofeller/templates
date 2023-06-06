@@ -69,6 +69,12 @@
         "ts-ignore": "allow-with-description"
       }
     ],
+    "@typescript-eslint/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "never"
+      }
+    ],
     "@typescript-eslint/no-duplicate-imports": [
       "error"
     ],

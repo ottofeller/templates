@@ -29,6 +29,7 @@ describe('AssetFile util', () => {
   })
 
   test('formats JS/TS code with prettier after template replacement', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
     const mockedFormat = format as unknown as jest.Mock<string, [string, Options]>
     mockedFormat.mockReturnValue('formatted content')
     const project = new TestProject()

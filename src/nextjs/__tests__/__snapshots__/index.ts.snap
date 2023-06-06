@@ -173,6 +173,12 @@ node_modules
           "ts-ignore": "allow-with-description",
         },
       ],
+      "@typescript-eslint/consistent-type-assertions": Array [
+        "error",
+        Object {
+          "assertionStyle": "never",
+        },
+      ],
       "@typescript-eslint/no-duplicate-imports": Array [
         "error",
       ],
