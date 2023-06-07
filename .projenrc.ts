@@ -55,13 +55,7 @@ project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
 addLinters({
   project,
   lintPaths: ['.projenrc.ts', 'src'],
-  extraEslintConfigs: [
-    {
-      rules: {
-        'import/no-relative-parent-imports': ['off'],
-      },
-    },
-  ],
+  extraEslintConfigs: [{rules: {'import/no-relative-parent-imports': ['off']}}],
 })
 
 // Solves the typescript > 4 problem

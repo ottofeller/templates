@@ -120,6 +120,7 @@ describe('NextJS template', () => {
   })
 
   test('formats ".projenrc.ts" file after synthesis', () => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestNextJsTypeScriptProject()
     expect(project.postSynthFormattingPaths).toHaveLength(2)

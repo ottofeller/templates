@@ -14,6 +14,7 @@ export class VsCodeSettings extends JsonFile {
    * Looks for VSCode settings in the given project.
    */
   public static of(project: Project): VsCodeSettings | undefined {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Assume the file is of desired shape if exists
     return project.tryFindObjectFile(VsCodeSettings._FILENAME) as VsCodeSettings | undefined
   }
 
