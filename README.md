@@ -18,6 +18,12 @@ Upon completion the following changes would apply:
 - all projen-generated files are updated;
 - all sample code files are left unchanged (note that if you have deleted some sample code files they will be recreated unless you use the `sampleCode: false` option).
 
+### Install new packages
+The common approach of installing packages by running `npm install <package-name>` won't work because `npx projen` re-synthesizes all files, including `package.json`.
+To install new packages to the project:
+- Add a new item with the package name to either the `deps` or `devDeps` array. Alternative way would be to use `project.addDeps('package-name')` or `project.addDevDeps('@graphql-codegen/add')`.
+- Run `npx projen`. This will update the `package.json` and lock file as well.
+
 ### Eject
 To get rid of projen run this command:
 ```sh
