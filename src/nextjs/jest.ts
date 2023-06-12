@@ -32,8 +32,8 @@ export function setupJest(
   if (testTask) {
     testTask.reset(testCommand)
   } else {
-    project.addTask('test', {exec: testCommand})
+    project.addTask('test:unit', {exec: testCommand})
   }
 
-  project.addTask('test:watch', {exec: 'jest --watch'})
+  project.addTask('test:unit:watch', {exec: 'jest --watch'})
 }
