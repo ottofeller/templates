@@ -44,7 +44,14 @@ export interface OttofellerNextjsProjectOptions
    *
    * @default true
    */
-  readonly lighthouse?: boolean
+  readonly isLighthouseEnabled?: boolean
+
+  /**
+   * Setup Playwright project with Page Object Model.
+   *
+   * @default true
+   */
+  readonly isPlaywrightEnabled?: boolean
 }
 
 /**
@@ -133,12 +140,32 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Set up Lighthouse audit
-    const lighthouse = options.lighthouse ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
 
-    if (lighthouse) {
+    if (isLighthouseEnabled) {
       this.addDeps('@lhci/cli')
       this.addScripts({lighthouse: 'lhci autorun'})
       new SampleFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})
+    }
+
+    // ANCHOR Set up Playwright
+    const isPlaywrightEnabled = options.isPlaywrightEnabled ?? true
+
+    if (isPlaywrightEnabled) {
+      this.addDeps('@playwright/test', 'playwright-qase-reporter')
+
+      this.addScripts({'test:e2e': 'playwright test'})
+
+      new SampleFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts')})
+      new SampleFile(this, 'src/tests/common/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/index.ts')})
+      new SampleFile(this, 'src/tests/common/test.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/test.ts')})
+      new SampleFile(this, 'src/tests/pages/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/index.ts')})
+      new SampleFile(this, 'src/tests/pages/base.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/base.ts')})
+      new SampleFile(this, 'src/tests/pages/main.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/main.ts')})
+
+      new SampleFile(this, 'src/tests/specs/main.spec.ts', {
+        sourcePath: path.join(assetsDir, 'src/tests/pages/main.spec.ts'),
+      })
     }
 
     // ANCHOR Jest

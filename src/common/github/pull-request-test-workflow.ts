@@ -34,7 +34,14 @@ export interface PullRequestTestOptions {
    *
    * @default true
    */
-  readonly lighthouse?: boolean
+  readonly isLighthouseEnabled?: boolean
+
+  /**
+   * Setup Playwright end-to-end tests job.
+   *
+   * @default true
+   */
+  readonly isPlaywrightEnabled?: boolean
 }
 
 /**
@@ -74,7 +81,7 @@ export class PullRequestTest extends Component {
           with: {'node-version': 16, command: 'npm run typecheck', directory},
         },
       ]),
-      test: job([
+      'unit-tests': job([
         {
           uses: 'ottofeller/github-actions/npm-run@main',
           with: {'node-version': 16, command: 'npm run test', directory},
@@ -82,7 +89,7 @@ export class PullRequestTest extends Component {
       ]),
     })
 
-    if (options.lighthouse) {
+    if (options.isLighthouseEnabled) {
       workflow.addJobs({
         lighthouse: job([
           {uses: 'actions/checkout@v3', workingDirectory: directory},
@@ -101,6 +108,19 @@ export class PullRequestTest extends Component {
         ]),
       })
     }
+
+    if (options.isPlaywrightEnabled) {
+      workflow.addJobs({
+        'e2e-tests': job([
+          {uses: 'actions/checkout@v3', workingDirectory: directory},
+          {uses: 'actions/setup-node@v3', with: {'node-version': 16}, workingDirectory: directory},
+          {name: 'Install dependencies', run: 'npm install', workingDirectory: directory},
+          {name: 'Copy environment variables', run: 'cp .env.development .env.local', workingDirectory: directory},
+          {name: 'Build Next.js application', run: 'npm run build', workingDirectory: directory},
+          {name: 'Run end-to-end tests', run: 'npm run test:e2e', workingDirectory: directory},
+        ]),
+      })
+    }
   }
 
   /**
@@ -114,14 +134,15 @@ export class PullRequestTest extends Component {
    */
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
-    const lighthouse = options.lighthouse ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
+    const isPlaywrightEnabled = options.isPlaywrightEnabled ?? true
 
     if (!hasDefaultGithubWorkflows) {
       return
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {lighthouse})
+      new PullRequestTest(project.github, {isLighthouseEnabled, isPlaywrightEnabled})
       return
     }
 
@@ -130,7 +151,8 @@ export class PullRequestTest extends Component {
         runsOn: options.runsOn,
         name: `test-${options.name}`,
         outdir: options.outdir,
-        lighthouse,
+        isLighthouseEnabled,
+        isPlaywrightEnabled,
       })
     }
   }
