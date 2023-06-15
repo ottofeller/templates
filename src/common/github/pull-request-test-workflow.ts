@@ -1,6 +1,6 @@
 import {Component, github, javascript} from 'projen'
 import {NodeProject} from 'projen/lib/javascript'
-import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
+import {lighthouseJob, NodeJobOptions, playwrightJob, runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
@@ -37,7 +37,14 @@ export interface PullRequestTestOptions
    *
    * @default true
    */
-  readonly lighthouse?: boolean
+  readonly isLighthouseEnabled?: boolean
+
+  /**
+   * Setup Playwright end-to-end tests job.
+   *
+   * @default true
+   */
+  readonly isPlaywrightEnabled?: boolean
 }
 
 /**
@@ -72,12 +79,16 @@ export class PullRequestTest extends Component {
 
     workflow.addJobs({
       lint: runScriptJob({command: 'lint', ...commonJobProps}),
-      test: runScriptJob({command: 'test', ...commonJobProps}),
+      'unit-tests': runScriptJob({command: 'test', ...commonJobProps}),
       typecheck: runScriptJob({command: 'typecheck', ...commonJobProps}),
     })
 
-    if (options.lighthouse) {
+    if (options.isLighthouseEnabled) {
       workflow.addJobs({lighthouse: lighthouseJob(commonJobProps)})
+    }
+
+    if (options.isPlaywrightEnabled) {
+      workflow.addJobs({playwright: playwrightJob(commonJobProps)})
     }
   }
 
@@ -92,21 +103,22 @@ export class PullRequestTest extends Component {
    */
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
-    const lighthouse = options.lighthouse ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
+    const isPlaywrightEnabled = options.isPlaywrightEnabled ?? true
 
     if (!hasDefaultGithubWorkflows) {
       return
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {lighthouse, runsOn: options.runsOn})
-
+      new PullRequestTest(project.github, {isLighthouseEnabled, isPlaywrightEnabled, runsOn: options.runsOn})
       return
     }
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
       new PullRequestTest(project.parent.github, {
-        lighthouse,
+        isLighthouseEnabled,
+        isPlaywrightEnabled,
         name: `test-${options.name}`,
         outdir: options.outdir,
         runsOn: options.runsOn,

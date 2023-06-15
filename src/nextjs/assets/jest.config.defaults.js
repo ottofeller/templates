@@ -7,7 +7,7 @@ module.exports = {
   moduleNameMapper: {'generated/(.*)': '<rootDir>/generated/$1'},
   testEnvironment: 'jsdom',
 
-  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/src/tests/'],
 
   testRegex: '/__tests__/index.tsx?$',
 }
