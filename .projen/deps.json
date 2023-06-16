@@ -65,7 +65,7 @@
     },
     {
       "name": "eslint-plugin-tailwindcss",
-      "version": "3.11.0",
+      "version": "3.12.1",
       "type": "build"
     },
     {

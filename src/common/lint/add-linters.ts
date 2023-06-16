@@ -24,7 +24,7 @@ export const linterDependencies = [
   'eslint-plugin-import@2.27.5',
   'eslint-plugin-react@7.32.2',
   'eslint-plugin-react-hooks@4.6.0',
-  'eslint-plugin-tailwindcss@3.11.0',
+  'eslint-plugin-tailwindcss@3.12.1',
   'eslint@8',
   'prettier@2.8.7',
   'prettier-plugin-organize-imports@3.2.2',

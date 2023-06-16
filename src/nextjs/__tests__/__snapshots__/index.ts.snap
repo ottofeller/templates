@@ -363,7 +363,6 @@ node_modules
         "callees": Array [
           "cn",
         ],
-        "config": "tailwind-config.js",
       },
     },
   },
@@ -741,7 +740,7 @@ tsconfig.tsbuildinfo
       Object {
         "name": "eslint-plugin-tailwindcss",
         "type": "build",
-        "version": "3.11.0",
+        "version": "3.12.1",
       },
       Object {
         "name": "eslint",
@@ -754,10 +753,6 @@ tsconfig.tsbuildinfo
       },
       Object {
         "name": "jest-environment-jsdom",
-        "type": "build",
-      },
-      Object {
-        "name": "jiti",
         "type": "build",
       },
       Object {
@@ -1543,10 +1538,9 @@ module.exports = {
       "eslint-plugin-import": "2.27.5",
       "eslint-plugin-react": "7.32.2",
       "eslint-plugin-react-hooks": "4.6.0",
-      "eslint-plugin-tailwindcss": "3.11.0",
+      "eslint-plugin-tailwindcss": "3.12.1",
       "jest": "*",
       "jest-environment-jsdom": "*",
-      "jiti": "*",
       "jscodeshift": "*",
       "postcss": "*",
       "postcss-nesting": "*",
@@ -1663,10 +1657,6 @@ export const Home = memo(function Home() {
   "src/assets/global.css": "@tailwind base;
 @tailwind components;
 @tailwind utilities;
-",
-  "tailwind-config.js": "const jiti = require('jiti')()
-jiti.register()
-module.exports = require('./tailwind.config').default
 ",
   "tailwind.config.defaults.ts": "import plugin from 'tailwindcss/plugin'
 import {Config} from 'tailwindcss/types/config'
