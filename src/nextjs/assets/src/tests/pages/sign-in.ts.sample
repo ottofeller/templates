@@ -33,6 +33,6 @@ export class SignInPage extends BasePage {
   }
 
   async open() {
-    return super.open('https://www.saucedemo.com/')
+    return super.open('./')
   }
 }

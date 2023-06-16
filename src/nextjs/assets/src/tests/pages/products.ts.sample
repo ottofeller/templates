@@ -3,7 +3,6 @@ import {BasePage} from 'src/tests/pages/base'
 
 export class ProductsPage extends BasePage {
   readonly productList: Locator
-  readonly item: Locator
 
   constructor(page: Page) {
     super(page)

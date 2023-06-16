@@ -3,7 +3,6 @@ import {test, Users, expect} from 'src/tests/common'
 import {errors} from 'src/tests/data'
 
 test.describe('Authorization & Authentication', () => {
-  const password = 'secret_sauce'
 
   test.beforeEach(async ({signInPage}) => {
     await signInPage.open()
@@ -11,14 +10,14 @@ test.describe('Authorization & Authentication', () => {
 
   test(qase('', 'Sign in with valid credentials'), async ({signInPage, productsPage}) => {
     await signInPage.input.username.fill(Users.standard)
-    await signInPage.input.password.fill(password)
+    await signInPage.input.password.fill(process.env.PASSWORD!)
     await signInPage.button.login.click()
     await expect(productsPage.productList).toBeVisible()
   })
 
   test(qase('', 'Sign in with locked user credentials'), async ({signInPage}) => {
     await signInPage.input.username.fill(Users.locked)
-    await signInPage.input.password.fill(password)
+    await signInPage.input.password.fill(process.env.PASSWORD!)
     await signInPage.button.login.click()
     await expect(signInPage.error.message).toBeVisible()
     await expect(signInPage.error.message).toHaveText(errors.signIn.lockedUser)
