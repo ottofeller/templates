@@ -168,20 +168,20 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
       this.addScripts({'test:e2e': 'playwright test'})
 
-      new SampleFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts')})
-      new SampleFile(this, 'src/tests/common/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/index.ts')})
-      new SampleFile(this, 'src/tests/common/test.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/test.ts')})
+      new SampleFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts.sample')})
+      new SampleFile(this, 'src/tests/common/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/index.ts.sample')})
+      new SampleFile(this, 'src/tests/common/test.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/test.ts.sample')})
       new SampleFile(this, 'src/tests/common/users.ts', {sourcePath: path.join(assetsDir, 'src/tests/common/users.ts')})
       new SampleFile(this, 'src/tests/data/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/data/index.ts')})
-      new SampleFile(this, 'src/tests/data/error-texts.json', {sourcePath: path.join(assetsDir, 'src/tests/data/errors-texts.json')})
-      new SampleFile(this, 'src/tests/pages/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/index.ts')})
-      new SampleFile(this, 'src/tests/pages/base.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/base.ts')})
-      new SampleFile(this, 'src/tests/pages/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/index.ts')})
-      new SampleFile(this, 'src/tests/pages/sign-in.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/sign-in.ts')})
-      new SampleFile(this, 'src/tests/pages/products.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/products.ts')})
+      new SampleFile(this, 'src/tests/data/error-texts.json', {sourcePath: path.join(assetsDir, 'src/tests/data/error-texts.json')})
+      new SampleFile(this, 'src/tests/pages/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/index.ts.sample')})
+      new SampleFile(this, 'src/tests/pages/base.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/base.ts.sample')})
+      new SampleFile(this, 'src/tests/pages/index.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/index.ts.sample')})
+      new SampleFile(this, 'src/tests/pages/sign-in.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/sign-in.ts.sample')})
+      new SampleFile(this, 'src/tests/pages/products.ts', {sourcePath: path.join(assetsDir, 'src/tests/pages/products.ts.sample')})
 
       new SampleFile(this, 'src/tests/specs/auth.spec.ts', {
-        sourcePath: path.join(assetsDir, 'src/tests/pages/auth.spec.ts'),
+        sourcePath: path.join(assetsDir, 'src/tests/specs/auth.spec.ts.sample'),
       })
     }
 

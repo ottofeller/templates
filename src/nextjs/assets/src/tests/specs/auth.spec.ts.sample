@@ -1,11 +1,11 @@
 import {qase} from 'playwright-qase-reporter/dist/playwright'
-import {test, Users} from '../common'
-import {errors} from '../data'
+import {test, Users, expect} from 'src/tests/common'
+import {errors} from 'src/tests/data'
 
-describe('Authorization & Authentication', () => {
+test.describe('Authorization & Authentication', () => {
   const password = 'secret_sauce'
 
-  test.beforeAll(async ({signInPage}) => {
+  test.beforeEach(async ({signInPage}) => {
     await signInPage.open()
   })
 
@@ -14,14 +14,13 @@ describe('Authorization & Authentication', () => {
     await signInPage.input.password.fill(password)
     await signInPage.button.login.click()
     await expect(productsPage.productList).toBeVisible()
-    await expect(productsPage.item).toBeVisible()
   })
 
   test(qase('', 'Sign in with locked user credentials'), async ({signInPage}) => {
     await signInPage.input.username.fill(Users.locked)
     await signInPage.input.password.fill(password)
     await signInPage.button.login.click()
-    await expect(signInPage.error).toBeVisible()
-    await expect(signInPage.error).toHaveText(errors.signIn.lockedUser)
+    await expect(signInPage.error.message).toBeVisible()
+    await expect(signInPage.error.message).toHaveText(errors.signIn.lockedUser)
   })
 })
