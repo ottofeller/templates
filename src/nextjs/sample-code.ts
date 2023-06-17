@@ -20,21 +20,18 @@ export function sampleCode(
   const homeComponentFilePath = 'src/Home/index.tsx'
   new projen.SampleFile(project, homeComponentFilePath, {sourcePath: path.join(assetsDir, homeComponentFilePath)})
 
-  const indexPagePath = 'pages/index.tsx'
+  const indexPagePath = 'app/page.tsx'
   new projen.SampleFile(project, indexPagePath, {sourcePath: path.join(assetsDir, indexPagePath)})
 
-  const documentPagePath = 'pages/_document.tsx'
-  new projen.SampleFile(project, documentPagePath, {sourcePath: path.join(assetsDir, documentPagePath)})
-
-  const appFilePath = 'pages/_app.tsx'
-  const appContents = fs.readFileSync(path.join(assetsDir, appFilePath), {encoding: 'utf-8'}).split('\n')
+  const layoutFilePath = 'app/layout.tsx'
+  const layoutContents = fs.readFileSync(path.join(assetsDir, layoutFilePath), {encoding: 'utf-8'}).split('\n')
 
   if (isUiConfigEnabled) {
-    appContents.unshift("import 'src/assets/global.css'")
-    project.postSynthFormattingPaths.push(appFilePath)
+    layoutContents.unshift("import 'src/assets/global.css'", '')
+    project.postSynthFormattingPaths.push(layoutFilePath)
   }
 
-  new projen.SampleFile(project, appFilePath, {contents: appContents.join('\n')})
+  new projen.SampleFile(project, layoutFilePath, {contents: layoutContents.join('\n')})
 
   if (isUiConfigEnabled) {
     const globalCssPath = 'src/assets/global.css'

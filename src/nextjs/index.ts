@@ -74,6 +74,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
           baseUrl: './',
           target: 'es6',
         },
+        include: ['**/*.ts', '**/*.tsx', '.next/types/**/*.ts'],
       },
       sampleCode: false,
       tailwind: false, // Tailwind has to be configured manually.
@@ -88,6 +89,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       depsUpgrade: false,
       pullRequestTemplate: false,
     })
+
+    // ANCHOR Next.js related setup of TypeScript -- define the "plugins" option manually, since it is not yet supported by projen types.
+    this.tsconfig?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
 
     // ANCHOR Rename "server" task to "start"
     const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}
@@ -108,7 +112,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'pages', 'src']
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'app', 'src']
     const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintConfigTailwind]
     addLinters({project: this, lintPaths, extraEslintConfigs})
 
