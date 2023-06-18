@@ -1,32 +1,14 @@
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
-import {VsCodeSettings, WithVSCode} from '..'
+import {addVsCode} from '..'
 
-describe('VsCodeSettings utils', () => {
+describe('addVsCode function', () => {
   const settingsPath = '.vscode/settings.json'
   const extensionsPath = '.vscode/extensions.json'
 
-  test('creates a settings file', () => {
-    const project = new TestProject()
-    new VsCodeSettings(project)
-    const snapshot = synthSnapshot(project)
-    expect(snapshot[settingsPath]).toBeDefined()
-  })
-
-  test('allows to add settings', () => {
-    const project = new TestProject()
-    new VsCodeSettings(project, {'typescript.tsdk': 'node_modules/typescript/lib'})
-    const settings = VsCodeSettings.of(project)
-    expect(settings).toBeDefined()
-    settings!.add({'some.prop.enable': true})
-    const snapshot = synthSnapshot(project)
-    expect(snapshot[settingsPath]['typescript.tsdk']).toBeDefined()
-    expect(snapshot[settingsPath]['some.prop.enable']).toBeDefined()
-  })
-
   test('adds predefined settings and extensions to a project', () => {
     const project = new TestProject()
-    VsCodeSettings.addToProject(project)
+    addVsCode(project)
     const snapshot = synthSnapshot(project)
     expect(snapshot[settingsPath]).toBeDefined()
     expect(snapshot[settingsPath]['[dockerfile]']).toBeDefined()
@@ -38,9 +20,8 @@ describe('VsCodeSettings utils', () => {
   })
 
   test('can be opted out', () => {
-    const options: WithVSCode = {hasVscode: false}
-    const project = new TestProject(options)
-    VsCodeSettings.addToProject(project, options)
+    const project = new TestProject({vscode: false})
+    addVsCode(project)
     const snapshot = synthSnapshot(project)
     expect(snapshot[settingsPath]).not.toBeDefined()
     expect(snapshot[extensionsPath]).not.toBeDefined()
@@ -48,7 +29,7 @@ describe('VsCodeSettings utils', () => {
 })
 
 class TestProject extends NodeProject {
-  constructor(options: Partial<NodeProjectOptions & WithVSCode> = {}) {
+  constructor(options: Partial<NodeProjectOptions> = {}) {
     super({
       ...options,
       name: 'test-project',
