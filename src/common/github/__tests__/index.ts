@@ -1,4 +1,5 @@
 import * as projen from 'projen'
+import type {Job} from 'projen/lib/github/workflows-model'
 import {JavaProject} from 'projen/lib/java'
 import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
@@ -85,6 +86,36 @@ describe('GitHub utils', () => {
       })
     })
 
+    describe('allows setting nodeVersion', () => {
+      const nodeVersion = '18.15.0'
+
+      test('from workflow options', () => {
+        const project = new TestProject()
+        new PullRequestTest(project.github!, {workflowNodeVersion: nodeVersion})
+        const snapshot = synthSnapshot(project)
+        const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+        Object.values<Job>(workflow.jobs)
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .forEach((job) => {
+            expect(job!.with!['node-version']).toEqual(nodeVersion)
+          })
+      })
+
+      test('from project package', () => {
+        const project = new TestProject({minNodeVersion: nodeVersion})
+        new PullRequestTest(project.github!)
+        const snapshot = synthSnapshot(project)
+        const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+        Object.values<Job>(workflow.jobs)
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .forEach((job) => {
+            expect(job!.with!['node-version']).toEqual(nodeVersion)
+          })
+      })
+    })
+
     describe('addToProject', () => {
       const name = 'subproject'
       const subprojectTestWorkflowPath = `.github/workflows/test-${name}.yml`
@@ -134,6 +165,36 @@ describe('GitHub utils', () => {
         expect(subprojectWorkflow.on).toEqual({
           pull_request: {paths, types: ['opened', 'synchronize']},
           push: {paths, branches: ['main']},
+        })
+      })
+
+      describe('picks nodeVersion', () => {
+        const nodeVersion = '16.15.1'
+
+        test('from workflow options first', () => {
+          const project = new TestProject({workflowNodeVersion: '18.15.0'})
+          PullRequestTest.addToProject(project, {workflowNodeVersion: nodeVersion})
+          const snapshot = synthSnapshot(project)
+          const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+          Object.values<Job>(workflow.jobs)
+            .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+            .forEach((job) => {
+              expect(job!.with!['node-version']).toEqual(nodeVersion)
+            })
+        })
+
+        test('from project package as a fallback', () => {
+          const project = new TestProject({minNodeVersion: nodeVersion})
+          PullRequestTest.addToProject(project, {})
+          const snapshot = synthSnapshot(project)
+          const workflow = YAML.parse(snapshot[testWorkflowPath])
+
+          Object.values<Job>(workflow.jobs)
+            .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+            .forEach((job) => {
+              expect(job!.with!['node-version']).toEqual(nodeVersion)
+            })
         })
       })
     })

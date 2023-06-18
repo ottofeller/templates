@@ -1,5 +1,5 @@
 import {Component, github, javascript} from 'projen'
-import {NodeProject} from 'projen/lib/javascript'
+import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
 
@@ -8,7 +8,8 @@ import type {WithDefaultWorkflow} from './with-default-workflow'
  */
 export interface PullRequestTestOptions
   extends Partial<Pick<javascript.NodeProject, 'runScriptCommand'>>,
-    Partial<Pick<javascript.NodePackage, 'installCommand'>> {
+    Partial<Pick<javascript.NodePackage, 'installCommand'>>,
+    Pick<NodeProjectOptions, 'workflowNodeVersion'> {
   /**
    * Github Runner selection labels
    * @default ['ubuntu-latest']
@@ -57,6 +58,7 @@ export class PullRequestTest extends Component {
     const paths = workingDirectory ? [`${workingDirectory}/**`] : undefined
     const workflow = githubInstance.addWorkflow(workflowName)
     const branches = options.triggerOnPushToBranches ?? ['main']
+    const nodeVersion = options.workflowNodeVersion ?? project.package.minNodeVersion
 
     workflow.on({
       pullRequest: {paths, types: ['opened', 'synchronize']},
@@ -68,6 +70,7 @@ export class PullRequestTest extends Component {
       workingDirectory,
       projectPackage: project.package,
       runScriptCommand: project.runScriptCommand,
+      nodeVersion,
     }
 
     workflow.addJobs({
@@ -77,7 +80,7 @@ export class PullRequestTest extends Component {
     })
 
     if (options.lighthouse) {
-      workflow.addJobs({lighthouse: lighthouseJob(commonJobProps)})
+      workflow.addJob('lighthouse', lighthouseJob(commonJobProps))
     }
   }
 
@@ -93,14 +96,14 @@ export class PullRequestTest extends Component {
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
     const lighthouse = options.lighthouse ?? true
+    const {runsOn, outdir, workflowNodeVersion} = options
 
     if (!hasDefaultGithubWorkflows) {
       return
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {lighthouse, runsOn: options.runsOn})
-
+      new PullRequestTest(project.github, {lighthouse, runsOn, workflowNodeVersion})
       return
     }
 
@@ -108,8 +111,9 @@ export class PullRequestTest extends Component {
       new PullRequestTest(project.parent.github, {
         lighthouse,
         name: `test-${options.name}`,
-        outdir: options.outdir,
-        runsOn: options.runsOn,
+        outdir,
+        runsOn,
+        workflowNodeVersion,
       })
     }
   }
