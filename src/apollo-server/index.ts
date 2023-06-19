@@ -9,7 +9,7 @@ import {AssetFile} from '../common/files/AssetFile'
 import {addHusky, extendGitignore, WithGitHooks} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {addLinters, WithCustomLintPaths} from '../common/lint'
-import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
+import {addVsCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {sampleCode} from './sample-code'
 
@@ -18,8 +18,7 @@ export interface OttofellerApolloServerProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks,
-    WithVSCode {}
+    WithGitHooks {}
 
 /**
  * Apollo server template.
@@ -145,12 +144,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     }
 
     // ANCHOR VSCode settings
-    VsCodeSettings.addToProject(this, options)
-
-    VsCodeSettings.of(this)?.add({
-      'eslint.useESLintClass': true,
-      'eslint.options': {cache: true, reportUnusedDisableDirectives: 'error'},
-    })
+    addVsCode(this)
 
     // ANCHOR gitignore
     extendGitignore(this)

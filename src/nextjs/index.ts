@@ -10,7 +10,7 @@ import {AssetFile} from '../common/files/AssetFile'
 import {addHusky, extendGitignore, WithGitHooks} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {addLinters, WithCustomLintPaths} from '../common/lint'
-import {VsCodeSettings, WithVSCode} from '../common/vscode-settings'
+import {addVsCode} from '../common/vscode-settings'
 import {codegenConfig} from './codegen-config'
 import {eslintConfigTailwind} from './eslint-config-tailwind'
 import {setupJest} from './jest'
@@ -24,8 +24,7 @@ export interface OttofellerNextjsProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks,
-    WithVSCode {
+    WithGitHooks {
   /**
    * Set up GraphQL dependencies and supplementary script.
    *
@@ -224,12 +223,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR VSCode settings
-    VsCodeSettings.addToProject(this, options)
-
-    VsCodeSettings.of(this)?.add({
-      'eslint.useESLintClass': true,
-      'eslint.options': {cache: true, reportUnusedDisableDirectives: 'error'},
-    })
+    addVsCode(this)
 
     // ANCHOR gitignore
     extendGitignore(this)

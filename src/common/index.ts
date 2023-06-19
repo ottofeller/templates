@@ -12,4 +12,4 @@ export {
 } from './github'
 export {addLinters, WithCustomLintPaths} from './lint'
 export {MaybePlural} from './MaybePlural'
-export {VsCodeSettings, WithVSCode} from './vscode-settings'
+export {addVsCode} from './vscode-settings'
