@@ -5,11 +5,4 @@ export interface WithDefaultWorkflow {
    * @default true
    */
   readonly hasDefaultGithubWorkflows?: boolean
-
-  /**
-   * Enables/disables the lighthouse integration
-   *
-   * @default true
-   */
-  readonly isLighthouseEnabled?: boolean
 }
