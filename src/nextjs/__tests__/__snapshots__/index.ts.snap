@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -89,7 +89,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -429,7 +429,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -451,7 +451,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -473,7 +473,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
@@ -495,7 +495,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 12.22.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v3
