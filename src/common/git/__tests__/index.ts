@@ -28,20 +28,28 @@ describe('extendGitignore function', () => {
 })
 
 describe('addHusky function', () => {
-  const commitMsgFileName = '.husky/commit-msg'
-  const assetFilePath = path.resolve('src/common/git/assets/commit-msg')
-  const assetFileContents = fs.readFileSync(assetFilePath, {encoding: 'utf-8'})
-  expect(assetFileContents).toBeDefined()
+  const sourceFolder = 'src/common/git/assets'
+  const destinationFolder = '.husky'
+  const shellScriptName = 'commit-msg'
+  const nodeScriptFileName = 'check-commit-msg.js'
+
+  const shellScriptSourcePath = path.join(sourceFolder, shellScriptName)
+  const shellScriptDestinationPath = path.join(destinationFolder, shellScriptName)
+  const shellScriptContents = fs.readFileSync(shellScriptSourcePath, {encoding: 'utf-8'})
+  expect(shellScriptContents).toBeDefined()
+
+  const nodeScriptSourcePath = path.join(sourceFolder, nodeScriptFileName)
+  const nodeScriptDestinationPath = path.join(destinationFolder, nodeScriptFileName)
+  const nodeScriptContents = fs.readFileSync(nodeScriptSourcePath, {encoding: 'utf-8'})
+  expect(nodeScriptContents).toBeDefined()
 
   test('sets up husky with a commit-msg hook', () => {
     const project = new TestProject()
     addHusky(project, {})
     const snapshot = synthSnapshot(project)
     expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
-
-    const commitMsgFile = snapshot[commitMsgFileName]
-    expect(commitMsgFile).toBeDefined()
-    expect(commitMsgFile).toEqual(assetFileContents)
+    expect(snapshot[shellScriptDestinationPath]).toEqual(shellScriptContents)
+    expect(snapshot[nodeScriptDestinationPath]).toEqual(nodeScriptContents)
   })
 
   test('has disabled commit-msg hook with hasDefaultCommitHook option', () => {
@@ -49,7 +57,8 @@ describe('addHusky function', () => {
     addHusky(project, {hasDefaultCommitHook: false})
     const snapshot = synthSnapshot(project)
     expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
-    expect(snapshot[commitMsgFileName]).not.toBeDefined()
+    expect(snapshot[shellScriptDestinationPath]).not.toBeDefined()
+    expect(snapshot[nodeScriptDestinationPath]).not.toBeDefined()
   })
 })
 
