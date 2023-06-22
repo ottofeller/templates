@@ -1,7 +1,7 @@
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
-import {CodegenConfig, CodegenConfigYaml} from '..'
+import {CodegenConfig, CodegenConfigYaml, PluginConfig} from '..'
 
 describe('Codegen utils', () => {
   const generatedIndex = './generated/index.ts'
@@ -81,6 +81,69 @@ describe('Codegen utils', () => {
         [generatedIndex]: {
           ...config.generates[generatedIndex],
           plugins,
+        },
+      },
+    }
+
+    expect(YAML.parse(snapshot['codegen.yml'])).toStrictEqual(expectedConfig)
+  })
+
+  test('allows output config override', () => {
+    const project = new TestProject()
+    const configFile = new CodegenConfigYaml(project, config)
+    const pluginConfig: PluginConfig = {configKey: 'configValue'}
+    configFile.overrideConfigForOutput(generatedIndex, pluginConfig)
+    const snapshot = synthSnapshot(project)
+
+    const expectedConfig: CodegenConfig = {
+      ...config,
+      generates: {
+        ...config.generates,
+        [generatedIndex]: {
+          ...config.generates[generatedIndex],
+          config: pluginConfig,
+        },
+      },
+    }
+
+    expect(YAML.parse(snapshot['codegen.yml'])).toStrictEqual(expectedConfig)
+  })
+
+  test('allows output preset override', () => {
+    const project = new TestProject()
+    const configFile = new CodegenConfigYaml(project, config)
+    const preset = 'client'
+    configFile.overridePresetForOutput(generatedIndex, preset)
+    const snapshot = synthSnapshot(project)
+
+    const expectedConfig: CodegenConfig = {
+      ...config,
+      generates: {
+        ...config.generates,
+        [generatedIndex]: {
+          ...config.generates[generatedIndex],
+          preset,
+        },
+      },
+    }
+
+    expect(YAML.parse(snapshot['codegen.yml'])).toStrictEqual(expectedConfig)
+  })
+
+  test('allows output preset-config override', () => {
+    const project = new TestProject()
+    const configFile = new CodegenConfigYaml(project, config)
+    const presetConfig = {extension: '.generated.tsx', baseTypesPath: 'types.ts'}
+    configFile.overridePresetConfigForOutput(generatedIndex, presetConfig)
+    const snapshot = synthSnapshot(project)
+
+    const expectedConfig: CodegenConfig = {
+      ...config,
+      generates: {
+        ...config.generates,
+        [generatedIndex]: {
+          ...config.generates[generatedIndex],
+          presetConfig: presetConfig,
         },
       },
     }
