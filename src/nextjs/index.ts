@@ -55,7 +55,7 @@ export interface OttofellerNextjsProjectOptions
  */
 export class OttofellerNextjsProject extends NextJsTypeScriptProject {
   public codegenConfigYaml?: CodegenConfigYaml
-  public postSynthFormattingPaths = ['.projenrc.ts']
+  public postSynthFormattingPaths: Array<string>
 
   constructor(options: OttofellerNextjsProjectOptions) {
     super({
@@ -87,6 +87,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       depsUpgrade: false,
       pullRequestTemplate: false,
     })
+
+    // NOTE A subproject won't have the `projenrc` file thus it does not need to format the file.
+    this.postSynthFormattingPaths = this.parent ? [] : ['.projenrc.ts']
 
     // ANCHOR Rename "server" task to "start"
     const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}
@@ -191,7 +194,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
      * The pages/_app.tsx file has optional content which is easier to format after the synthesis,
      * instead of trying to arrange the file lines programmatically.
      */
-    const formattingPaths = this.postSynthFormattingPaths.join(' ')
+    const formattingPaths = this.postSynthFormattingPaths
+      .map((filePath) => `${this.outdir}/${filePath}`) // NOTE: `outdir` is necessary for subprojects to correctly identify files in nested folders.
+      .join(' ')
+
     execSync(`prettier --write ${formattingPaths}`)
     execSync(`eslint --fix ${formattingPaths}`)
   }

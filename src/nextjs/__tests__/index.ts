@@ -124,7 +124,11 @@ describe('NextJS template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestNextJsTypeScriptProject()
     expect(project.postSynthFormattingPaths).toHaveLength(2)
-    const formattingPaths = project.postSynthFormattingPaths.join(' ')
+
+    const formattingPaths = project.postSynthFormattingPaths
+      .map((filePath) => `${project.outdir}/${filePath}`)
+      .join(' ')
+
     project.postSynthesize()
     expect(mockedExecSync).toBeCalledTimes(2)
     expect(mockedExecSync).toBeCalledWith(`prettier --write ${formattingPaths}`)
