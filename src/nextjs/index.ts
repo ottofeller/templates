@@ -94,6 +94,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR Next.js related setup of TypeScript -- define the "plugins" option manually, since it is not yet supported by projen types.
     this.tsconfig?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
+    this.tsconfigDev?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
 
     // ANCHOR Rename "server" task to "start"
     const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}

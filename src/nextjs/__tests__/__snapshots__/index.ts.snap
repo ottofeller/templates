@@ -1699,6 +1699,11 @@ export default config
       "noImplicitThis": true,
       "noUnusedLocals": true,
       "noUnusedParameters": true,
+      "plugins": Array [
+        Object {
+          "name": "next",
+        },
+      ],
       "resolveJsonModule": true,
       "skipLibCheck": true,
       "strict": false,
