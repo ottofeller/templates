@@ -2,7 +2,7 @@ import plugin from 'tailwindcss/plugin'
 import {Config} from 'tailwindcss/types/config'
 
 const defaultConfig: Config = {
-  content: ['./src/**/*.tsx'],
+  content: ['./app/**/*.tsx', './src/**/*.tsx'],
 
   plugins: [
     require('@tailwindcss/container-queries'),
