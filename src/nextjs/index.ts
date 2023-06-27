@@ -62,7 +62,7 @@ export interface OttofellerNextjsProjectOptions
  */
 export class OttofellerNextjsProject extends NextJsTypeScriptProject {
   public codegenConfigYaml?: CodegenConfigYaml
-  public postSynthFormattingPaths = ['.projenrc.ts']
+  public postSynthFormattingPaths: Array<string>
 
   constructor(options: OttofellerNextjsProjectOptions) {
     super({
@@ -80,6 +80,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
           baseUrl: './',
           target: 'es6',
         },
+        include: ['**/*.ts', '**/*.tsx', '.next/types/**/*.ts'],
       },
       sampleCode: false,
       tailwind: false, // Tailwind has to be configured manually.
@@ -94,6 +95,13 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       depsUpgrade: false,
       pullRequestTemplate: false,
     })
+
+    // NOTE A subproject won't have the `projenrc` file thus it does not need to format the file.
+    this.postSynthFormattingPaths = this.parent ? [] : ['.projenrc.ts']
+
+    // ANCHOR Next.js related setup of TypeScript -- define the "plugins" option manually, since it is not yet supported by projen types.
+    this.tsconfig?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
+    this.tsconfigDev?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
 
     // ANCHOR Rename "server" task to "start"
     const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}
@@ -114,7 +122,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'pages', 'src']
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'app', 'src']
     const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintConfigTailwind]
     addLinters({project: this, lintPaths, extraEslintConfigs})
 
@@ -248,7 +256,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
      * The pages/_app.tsx file has optional content which is easier to format after the synthesis,
      * instead of trying to arrange the file lines programmatically.
      */
-    const formattingPaths = this.postSynthFormattingPaths.join(' ')
+    const formattingPaths = this.postSynthFormattingPaths
+      .map((filePath) => `${this.outdir}/${filePath}`) // NOTE: `outdir` is necessary for subprojects to correctly identify files in nested folders.
+      .join(' ')
+
     execSync(`prettier --write ${formattingPaths}`)
     execSync(`eslint --fix ${formattingPaths}`)
   }

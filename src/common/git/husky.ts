@@ -1,7 +1,7 @@
 import * as path from 'path'
 import type {NodeProject} from 'projen/lib/javascript'
 import {AssetFile} from '../files/AssetFile'
-import {WithGitHooks} from './with-git-hooks'
+import type {WithGitHooks} from './with-git-hooks'
 
 export const addHusky = (project: NodeProject, options: WithGitHooks): void => {
   project.addDevDeps('husky')
@@ -11,6 +11,20 @@ export const addHusky = (project: NodeProject, options: WithGitHooks): void => {
     return
   }
 
-  const commitMsgFilePath = path.join(__dirname, '../../..', 'src/common/git/assets/commit-msg')
-  new AssetFile(project, '.husky/commit-msg', {sourcePath: commitMsgFilePath, executable: true, readonly: false})
+  const sourceFolder = path.join(__dirname, '../../..', 'src/common/git/assets')
+  const destinationFolder = '.husky'
+  const shellScriptFilename = 'commit-msg'
+  const nodeScriptFilename = 'check-commit-msg.js'
+
+  new AssetFile(project, path.join(destinationFolder, shellScriptFilename), {
+    sourcePath: path.join(sourceFolder, shellScriptFilename),
+    executable: true,
+    readonly: false,
+  })
+
+  new AssetFile(project, path.join(destinationFolder, nodeScriptFilename), {
+    sourcePath: path.join(sourceFolder, nodeScriptFilename),
+    executable: true,
+    readonly: false,
+  })
 }

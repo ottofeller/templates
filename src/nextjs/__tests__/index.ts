@@ -124,7 +124,11 @@ describe('NextJS template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestNextJsTypeScriptProject()
     expect(project.postSynthFormattingPaths).toHaveLength(2)
-    const formattingPaths = project.postSynthFormattingPaths.join(' ')
+
+    const formattingPaths = project.postSynthFormattingPaths
+      .map((filePath) => `${project.outdir}/${filePath}`)
+      .join(' ')
+
     project.postSynthesize()
     expect(mockedExecSync).toBeCalledTimes(2)
     expect(mockedExecSync).toBeCalledWith(`prettier --write ${formattingPaths}`)
@@ -179,8 +183,8 @@ describe('NextJS template', () => {
       const project = new TestNextJsTypeScriptProject()
       const snapshot = synthSnapshot(project)
       expect(snapshot['src/Home/index.tsx']).toBeDefined()
-      expect(snapshot['pages/index.tsx']).toBeDefined()
-      expect(snapshot['pages/_app.tsx']).toBeDefined()
+      expect(snapshot['app/page.tsx']).toBeDefined()
+      expect(snapshot['app/layout.tsx']).toBeDefined()
       expect(snapshot['src/assets/global.css']).toBeDefined()
       expect(snapshot['src/Home/__tests__/index.tsx']).toBeDefined()
     })
@@ -189,8 +193,8 @@ describe('NextJS template', () => {
       const project = new TestNextJsTypeScriptProject({sampleCode: false})
       const snapshot = synthSnapshot(project)
       expect(snapshot['src/Home/index.tsx']).not.toBeDefined()
-      expect(snapshot['pages/index.tsx']).not.toBeDefined()
-      expect(snapshot['pages/_app.tsx']).not.toBeDefined()
+      expect(snapshot['app/page.tsx']).not.toBeDefined()
+      expect(snapshot['app/layout.tsx']).not.toBeDefined()
       expect(snapshot['src/assets/global.css']).not.toBeDefined()
       expect(snapshot['src/Home/__tests__/index.tsx']).not.toBeDefined()
     })
