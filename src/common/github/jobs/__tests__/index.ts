@@ -143,6 +143,16 @@ describe('GitHub utils', () => {
         'pnpm i --frozen-lockfile',
       ])
     })
+
+    test('allows setting pnpm version', () => {
+      const pnpmVersion = '8.6.5'
+      const project = new TestProject({packageManager: NodePackageManager.PNPM, pnpmVersion})
+      const setupNodeSteps = setupNode({projectPackage: project.package})
+
+      const pnpmSetupStep = setupNodeSteps.find((step) => step.uses === 'pnpm/action-setup@v2')
+      expect(pnpmSetupStep).toBeDefined()
+      expect(pnpmSetupStep!.with!.version).toEqual(pnpmVersion)
+    })
   })
 
   describe('runScriptJob function', () => {
