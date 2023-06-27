@@ -52,7 +52,7 @@ export const setupNode = ({
   scope,
   workingDirectory,
 }: SetupNodeOptions): Array<JobStep> => {
-  const {installCommand, lockFile, packageManager} = projectPackage
+  const {installCommand, lockFile, packageManager, pnpmVersion = '7'} = projectPackage
   const isPnpm = packageManager === NodePackageManager.PNPM
   const directory = workingDirectory || '.'
 
@@ -73,7 +73,7 @@ export const setupNode = ({
         uses: 'pnpm/action-setup@v2',
         name: 'Install pnpm',
         id: 'pnpm-install',
-        with: {version: 7, run_install: false},
+        with: {version: pnpmVersion, run_install: false},
       },
       {
         name: 'Get pnpm store directory',
