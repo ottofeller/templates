@@ -118,7 +118,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Github workflow
-    PullRequestTest.addToProject(this, options)
+    PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false, isPlaywrightEnabled: false})
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
