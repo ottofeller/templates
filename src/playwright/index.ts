@@ -25,6 +25,10 @@ export interface OttofellerPlaywrightProjectOptions
  */
 export class OttofellerPlaywrightProject extends TypeScriptProject {
   constructor(options: OttofellerPlaywrightProjectOptions) {
+    if (!options.parent) {
+      throw new Error('Parent project is necessary')
+    }
+
     super({
       ...options,
       bundlerOptions: {},
@@ -51,7 +55,7 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
     sampleCode(this, options, assetsDir)
 
     // ANCHOR playwright config
-    new AssetFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'palywright.config.ts.sample')})
+    new AssetFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts.sample')})
 
     this.addDeps('@playwright/test', 'playwright-qase-reporter')
 

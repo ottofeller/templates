@@ -230,7 +230,7 @@ jobs:
         run: npm ci
       - name: Execute the command
         run: npm run lint
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
     permissions:
       contents: read
