@@ -25,17 +25,14 @@ export interface OttofellerPlaywrightProjectOptions
  */
 export class OttofellerPlaywrightProject extends TypeScriptProject {
   constructor(options: OttofellerPlaywrightProjectOptions) {
-    if (!options.parent) {
-      throw new Error('Parent project is necessary')
-    }
-
     super({
       ...options,
       bundlerOptions: {},
+      jest: false,
+      eslint: false,
       projenrcTs: true,
       projenrcJs: false,
-      defaultReleaseBranch: 'main',
-      name: 'nextjs',
+      name: 'End-to-end tests',
       packageManager: options.packageManager ?? NodePackageManager.NPM,
       srcdir: options.srcdir ?? '.',
 

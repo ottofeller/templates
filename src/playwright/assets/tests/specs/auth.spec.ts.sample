@@ -1,6 +1,6 @@
 import {qase} from 'playwright-qase-reporter/dist/playwright'
-import {test, Users, expect} from 'src/tests/common'
-import {errors} from 'src/tests/data'
+import {test, Users, expect} from 'tests/common'
+import {errors} from 'tests/data'
 
 test.describe('Authorization & Authentication', () => {
 

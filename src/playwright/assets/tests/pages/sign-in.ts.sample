@@ -1,5 +1,5 @@
 import {Locator, Page} from '@playwright/test'
-import {BasePage} from 'src/tests/pages/base'
+import {BasePage} from 'tests/pages/base'
 
 export class SignInPage extends BasePage {
   readonly input: {

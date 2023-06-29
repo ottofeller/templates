@@ -132,7 +132,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github workflow
-    PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false, isPlaywrightEnabled: false})
+    PullRequestTest.addToProject(this, options)
 
     // ANCHOR Codegen
     this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
