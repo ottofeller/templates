@@ -5,7 +5,7 @@ config({path: '.env.local'})
 config({path: '.env.development'})
 
 export default defineConfig({
-  testDir: './src/tests/specs',
+  testDir: './tests/specs',
   timeout: 60000,
   expect: {
     timeout: 30000,
@@ -31,10 +31,4 @@ export default defineConfig({
       },
     ],
   ],
-  webServer: {
-    command: 'npm run dev',
-    port: 3000,
-    timeout: 120 * 1000,
-    reuseExistingServer: true,
-  },
 })

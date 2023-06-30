@@ -1,4 +1,5 @@
 export {job} from './job'
+export {lighthouseJob} from './lighthouse-job'
 export {NodeJobOptions} from './node-job-options'
 export {npmRunJobStep} from './npm-run-job'
 export {runScriptJob, RunScriptJobOptions} from './run-script-job'

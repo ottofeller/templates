@@ -1,7 +1,7 @@
 import type {Job} from 'projen/lib/github/workflows-model'
-import {job} from '../../../common/github/jobs/job'
-import type {NodeJobOptions} from '../../../common/github/jobs/node-job-options'
-import {setupNode} from '../../../common/github/jobs/setup-node'
+import {job} from './job'
+import type {NodeJobOptions} from './node-job-options'
+import {setupNode} from './setup-node'
 
 /**
  * Create GitHub workflow job which runs a node.js script with a given setup.

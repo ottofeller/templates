@@ -1,1 +1,1 @@
-export {WithDefaultWorkflow} from './with-default-workflow'
+export {PlaywrightWorkflowTest} from './playwright-workflow'

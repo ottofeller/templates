@@ -1,6 +1,6 @@
 import {Component, github, javascript} from 'projen'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
-import {NodeJobOptions, runScriptJob} from './jobs'
+import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
 
 /**
@@ -32,6 +32,13 @@ export interface PullRequestTestOptions
    * @default ['main']
    */
   readonly triggerOnPushToBranches?: Array<string>
+
+  /**
+   * Setup Lighthouse audit script & GitHub job.
+   *
+   * @default true
+   */
+  readonly isLighthouseEnabled?: boolean
 }
 
 /**
@@ -71,6 +78,10 @@ export class PullRequestTest extends Component {
       'unit-tests': runScriptJob({command: 'test', ...commonJobProps}),
       typecheck: runScriptJob({command: 'typecheck', ...commonJobProps}),
     })
+
+    if (options.isLighthouseEnabled) {
+      workflow.addJob('lighthouse', lighthouseJob(commonJobProps))
+    }
   }
 
   /**
@@ -84,6 +95,7 @@ export class PullRequestTest extends Component {
    */
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
     const {runsOn, outdir, workflowNodeVersion} = options
 
     if (!hasDefaultGithubWorkflows) {
@@ -97,6 +109,7 @@ export class PullRequestTest extends Component {
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
       new PullRequestTest(project.parent.github, {
+        isLighthouseEnabled,
         name: `test-${options.name}`,
         outdir,
         runsOn,

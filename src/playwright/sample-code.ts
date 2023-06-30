@@ -14,10 +14,6 @@ export function sampleCode(
     return
   }
 
-  new projen.SampleFile(project, 'playwright.config.ts', {
-    sourcePath: path.join(assetsDir, 'playwright.config.ts.sample'),
-  })
-
   new projen.SampleFile(project, 'tests/common/index.ts', {
     sourcePath: path.join(assetsDir, 'tests/common/index.ts.sample'),
   })

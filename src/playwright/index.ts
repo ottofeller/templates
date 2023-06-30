@@ -1,8 +1,11 @@
+import {execSync} from 'child_process'
 import * as path from 'path'
 import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {AssetFile, WithCustomLintPaths, WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
+import {WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
+import {addLinters, WithCustomLintPaths} from '../common/lint'
+import {PlaywrightWorkflowTest} from './github'
 import {sampleCode} from './sample-code'
 
 export interface OttofellerPlaywrightProjectOptions
@@ -10,14 +13,7 @@ export interface OttofellerPlaywrightProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks {
-  /**
-   * Setup Lighthouse audit script & GitHub job.
-   *
-   * @default true
-   */
-  readonly isLighthouseEnabled?: boolean
-}
+    WithGitHooks {}
 /**
  * Playwright template with TypeScript support.
  *
@@ -32,7 +28,7 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
       eslint: false,
       projenrcTs: true,
       projenrcJs: false,
-      name: 'End-to-end tests',
+      name: 'playwright',
       packageManager: options.packageManager ?? NodePackageManager.NPM,
       srcdir: options.srcdir ?? '.',
 
@@ -40,8 +36,18 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
         compilerOptions: {
           baseUrl: './',
           target: 'es6',
+          paths: {
+            '*': ['./*'],
+          },
         },
       },
+
+      // In case Github is enabled remove all default stuff.
+      githubOptions: {mergify: false, pullRequestLint: false},
+      buildWorkflow: false,
+      release: false,
+      depsUpgrade: false,
+      pullRequestTemplate: false,
     })
 
     // ANCHOR Add required dependencies
@@ -52,19 +58,53 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
     sampleCode(this, options, assetsDir)
 
     // ANCHOR playwright config
-    new AssetFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts.sample')})
+    new SampleFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts.sample')})
+    new SampleFile(this, '.env.development', {sourcePath: path.join(assetsDir, '.env.development')})
 
     this.addDeps('@playwright/test', 'playwright-qase-reporter')
+    this.addDeps('dotenv')
 
-    this.addScripts({'test:e2e': 'playwright test'})
+    this.addScripts({
+      'test:e2e': 'playwright test',
+      'test:report': 'playwright show-report',
+    })
 
-    // ANCHOR Set up Lighthouse audit
-    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
+    this.package.file.addDeletionOverride('main')
+    this.package.file.addDeletionOverride('types')
 
-    if (isLighthouseEnabled) {
-      this.addDevDeps('@lhci/cli')
-      this.addScripts({lighthouse: 'lhci autorun'})
-      new SampleFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})
-    }
+    const tasksToRemove = [
+      'build',
+      'bump',
+      'clobber',
+      'compile',
+      'package',
+      'post-compile',
+      'post-upgrade',
+      'pre-compile',
+      'release',
+      'test',
+      'unbump',
+      'upgrade',
+      'watch',
+      'projen',
+    ]
+
+    tasksToRemove.forEach(this.removeTask.bind(this))
+
+    // ANCHOR ESLint and prettier setup
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    addLinters({project: this, lintPaths})
+
+    // ANCHOR Github workflow
+    PlaywrightWorkflowTest.addToProject(this, options)
+  }
+
+  postSynthesize(): void {
+    /*
+     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * Therefore an additional formatting step is required after project initialization.
+     */
+    execSync('prettier --write .projenrc.ts')
+    execSync('eslint --fix .projenrc.ts')
   }
 }
