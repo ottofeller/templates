@@ -1,8 +1,8 @@
 import {Component, github, javascript} from 'projen'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
+import {NodeJobOptions} from '../../common/github/jobs'
 import type {WithDefaultWorkflow} from '../../common/github/with-default-workflow'
-import { NodeJobOptions } from '../../common/github/jobs'
-import { playwrightJob } from './playwright-job'
+import {playwrightJob} from './playwright-job'
 
 /**
  * Options for PullRequestLint
