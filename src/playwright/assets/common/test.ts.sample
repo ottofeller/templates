@@ -1,5 +1,5 @@
 import {test as base} from '@playwright/test'
-import {ProductsPage, SignInPage} from 'tests/pages'
+import {ProductsPage, SignInPage} from '/pages'
 
 type Fixtures = {
   signInPage: SignInPage

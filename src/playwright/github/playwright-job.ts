@@ -12,7 +12,7 @@ export const playwrightJob = (options: NodeJobOptions): Job => {
 
   steps.push(
     {name: 'Install Playwright browsers', run: 'npx playwright install --with-deps chromium', workingDirectory},
-    {name: 'Run tests', run: 'npm run playwright test', workingDirectory},
+    {name: 'Run tests', run: 'npm run test:e2e', workingDirectory},
   )
 
   return job(steps, runsOn)

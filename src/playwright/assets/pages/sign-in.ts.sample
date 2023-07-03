@@ -1,5 +1,5 @@
 import {Locator, Page} from '@playwright/test'
-import {BasePage} from 'tests/pages/base'
+import {BasePage} from './base'
 
 export class SignInPage extends BasePage {
   readonly input: {
@@ -11,8 +11,8 @@ export class SignInPage extends BasePage {
     login: Locator
   }
 
-  readonly error: {
-    message: Locator
+  readonly message: {
+    error: Locator
   }
 
   constructor(page: Page) {
@@ -27,12 +27,12 @@ export class SignInPage extends BasePage {
       login: this.page.locator('[data-test="login-button"]'),
     }
 
-    this.error = {
-      message: this.page.locator('[data-test="error"]'),
+    this.message = {
+      error: this.page.locator('[data-test="error"]'),
     }
   }
 
   async open() {
-    return super.open('./')
+    return super.open('/')
   }
 }

@@ -5,7 +5,7 @@ config({path: '.env.local'})
 config({path: '.env.development'})
 
 export default defineConfig({
-  testDir: './tests/specs',
+  testDir: './specs',
   timeout: 60000,
   expect: {
     timeout: 30000,

@@ -1,12 +1,12 @@
 import {Locator, Page} from '@playwright/test'
-import {BasePage} from 'tests/pages/base'
+import {BasePage} from './base'
 
 export class ProductsPage extends BasePage {
-  readonly productList: Locator
+  readonly products: Locator
 
   constructor(page: Page) {
     super(page)
 
-    this.productList = this.page.locator('.inventory_list')
+    this.products = this.page.locator('.inventory_list')
   }
 }
