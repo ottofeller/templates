@@ -1,0 +1,11 @@
+import {SSTConfig} from 'sst'
+
+export default {
+  config(_input) {
+    return {
+      name: 'sst-default',
+      region: 'us-east-1',
+    }
+  },
+  stacks(_app) {},
+} satisfies SSTConfig
