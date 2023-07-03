@@ -89,7 +89,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
     if (hasDefaultGithubWorkflows && this.github) {
       const initialReleaseVersion = options.initialReleaseVersion ?? '0.0.1'
       new ReleaseWorkflow(this.github, {initialReleaseVersion})
-      PullRequestTest.addToProject(this, {...options, lighthouse: false})
+      PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
     }
 
     // ANCHOR VSCode settings
