@@ -103,7 +103,7 @@ export class PullRequestTest extends Component {
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {runsOn, workflowNodeVersion})
+      new PullRequestTest(project.github, {isLighthouseEnabled, runsOn, workflowNodeVersion})
       return
     }
 
