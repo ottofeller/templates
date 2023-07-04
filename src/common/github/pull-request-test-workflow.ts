@@ -95,7 +95,7 @@ export class PullRequestTest extends Component {
    */
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
-    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? false
     const {runsOn, outdir, workflowNodeVersion} = options
 
     if (!hasDefaultGithubWorkflows) {

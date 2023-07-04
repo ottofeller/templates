@@ -597,10 +597,6 @@ tsconfig.tsbuildinfo
         "type": "build",
       },
       Object {
-        "name": "@lhci/cli",
-        "type": "build",
-      },
-      Object {
         "name": "@ottofeller/eslint-plugin-ottofeller",
         "type": "build",
         "version": "0.1.4",
@@ -1383,23 +1379,6 @@ const customJestConfig = {
 
 module.exports = createJestConfig(customJestConfig)
 ",
-  "lighthouserc.js": "module.exports = {
-  ci: {
-    collect: {
-      url: ['http://localhost:3000'],
-      numberOfRuns: 1,
-      startServerCommand: 'npm run start',
-    },
-    assert: {
-      assertions: {
-        'categories:accessibility': ['error', {minScore: 1}],
-        'categories:best-practices': ['error', {minScore: 1}],
-        'categories:seo': ['error', {minScore: 1}],
-      },
-    },
-  },
-}
-",
   "next-env.d.ts": "/// <reference types=\\"next\\" />
 /// <reference types=\\"next/image-types/global\\" />
 
@@ -1475,7 +1454,6 @@ module.exports = {
       "@graphql-codegen/typescript-graphql-request": "*",
       "@graphql-codegen/typescript-operations": "*",
       "@graphql-codegen/typescript-react-apollo": "*",
-      "@lhci/cli": "*",
       "@ottofeller/eslint-plugin-ottofeller": "0.1.4",
       "@tailwindcss/container-queries": "*",
       "@tailwindcss/line-clamp": "*",
@@ -1524,7 +1502,6 @@ module.exports = {
       "format": "npx projen format",
       "generate-graphql-schema": "npx projen generate-graphql-schema",
       "gql-to-ts": "npx projen gql-to-ts",
-      "lighthouse": "lhci autorun",
       "lint": "npx projen lint",
       "package": "npx projen package",
       "post-compile": "npx projen post-compile",

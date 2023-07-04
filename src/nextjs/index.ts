@@ -125,7 +125,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Github workflow
-    PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
+    PullRequestTest.addToProject(this, options)
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
@@ -152,7 +152,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Set up Lighthouse audit
-    const isLighthouseEnabled = options.isLighthouseEnabled ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? false
 
     if (isLighthouseEnabled) {
       this.addDevDeps('@lhci/cli')
