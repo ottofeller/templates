@@ -1,0 +1,26 @@
+import {qase} from 'playwright-qase-reporter/dist/playwright'
+import {test, expect} from '/common'
+import { User } from 'common/enums/user'
+import {errors} from '/data'
+
+test.describe('Authorization & Authentication', () => {
+
+  test.beforeEach(async ({signInPage}) => {
+    await signInPage.open()
+  })
+
+  test(qase('1', 'Sign in with valid credentials'), async ({signInPage, productsPage}) => {
+    await signInPage.input.username.fill(User.Standard)
+    await signInPage.input.password.fill(process.env.PASSWORD!)
+    await signInPage.button.login.click()
+    await expect(productsPage.products).toBeVisible()
+  })
+
+  test(qase('2', 'Sign in with locked user credentials'), async ({signInPage}) => {
+    await signInPage.input.username.fill(User.Locked)
+    await signInPage.input.password.fill(process.env.PASSWORD!)
+    await signInPage.button.login.click()
+    await expect(signInPage.message.error).toBeVisible()
+    await expect(signInPage.message.error).toHaveText(errors.lockedUser)
+  })
+})

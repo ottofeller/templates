@@ -45,7 +45,7 @@ export interface OttofellerNextjsProjectOptions
    *
    * @default true
    */
-  readonly lighthouse?: boolean
+  readonly isLighthouseEnabled?: boolean
 }
 
 /**
@@ -152,9 +152,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     }
 
     // ANCHOR Set up Lighthouse audit
-    const lighthouse = options.lighthouse ?? true
+    const isLighthouseEnabled = options.isLighthouseEnabled ?? false
 
-    if (lighthouse) {
+    if (isLighthouseEnabled) {
       this.addDevDeps('@lhci/cli')
       this.addScripts({lighthouse: 'lhci autorun'})
       new SampleFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})

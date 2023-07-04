@@ -1,12 +1,13 @@
 import {Component, github, javascript} from 'projen'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
-import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
-import type {WithDefaultWorkflow} from './with-default-workflow'
+import {NodeJobOptions} from '../../common/github/jobs'
+import type {WithDefaultWorkflow} from '../../common/github/with-default-workflow'
+import {playwrightJob} from './playwright-job'
 
 /**
  * Options for PullRequestLint
  */
-export interface PullRequestTestOptions
+export interface PlaywrightWorkflowTestOptions
   extends Partial<Pick<javascript.NodeProject, 'runScriptCommand'>>,
     Partial<Pick<javascript.NodePackage, 'installCommand'>>,
     Pick<NodeProjectOptions, 'workflowNodeVersion'> {
@@ -18,34 +19,22 @@ export interface PullRequestTestOptions
 
   /**
    * The workflow name
-   * @default 'test'
+   * @default 'e2e-tests'
    */
   readonly name?: string
 
   /**
    * Relative output directory of the project.
+   * @default ['e2e']
    */
   readonly outdir?: string
-
-  /**
-   * A list of branches on pushes to which the workflow will run.
-   * @default ['main']
-   */
-  readonly triggerOnPushToBranches?: Array<string>
-
-  /**
-   * Setup Lighthouse audit script & GitHub job.
-   *
-   * @default true
-   */
-  readonly isLighthouseEnabled?: boolean
 }
 
 /**
  * Configure a testing workflow with basic checks to run on GitHub pull requests.
  */
-export class PullRequestTest extends Component {
-  constructor(githubInstance: github.GitHub, options: PullRequestTestOptions = {}) {
+export class PlaywrightWorkflowTest extends Component {
+  constructor(githubInstance: github.GitHub, options: PlaywrightWorkflowTestOptions = {}) {
     super(githubInstance.project)
     const {project} = githubInstance
 
@@ -53,16 +42,14 @@ export class PullRequestTest extends Component {
       throw new Error('PullRequestTest works only with instances of NodeProject.')
     }
 
-    const workflowName = options.name ?? 'test'
-    const workingDirectory = options.outdir
-    const paths = workingDirectory ? [`${workingDirectory}/**`] : undefined
+    const workflowName = options.name ?? 'e2e-tests'
+    const workingDirectory = options.outdir ?? 'e2e'
     const workflow = githubInstance.addWorkflow(workflowName)
-    const branches = options.triggerOnPushToBranches ?? ['main']
     const nodeVersion = options.workflowNodeVersion ?? project.package.minNodeVersion
 
     workflow.on({
-      pullRequest: {paths, types: ['opened', 'synchronize']},
-      push: {paths, branches},
+      workflowDispatch: {},
+      workflowRun: {workflows: ['Deploy Staging'], types: ['completed']},
     })
 
     const commonJobProps: NodeJobOptions = {
@@ -73,15 +60,7 @@ export class PullRequestTest extends Component {
       nodeVersion,
     }
 
-    workflow.addJobs({
-      lint: runScriptJob({command: 'lint', ...commonJobProps}),
-      'unit-tests': runScriptJob({command: 'test', ...commonJobProps}),
-      typecheck: runScriptJob({command: 'typecheck', ...commonJobProps}),
-    })
-
-    if (options.isLighthouseEnabled) {
-      workflow.addJob('lighthouse', lighthouseJob(commonJobProps))
-    }
+    workflow.addJobs({playwright: playwrightJob(commonJobProps)})
   }
 
   /**
@@ -93,9 +72,8 @@ export class PullRequestTest extends Component {
    * NOTE: Use this method if the described conditional logic is needed.
    * Otherwise just use the constructor.
    */
-  static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
+  static addToProject(project: javascript.NodeProject, options: PlaywrightWorkflowTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
-    const isLighthouseEnabled = options.isLighthouseEnabled ?? false
     const {runsOn, outdir, workflowNodeVersion} = options
 
     if (!hasDefaultGithubWorkflows) {
@@ -103,13 +81,12 @@ export class PullRequestTest extends Component {
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {isLighthouseEnabled, runsOn, workflowNodeVersion})
+      new PlaywrightWorkflowTest(project.github, {runsOn, workflowNodeVersion})
       return
     }
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
-      new PullRequestTest(project.parent.github, {
-        isLighthouseEnabled,
+      new PlaywrightWorkflowTest(project.parent.github, {
         name: `test-${options.name}`,
         outdir,
         runsOn,

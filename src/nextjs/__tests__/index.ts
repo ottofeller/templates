@@ -158,7 +158,7 @@ describe('NextJS template', () => {
       expect(snapshot['package.json'].scripts).toHaveProperty('test')
       expect(snapshot['.projen/tasks.json'].tasks.test.steps).toHaveLength(1)
       expect(snapshot['.projen/tasks.json'].tasks.test.steps[0].exec).toEqual('jest --no-cache --all')
-      expect(snapshot['package.json'].scripts).toHaveProperty('test:watch')
+      expect(snapshot['package.json'].scripts).toHaveProperty('test-unit:watch')
       expect(snapshot['jest.config.defaults.js']).toBeDefined()
       expect(snapshot['jest.config.js']).toBeDefined()
     })
