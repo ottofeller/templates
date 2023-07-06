@@ -2,6 +2,7 @@ import type {Linter} from 'eslint'
 import {JsonFile} from 'projen'
 import {NodeProject} from 'projen/lib/javascript'
 import {deepMerge} from 'projen/lib/util'
+import {cSpellConfig} from './configs/cspell'
 import {eslintConfigFormatting} from './configs/eslint-config-formatting'
 import {eslintConfigQuality} from './configs/eslint-config-quality'
 import {prettierConfig} from './configs/prettier'
@@ -16,6 +17,8 @@ type AddLintersProps = {
 }
 
 export const linterDependencies = [
+  // TODO: Get rid of the versions to let users run updates on their own.
+  '@cspell/eslint-plugin',
   '@ottofeller/eslint-plugin-ottofeller@0.1.4',
   '@typescript-eslint/eslint-plugin@5.58.0',
   '@typescript-eslint/parser@5.58.0',
@@ -82,4 +85,5 @@ export const addLinters = (props: AddLintersProps): void => {
 
   const finalConfig = deepMerge([{}, ...allConfigs, mergedArrayProperties])
   new JsonFile(project, '.eslintrc.json', {obj: finalConfig, marker: false})
+  new JsonFile(project, 'cspell.json', {obj: cSpellConfig})
 }

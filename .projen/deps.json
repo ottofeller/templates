@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@cspell/eslint-plugin",
+      "type": "build"
+    },
+    {
       "name": "@ottofeller/eslint-plugin-ottofeller",
       "version": "0.1.4",
       "type": "build"

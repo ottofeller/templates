@@ -179,7 +179,8 @@
     ]
   },
   "extends": [
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:@cspell/recommended"
   ],
   "globals": {
     "document": "readonly",
@@ -202,7 +203,8 @@
     "import",
     "react-hooks",
     "react",
-    "@ottofeller/ottofeller"
+    "@ottofeller/ottofeller",
+    "@cspell"
   ],
   "settings": {
     "react": {

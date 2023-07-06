@@ -1,6 +1,6 @@
 import {qase} from 'playwright-qase-reporter/dist/playwright'
 import {test, expect} from '/common'
-import { User } from 'common/enums/user'
+import {User} from 'common/enums/user'
 import {errors} from '/data'
 
 test.describe('Authorization & Authentication', () => {

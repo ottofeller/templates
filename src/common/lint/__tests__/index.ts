@@ -15,7 +15,7 @@ describe('addLinters function', () => {
 
     linterDependencies.forEach((dep) => {
       const versionSplitterIndex = dep.lastIndexOf('@')
-      const depName = dep.slice(0, versionSplitterIndex)
+      const depName = versionSplitterIndex === 0 ? dep : dep.slice(0, versionSplitterIndex)
       expect(devDependencies).toHaveProperty(depName)
     })
   })
@@ -65,7 +65,7 @@ describe('addLinters function', () => {
     expect(eslintrc).toBeDefined()
 
     const {extends: extendingConfigs, rules} = eslintrc
-    expect(extendingConfigs).toHaveLength(2)
+    expect(extendingConfigs).toHaveLength(3)
     expect(extendingConfigs).toContainEqual(extraConfig.extends)
     expect(rules).toHaveProperty('testRule')
   })
@@ -85,6 +85,13 @@ describe('addLinters function', () => {
     addLinters({project: subproject, lintPaths: [], extraEslintConfigs: [extraConfig]})
     const snapshot = synthSnapshot(subproject)
     expect(snapshot['.eslintrc.json']).toEqual(extraConfig)
+  })
+
+  test('creates cspell config', () => {
+    const project = new TestProject()
+    addLinters({project, lintPaths: []})
+    const snapshot = synthSnapshot(project)
+    expect(snapshot['cspell.json']).toBeDefined()
   })
 })
 
