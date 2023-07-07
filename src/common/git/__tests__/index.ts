@@ -32,7 +32,6 @@ describe('addHusky function', () => {
   const destinationFolder = '.husky'
   const shellScriptName = 'commit-msg'
   const nodeScriptFileName = 'check-commit-msg.js'
-
   const shellScriptSourcePath = path.join(sourceFolder, shellScriptName)
   const shellScriptDestinationPath = path.join(destinationFolder, shellScriptName)
   const shellScriptContents = fs.readFileSync(shellScriptSourcePath, {encoding: 'utf-8'})

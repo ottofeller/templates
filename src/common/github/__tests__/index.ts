@@ -53,7 +53,6 @@ describe('GitHub utils', () => {
       new PullRequestTest(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
-
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
       expect(jobs).toHaveLength(3)
       expect(jobs).toContain('npm run typecheck')
@@ -66,7 +65,6 @@ describe('GitHub utils', () => {
       new PullRequestTest(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
-
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
       expect(jobs).toHaveLength(3)
       expect(jobs).toContain('pnpm run typecheck')
@@ -216,7 +214,6 @@ describe('GitHub utils', () => {
       new ReleaseWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[releaseWorkflowPath])
-
       const createJob = workflow.jobs.create
       expect(createJob).toBeDefined()
       expect(createJob.steps[0].uses).toEqual('ottofeller/github-actions/create-release@main')
