@@ -751,6 +751,24 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "install": Object {
+        "description": "Install project dependencies and update lockfile (non-frozen)",
+        "name": "install",
+        "steps": Array [
+          Object {
+            "exec": "npm install",
+          },
+        ],
+      },
+      "install:ci": Object {
+        "description": "Install project dependencies using frozen lockfile",
+        "name": "install:ci",
+        "steps": Array [
+          Object {
+            "exec": "npm ci",
+          },
+        ],
+      },
       "lint": Object {
         "name": "lint",
         "steps": Array [
