@@ -23,6 +23,7 @@ export const addVsCode = (project: NodeProject) => {
   })
 
   extensions.addRecommendations(
+    /* eslint-disable @cspell/spellchecker -- these words are used once, so no need to add them to the dictionary */
     'amazonwebservices.aws-toolkit-vscode',
     'bradlc.vscode-tailwindcss',
     'dbaeumer.vscode-eslint',
@@ -37,11 +38,14 @@ export const addVsCode = (project: NodeProject) => {
     'orta.vscode-jest',
     'Quidgest.vscode-velocity',
     'streetsidesoftware.code-spell-checker',
+    /* eslint-enable @cspell/spellchecker */
   )
 
   extensions.addUnwantedRecommendations(
+    /* eslint-disable @cspell/spellchecker -- these words are used once, so no need to add them to the dictionary */
     'DavidAnson.vscode-markdownlint',
     'GoogleCloudTools.cloudcode',
     'ms-kubernetes-tools.vscode-kubernetes-tools',
+    /* eslint-enable @cspell/spellchecker */
   )
 }

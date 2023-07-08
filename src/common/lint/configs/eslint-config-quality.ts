@@ -6,7 +6,7 @@ import type {Linter} from 'eslint'
  */
 export const eslintConfigQuality: Linter.Config = {
   env: {browser: true, jest: true, node: true},
-  extends: ['plugin:import/typescript'],
+  extends: ['plugin:import/typescript', 'plugin:@cspell/recommended'],
   ignorePatterns: '!.projenrc.ts',
   globals: {document: 'readonly', navigator: 'readonly', window: 'readonly'},
 
@@ -23,7 +23,15 @@ export const eslintConfigQuality: Linter.Config = {
 
   parser: '@typescript-eslint/parser',
   parserOptions: {ecmaFeatures: {jsx: true}, ecmaVersion: 2020, sourceType: 'module'},
-  plugins: ['@typescript-eslint', 'eslint-comments', 'import', 'react-hooks', 'react', '@ottofeller/ottofeller'],
+  plugins: [
+    '@typescript-eslint',
+    'eslint-comments',
+    'import',
+    'react-hooks',
+    'react',
+    '@ottofeller/ottofeller',
+    '@cspell',
+  ],
   settings: {react: {pragma: 'React', version: '17'}},
 
   // Static analysis and code quality

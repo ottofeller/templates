@@ -44,6 +44,7 @@ junit.xml
 tsconfig.json
 !/.prettierrc.json
 !/.eslintrc.json
+!/cspell.json
 !/.husky/commit-msg
 !/.husky/check-commit-msg.js
 !/.github/workflows/test.yml

@@ -32,6 +32,7 @@
     "organization": false
   },
   "devDependencies": {
+    "@cspell/eslint-plugin": "^6.31.1",
     "@ottofeller/eslint-plugin-ottofeller": "0.1.4",
     "@types/eslint": "8.40.0",
     "@types/jest": "^27",
