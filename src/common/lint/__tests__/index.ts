@@ -44,7 +44,6 @@ describe('addLinters function', () => {
     const project = new TestProject()
     addLinters({project, lintPaths: []})
     const snapshot = synthSnapshot(project)
-
     const eslintrc = snapshot['.eslintrc.json']
     expect(eslintrc).toBeDefined()
     const {rules} = eslintrc

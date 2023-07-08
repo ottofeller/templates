@@ -264,6 +264,17 @@ node_modules
           "next": "*",
           "prev": "multiline-let",
         },
+        Object {
+          "blankLine": "never",
+          "next": Array [
+            "singleline-const",
+            "singleline-let",
+          ],
+          "prev": Array [
+            "singleline-const",
+            "singleline-let",
+          ],
+        },
       ],
       "react-hooks/exhaustive-deps": Array [
         "error",

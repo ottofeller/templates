@@ -60,6 +60,17 @@
         "blankLine": "always",
         "prev": "multiline-let",
         "next": "*"
+      },
+      {
+        "blankLine": "never",
+        "prev": [
+          "singleline-const",
+          "singleline-let"
+        ],
+        "next": [
+          "singleline-const",
+          "singleline-let"
+        ]
       }
     ],
     "@typescript-eslint/ban-ts-comment": [

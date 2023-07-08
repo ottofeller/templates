@@ -16,7 +16,6 @@ export function sampleCode(
   }
 
   const isUiConfigEnabled = options.isUiConfigEnabled ?? true
-
   const homeComponentFilePath = 'src/Home/index.tsx'
   new projen.SampleFile(project, homeComponentFilePath, {sourcePath: path.join(assetsDir, homeComponentFilePath)})
 

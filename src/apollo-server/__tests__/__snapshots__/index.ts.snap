@@ -275,6 +275,17 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
           "next": "*",
           "prev": "multiline-let",
         },
+        Object {
+          "blankLine": "never",
+          "next": Array [
+            "singleline-const",
+            "singleline-let",
+          ],
+          "prev": Array [
+            "singleline-const",
+            "singleline-let",
+          ],
+        },
       ],
       "react-hooks/exhaustive-deps": Array [
         "error",

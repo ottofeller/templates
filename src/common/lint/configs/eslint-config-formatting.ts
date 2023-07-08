@@ -23,6 +23,7 @@ export const eslintConfigFormatting: Linter.Config = {
       {blankLine: 'always', prev: 'multiline-expression', next: '*'},
       {blankLine: 'always', prev: '*', next: 'multiline-let'},
       {blankLine: 'always', prev: 'multiline-let', next: '*'},
+      {blankLine: 'never', prev: ['singleline-const', 'singleline-let'], next: ['singleline-const', 'singleline-let']},
     ],
   },
 }
