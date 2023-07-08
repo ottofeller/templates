@@ -62,8 +62,6 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
     // ANCHOR Setup tasks
     this.removeTask('build')
     this.removeTask('compile')
-    this.removeTask('install')
-    this.removeTask('install:ci')
     this.removeTask('package')
     this.removeTask('post-compile')
     this.removeTask('pre-compile')
