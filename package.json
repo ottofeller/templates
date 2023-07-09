@@ -54,20 +54,21 @@
     "jsii": "1.x",
     "jsii-diff": "^1.61.0",
     "jsii-pacmak": "^1.61.0",
+    "jsii-rosetta": "1.x",
     "prettier": "2.8.7",
     "prettier-plugin-organize-imports": "3.2.2",
-    "projen": "^0.71.82",
+    "projen": "^0.71.128",
     "ts-jest": "^27",
     "ts-node": "10.8.1",
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "projen": "^0.71.82"
+    "projen": "^0.71.128"
   },
   "dependencies": {
     "eslint": "8.42.0",
     "prettier": "2.8.0",
-    "projen": "^0.71.82"
+    "projen": "^0.71.128"
   },
   "bundledDependencies": [
     "eslint",
