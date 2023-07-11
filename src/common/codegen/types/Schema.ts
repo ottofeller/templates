@@ -18,6 +18,10 @@ export type UrlSchemaOptions = {
 }
 
 export interface UrlSchemaWithOptions {
+  /**
+   * NOTE: updated jsii does not allow index signatures
+   * @jsii ignore
+   */
   [url: string]: UrlSchemaOptions
 }
 

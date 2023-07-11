@@ -15,11 +15,14 @@ const project = new projen.cdk.JsiiProject({
   packageName: '@ottofeller/templates',
   packageManager: projen.javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
+
   deps: ['projen'],
   bundledDeps: ['prettier', 'eslint'],
   peerDeps: ['projen'],
-
   devDeps: ['@types/eslint', '@types/jscodeshift'],
+
+  jsiiVersion: '5.1.x',
+  typescriptVersion: '5.1.x',
 
   github: true,
   buildWorkflow: false,
@@ -32,9 +35,18 @@ const project = new projen.cdk.JsiiProject({
   projenrcTs: true,
   sampleCode: false,
   docgen: false,
-  jest: true,
   eslint: false,
+  jest: true,
+  jestOptions: {
+    jestVersion: '29',
+    jestConfig: {
+      transform: {'^.+\\.tsx?$': new projen.javascript.Transform('ts-jest', {tsconfig: 'tsconfig.dev.json'})},
+    },
+  },
 })
+
+// FIXME It is a workaround needed until this issue resolves: https://github.com/projen/projen/issues/2361
+project.package.file.addDeletionOverride('jest.globals')
 
 // ANCHOR Pull project version from package.json (in order to make possible the version update with npm).
 // Allow an override with an environment variable

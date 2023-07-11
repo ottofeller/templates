@@ -1,8 +1,8 @@
 import * as fs from 'fs'
 import {format} from 'prettier'
 import {Project, TextFile, TextFileOptions} from 'projen'
-import {prettierConfig} from '../lint/configs/prettier'
 import {MaybePlural} from '../MaybePlural'
+import {prettierConfig} from '../lint/configs/prettier'
 
 /**
  * Options for template string replacement within an `AssetFile`.

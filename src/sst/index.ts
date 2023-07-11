@@ -4,9 +4,9 @@ import {SampleFile} from 'projen'
 import {DependabotScheduleInterval} from 'projen/lib/github'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {addHusky, extendGitignore, WithGitHooks} from '../common/git'
+import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
-import {addLinters, WithCustomLintPaths} from '../common/lint'
+import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerSSTProjectOptions
