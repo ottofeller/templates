@@ -1,6 +1,6 @@
 import {Component, github, javascript} from 'projen'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
-import {lighthouseJob, NodeJobOptions, runScriptJob} from './jobs'
+import {NodeJobOptions, lighthouseJob, runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
 
 /**

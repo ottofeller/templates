@@ -4,7 +4,7 @@ import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
-import {addLinters, WithCustomLintPaths} from '../common/lint'
+import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {PlaywrightWorkflowTest} from './github'
 import {sampleCode} from './sample-code'
 
