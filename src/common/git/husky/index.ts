@@ -1,2 +1,3 @@
 export * from './add-husky'
-export * from './with-git-hooks'
+export * from './check-cargo-options'
+export * from './husky-rule'

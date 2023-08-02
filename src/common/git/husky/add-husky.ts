@@ -1,7 +1,7 @@
 import type {NodeProject} from 'projen/lib/javascript'
+import {WithGitHooks} from '../with-git-hooks'
 import {checkCargo} from './check-cargo'
 import {commitMessage} from './commit-message'
-import {WithGitHooks} from './with-git-hooks'
 
 export const addHusky = (project: NodeProject, options: WithGitHooks): void => {
   project.addDevDeps('husky')
