@@ -1,8 +1,8 @@
 import * as path from 'path'
 import type {NodeProject} from 'projen/lib/javascript'
 import {AssetFile} from '../../files/AssetFile'
+import type {CheckCargoOptions} from './check-cargo-options'
 import {destinationFolder, sourceFolder, templateFile, templateString} from './template-path'
-import type {CheckCargoOptions} from './with-git-hooks'
 
 export const checkCargo = (project: NodeProject, options: CheckCargoOptions) => {
   const commands: Array<string> = ['cargo check']
