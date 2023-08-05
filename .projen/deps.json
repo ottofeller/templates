@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@graphql-codegen/cli",
+      "type": "build"
+    },
+    {
       "name": "@ottofeller/eslint-plugin-ottofeller",
       "type": "build"
     },

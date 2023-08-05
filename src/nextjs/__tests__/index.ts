@@ -74,7 +74,7 @@ describe('NextJS template', () => {
       expect(snapshot['package.json'].dependencies).toHaveProperty('graphql')
       expect(snapshot['package.json'].scripts).toHaveProperty('generate-graphql-schema')
       expect(snapshot['package.json'].scripts).toHaveProperty('gql-to-ts')
-      expect(snapshot['codegen.yml']).toBeDefined()
+      expect(snapshot['codegen.ts']).toBeDefined()
     })
 
     test('disabled with an option', () => {
@@ -84,7 +84,7 @@ describe('NextJS template', () => {
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('graphql')
       expect(snapshot['package.json'].scripts).not.toHaveProperty('generate-graphql-schema')
       expect(snapshot['package.json'].scripts).not.toHaveProperty('gql-to-ts')
-      expect(snapshot['codegen.yml']).not.toBeDefined()
+      expect(snapshot['codegen.ts']).not.toBeDefined()
     })
   })
 

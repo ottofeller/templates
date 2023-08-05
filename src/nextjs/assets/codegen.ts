@@ -1,6 +1,6 @@
-import type {CodegenConfig} from '../common/codegen/types'
+import type {CodegenConfig} from '@graphql-codegen/cli'
 
-export const codegenConfig: CodegenConfig = {
+const codegenConfig: CodegenConfig = {
   overwrite: true,
   schema: './schema.json',
 
@@ -28,3 +28,5 @@ export const codegenConfig: CodegenConfig = {
     './schema.json': {plugins: ['introspection']},
   },
 }
+
+export default codegenConfig

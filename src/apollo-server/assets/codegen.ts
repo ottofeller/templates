@@ -1,6 +1,6 @@
-import type {CodegenConfig} from '../common/codegen/types'
+import type {CodegenConfig} from '@graphql-codegen/cli'
 
-export const codegenConfig: CodegenConfig = {
+const codegenConfig: CodegenConfig = {
   schema: {'${APP_URL}': {headers: {'x-access-token': '${ACCESS_TOKEN}'}}},
 
   // The following paths and corresponding output settings are defaults for the apollo-server project.
@@ -23,3 +23,5 @@ export const codegenConfig: CodegenConfig = {
     },
   },
 }
+
+export default codegenConfig
