@@ -85,5 +85,5 @@ export const addLinters = (props: AddLintersProps): void => {
 
   const finalConfig = deepMerge([{}, ...allConfigs, mergedArrayProperties])
   new JsonFile(project, '.eslintrc.json', {obj: finalConfig, marker: false})
-  new JsonFile(project, 'cspell.json', {obj: cSpellConfig})
+  new JsonFile(project, 'cspell.json', {obj: cSpellConfig, readonly: false, marker: false})
 }
