@@ -19,18 +19,18 @@ type AddLintersProps = {
 export const linterDependencies = [
   // TODO: Get rid of the versions to let users run updates on their own.
   '@cspell/eslint-plugin',
-  '@ottofeller/eslint-plugin-ottofeller@0.1.4',
-  '@typescript-eslint/eslint-plugin@5.58.0',
-  '@typescript-eslint/parser@5.58.0',
-  '@typescript-eslint/typescript-estree@5.58.0',
-  'eslint-plugin-eslint-comments@3.2.0',
-  'eslint-plugin-import@2.27.5',
-  'eslint-plugin-react@7.32.2',
-  'eslint-plugin-react-hooks@4.6.0',
-  'eslint-plugin-tailwindcss@3.12.1',
+  '@ottofeller/eslint-plugin-ottofeller',
+  '@typescript-eslint/eslint-plugin@5',
+  '@typescript-eslint/parser@5',
+  '@typescript-eslint/typescript-estree@5',
+  'eslint-plugin-eslint-comments',
+  'eslint-plugin-import',
+  'eslint-plugin-react',
+  'eslint-plugin-react-hooks',
+  'eslint-plugin-tailwindcss@>=3.12',
   'eslint@8',
-  'prettier@2.8.7',
-  'prettier-plugin-organize-imports@3.2.2',
+  'prettier',
+  'prettier-plugin-organize-imports',
 ]
 
 export const addLinters = (props: AddLintersProps): void => {

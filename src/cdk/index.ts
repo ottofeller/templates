@@ -59,7 +59,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     this.initialReleaseVersion = options.initialReleaseVersion || this.initialReleaseVersion
 
     // ANCHOR Install dependencies
-    this.addDeps('cdk-nag@2.15.45')
+    this.addDeps('cdk-nag@2')
 
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {
