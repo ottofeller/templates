@@ -915,7 +915,7 @@ tsconfig.tsbuildinfo
             "exec": "prettier --write .projenrc.ts app src",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx .projenrc.ts app src --fix",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src --fix",
           },
         ],
       },
@@ -960,7 +960,7 @@ tsconfig.tsbuildinfo
             "exec": "prettier --check .projenrc.ts app src",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx .projenrc.ts app src",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src",
           },
         ],
       },

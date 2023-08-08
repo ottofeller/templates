@@ -102,7 +102,7 @@
           "exec": "prettier --write .projenrc.ts src"
         },
         {
-          "exec": "eslint --ext .js,.jsx,.ts,.tsx .projenrc.ts src --fix"
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src --fix"
         }
       ]
     },
@@ -131,7 +131,7 @@
           "exec": "prettier --check .projenrc.ts src"
         },
         {
-          "exec": "eslint --ext .js,.jsx,.ts,.tsx .projenrc.ts src"
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src"
         }
       ]
     },

@@ -40,10 +40,12 @@ export const addLinters = (props: AddLintersProps): void => {
   project.addDevDeps(...linterDependencies)
 
   // ANCHOR Scripts
-  const projenrcRegex = /.projenrc.(js|mjs|ts|json)/
+  const projenrcRegex = /.projenrc.(?:js|mjs|ts|json)/
   const filterPredicate = project.parent ? (path: string) => !projenrcRegex.test(path) : Boolean
   const filteredPaths = lintPaths.filter(filterPredicate).join(' ')
-  const eslintRunCommand = `eslint --ext .js,.jsx,.ts,.tsx ${filteredPaths}`
+  const projenrcFile = filteredPaths.match(projenrcRegex)?.[0]
+  const includeOption = projenrcFile ? `--ignore-pattern "!${projenrcFile}" ` : ''
+  const eslintRunCommand = `eslint --ext .js,.jsx,.ts,.tsx ${includeOption}${filteredPaths}`
 
   project.addTask('typecheck', {exec: 'tsc --noEmit --project tsconfig.dev.json'})
 
