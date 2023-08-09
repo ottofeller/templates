@@ -24,6 +24,5 @@ export const checkCargo = (project: NodeProject, options: CheckCargoOptions) => 
     sourcePath: path.join(sourceFolder, templateFile),
     template: {templateString, replacement: commands.join('\n')},
     executable: true,
-    readonly: false,
   })
 }

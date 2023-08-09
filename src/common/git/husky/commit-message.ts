@@ -11,12 +11,10 @@ export const commitMessage = (project: NodeProject) => {
     sourcePath: path.join(sourceFolder, templateFile),
     template: {templateString, replacement: 'node .husky/check-commit-msg.js "$(head -1 $@)"'},
     executable: true,
-    readonly: false,
   })
 
   new AssetFile(project, path.join(destinationFolder, nodeScriptFilename), {
     sourcePath: path.join(sourceFolder, nodeScriptFilename),
     executable: true,
-    readonly: false,
   })
 }
