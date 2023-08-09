@@ -15,7 +15,12 @@ describe('addLinters function', () => {
 
     linterDependencies.forEach((dep) => {
       const versionSplitterIndex = dep.lastIndexOf('@')
-      const depName = versionSplitterIndex === 0 ? dep : dep.slice(0, versionSplitterIndex)
+
+      const depName =
+        versionSplitterIndex < 1
+          ? dep // Leave as is the names without @ and those starting with @.
+          : dep.slice(0, versionSplitterIndex)
+
       expect(devDependencies).toHaveProperty(depName)
     })
   })
