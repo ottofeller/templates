@@ -328,7 +328,6 @@ exports[`CDK template sets defaults 1`] = `
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
 /cdk.json linguist-generated
-/cspell.json linguist-generated
 /LICENSE linguist-generated
 /package-lock.json linguist-generated
 /package.json linguist-generated
@@ -502,7 +501,6 @@ jspm_packages/
 .parcel-cache/
 !/.prettierrc.json
 !/.eslintrc.json
-!/cspell.json
 !/.github/workflows/release.yml
 !/.github/workflows/test.yml
 !/.vscode/extensions.json

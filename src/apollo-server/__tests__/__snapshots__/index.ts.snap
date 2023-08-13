@@ -346,7 +346,6 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
 /.vscode/settings.json linguist-generated
 /apollo.config.cjs linguist-generated
 /codegen.yml linguist-generated
-/cspell.json linguist-generated
 /Dockerfile linguist-generated
 /esbuild.config.js linguist-generated
 /LICENSE linguist-generated
@@ -494,7 +493,6 @@ junit.xml
 !/nodemon.json
 !/.prettierrc.json
 !/.eslintrc.json
-!/cspell.json
 !/.github/workflows/test.yml
 !/codegen.yml
 !/.dockerignore

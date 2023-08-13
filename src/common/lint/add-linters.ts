@@ -1,5 +1,5 @@
 import type {Linter} from 'eslint'
-import {JsonFile} from 'projen'
+import {JsonFile, SampleFile} from 'projen'
 import {NodeProject} from 'projen/lib/javascript'
 import {deepMerge} from 'projen/lib/util'
 import {cSpellConfig} from './configs/cspell'
@@ -87,5 +87,5 @@ export const addLinters = (props: AddLintersProps): void => {
 
   const finalConfig = deepMerge([{}, ...allConfigs, mergedArrayProperties])
   new JsonFile(project, '.eslintrc.json', {obj: finalConfig, marker: false})
-  new JsonFile(project, 'cspell.json', {obj: cSpellConfig, readonly: false, marker: false})
+  new SampleFile(project, 'cspell.json', {contents: JSON.stringify(cSpellConfig, null, 2)})
 }
