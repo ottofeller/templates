@@ -134,6 +134,24 @@ See the [Codegen config](#codegen-config) subsection for the [NextJS](#nextjs) t
 npx projen new --from @ottofeller/templates ottofeller-cdk
 ```
 
+### SST
+An [SST](https://sst.dev) based template for easy deployment of modern full-stack applications on AWS.
+
+```sh
+npx projen new --from @ottofeller/templates ottofeller-sst
+```
+
+The initial release version can be set with `initialReleaseVersion` option:
+```sh
+npx projen new --from @ottofeller/templates ottofeller-sst --initial-release-version "1.0.0"
+```
+
+The project has the following common options (see [Other custom options](#other-custom-options) section for details):
+- `hasDefaultGithubWorkflows`;
+- `lintPaths`;
+- `hasGitHooks`;
+- `huskyRules`.
+
 ### Other custom options
 There are a few other options specific to all the templates within this project:
 - `hasVscode` - include recommended VSCode settings, defaults to `true`;
