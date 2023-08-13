@@ -70,10 +70,6 @@ addLinters({
   extraEslintConfigs: [{rules: {'import/no-relative-parent-imports': ['off']}}],
 })
 
-project
-  .tryFindObjectFile('cspell.json')!
-  .addToArray('words', 'jscodeshift', 'JSII', 'lhci', 'lighthouseci', 'lighthouserc', 'mergify', 'nmpignore', 'pjid')
-
 // Solves the typescript > 4 problem
 // https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
 project.addDevDeps('@types/prettier@2.6.0')

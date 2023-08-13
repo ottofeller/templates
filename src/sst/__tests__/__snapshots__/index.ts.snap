@@ -327,7 +327,6 @@ exports[`SST template sets defaults 1`] = `
 /.projen/tasks.json linguist-generated
 /.vscode/extensions.json linguist-generated
 /.vscode/settings.json linguist-generated
-/cspell.json linguist-generated
 /LICENSE linguist-generated
 /package-lock.json linguist-generated
 /package.json linguist-generated
@@ -496,7 +495,6 @@ jspm_packages/
 /dist/
 !/.prettierrc.json
 !/.eslintrc.json
-!/cspell.json
 !/.github/workflows/release.yml
 !/.github/workflows/test.yml
 !/.vscode/extensions.json
