@@ -155,9 +155,6 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
           "assertionStyle": "never",
         },
       ],
-      "@typescript-eslint/no-duplicate-imports": [
-        "error",
-      ],
       "@typescript-eslint/no-shadow": [
         "error",
       ],
@@ -562,17 +559,17 @@ tsconfig.tsbuildinfo
       {
         "name": "@typescript-eslint/eslint-plugin",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "@typescript-eslint/parser",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "@typescript-eslint/typescript-estree",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "eslint-plugin-eslint-comments",
@@ -1277,9 +1274,9 @@ buildSync({
       "@types/jest": "*",
       "@types/node": "^16",
       "@types/source-map-support": "*",
-      "@typescript-eslint/eslint-plugin": "5",
-      "@typescript-eslint/parser": "5",
-      "@typescript-eslint/typescript-estree": "5",
+      "@typescript-eslint/eslint-plugin": "6",
+      "@typescript-eslint/parser": "6",
+      "@typescript-eslint/typescript-estree": "6",
       "eslint": "8",
       "eslint-plugin-eslint-comments": "*",
       "eslint-plugin-import": "*",

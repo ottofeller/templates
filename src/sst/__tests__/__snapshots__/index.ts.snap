@@ -139,9 +139,6 @@ exports[`SST template sets defaults 1`] = `
           "assertionStyle": "never",
         },
       ],
-      "@typescript-eslint/no-duplicate-imports": [
-        "error",
-      ],
       "@typescript-eslint/no-shadow": [
         "error",
       ],
@@ -527,17 +524,17 @@ tsconfig.tsbuildinfo
       {
         "name": "@typescript-eslint/eslint-plugin",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "@typescript-eslint/parser",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "@typescript-eslint/typescript-estree",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "aws-cdk-lib",
@@ -1064,9 +1061,9 @@ tsconfig.tsbuildinfo
       "@cspell/eslint-plugin": "*",
       "@ottofeller/eslint-plugin-ottofeller": "*",
       "@types/node": "^16",
-      "@typescript-eslint/eslint-plugin": "5",
-      "@typescript-eslint/parser": "5",
-      "@typescript-eslint/typescript-estree": "5",
+      "@typescript-eslint/eslint-plugin": "6",
+      "@typescript-eslint/parser": "6",
+      "@typescript-eslint/typescript-estree": "6",
       "aws-cdk-lib": "*",
       "constructs": "*",
       "eslint": "8",

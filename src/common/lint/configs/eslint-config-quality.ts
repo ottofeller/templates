@@ -33,7 +33,6 @@ export const eslintConfigQuality: Linter.Config = {
       {'ts-expect-error': 'allow-with-description', 'ts-ignore': 'allow-with-description'},
     ],
     '@typescript-eslint/consistent-type-assertions': ['error', {assertionStyle: 'never'}],
-    '@typescript-eslint/no-duplicate-imports': ['error'],
     '@typescript-eslint/no-shadow': ['error'],
     '@typescript-eslint/no-unused-expressions': ['error'],
     '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
