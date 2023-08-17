@@ -4,13 +4,11 @@ import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithDocker} from '../common'
-import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {addVsCode} from '../common/vscode-settings'
-import {codegenConfig} from './codegen-config'
 import {sampleCode} from './sample-code'
 
 export interface OttofellerApolloServerProjectOptions
@@ -26,8 +24,6 @@ export interface OttofellerApolloServerProjectOptions
  * @pjid ottofeller-apollo-server
  */
 export class OttofellerApolloServerProject extends TypeScriptAppProject {
-  public codegenConfigYaml?: CodegenConfigYaml
-
   constructor(options: OttofellerApolloServerProjectOptions) {
     super({
       ...options,
@@ -135,7 +131,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
 
     // ANCHOR Codegen
-    this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
+    new AssetFile(this, 'codegen.ts', {sourcePath: path.join(assetsDir, 'codegen.ts'), readonly: false, marker: false})
 
     // ANCHOR Docker setup
     if (options.hasDocker ?? true) {

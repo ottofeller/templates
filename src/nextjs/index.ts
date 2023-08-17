@@ -5,13 +5,11 @@ import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
 import {WithDocker} from '../common'
-import {CodegenConfigYaml} from '../common/codegen'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {addVsCode} from '../common/vscode-settings'
-import {codegenConfig} from './codegen-config'
 import {eslintConfigTailwind} from './eslint-config-tailwind'
 import {setupJest} from './jest'
 import {sampleCode} from './sample-code'
@@ -54,7 +52,6 @@ export interface OttofellerNextjsProjectOptions
  * @pjid ottofeller-nextjs
  */
 export class OttofellerNextjsProject extends NextJsTypeScriptProject {
-  public codegenConfigYaml?: CodegenConfigYaml
   public postSynthFormattingPaths: Array<string>
 
   constructor(options: OttofellerNextjsProjectOptions) {
@@ -146,9 +143,14 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
       this.addDeps('@apollo/client', 'graphql')
 
       // ANCHOR Codegen
-      this.codegenConfigYaml = new CodegenConfigYaml(this, codegenConfig)
+      new AssetFile(this, 'codegen.ts', {
+        sourcePath: path.join(assetsDir, 'codegen.ts'),
+        readonly: false,
+        marker: false,
+      })
+
       this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
-      this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.yml'})
+      this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.ts'})
     }
 
     // ANCHOR Set up Lighthouse audit

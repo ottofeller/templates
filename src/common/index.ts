@@ -1,5 +1,4 @@
 export {MaybePlural} from './MaybePlural'
-export * from './codegen'
 export {WithDocker} from './docker/with-docker'
 export {AssetFile, AssetFileOptions, AssetFileTemplate} from './files/AssetFile'
 export {CheckCargoOptions, HuskyRule, WithGitHooks, addHusky, extendGitignore} from './git'

@@ -25,7 +25,7 @@ The common approach of installing packages by running `npm install <package-name
 - [node-package comments on dependency options](https://github.com/projen/projen/blob/main/src/javascript/node-package.ts#L46-L111) - these are available in an IDE.
 
 To install a new packages to the project:
-- Add a new item with the package name to either the `deps` or `devDeps` array in project options. Alternative way would be to use `project.addDeps('package-name')` or `project.addDevDeps('@graphql-codegen/add')`.
+- Add a new item with the package name to either the `deps` or `devDeps` array in project options. Alternative way would be to use `project.addDeps('package-name')` or `project.addDevDeps('dev-package-name')`.
 - Run `npx projen`. This will update the `package.json` and lock file as well.
 
 Note that there are two distinct approaches in controlling package version:
@@ -92,21 +92,9 @@ The template uses *tailwind* for CSS. There are two config files (similar to Nex
 - `tailwind.config.js` - editable config that by default only imports the `tailwind.config.defaults.js`; feel free to edit the file, add required options, or include only the needed part of the default config.
 
 #### Codegen config
-The template uses `@graphql-codegen` packages for GraphQL management. The main config is created with a custom class `CodegenConfigYaml`. The created file `codegen.yml` is not directly editable. In order to edit the config use `codegenConfig` property of the project. The class exposes methods to override restricted subset of config properties:
-```typescript
-// Set global `schema` property.
-project.codegenConfig?.overrideSchema('./schema.json')
-  // Set global `overwrite` property.
-  .overrideOverwrite(true)
-  // Set plugins for an output path within global `generates` property.
-  .overridePluginsForOutput('./generated/resolvers.ts', ['typescript', 'typescript-resolvers'])
-  // Delete plugins for an output path within global `generates` property.
-  .overridePluginsForOutput('./generated/index.ts')
-  // Set documents for an output path within global `generates` property.
-  .overrideDocumentsForOutput('./generated/index.ts', 'src/**/graphql/!(*.generated).ts')
-```
+The template uses `@graphql-codegen` packages for GraphQL management. The codegen config is copied from the assets folder (see the `codegen.ts` file). Feel free to edit the config.
 
-In order to exclude the GraphQL packages from the project use the `isGraphqlEnabled: false` option.
+In order to exclude the GraphQL packages from the project use the `isGraphqlEnabled: false` option. NOTE that the config file `codegen.ts` is editable and therefore not controlled by `projen` after creation. This means after GraphQL dependencies removal it remains in the project and should be deleted manually.
 
 #### Codemods
 ##### Add `src` reference to imports

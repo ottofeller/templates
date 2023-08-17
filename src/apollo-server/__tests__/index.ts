@@ -45,7 +45,7 @@ describe('Apollo server template', () => {
     expect(snapshot['package.json'].scripts).toHaveProperty('generate-graphql-schema')
     expect(snapshot['package.json'].scripts).toHaveProperty('gql-to-ts')
     expect(snapshot['apollo.config.cjs']).toBeDefined()
-    expect(snapshot['codegen.yml']).toBeDefined()
+    expect(snapshot['codegen.ts']).toBeDefined()
   })
 
   test('has prettier and eslint configs', () => {
