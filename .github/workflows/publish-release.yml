@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run lint
   typecheck:
     needs: set-commit-hash
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run typecheck
   test:
     needs: set-commit-hash
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run test
   publish:
     needs:

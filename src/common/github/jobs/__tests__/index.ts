@@ -25,7 +25,7 @@ describe('GitHub utils', () => {
 
       expect(jobObject).toStrictEqual({
         uses: 'ottofeller/github-actions/npm-run@main',
-        with: {'node-version': 16, command: `npm run ${command}`, directory: undefined},
+        with: {'node-version': 18, command: `npm run ${command}`, directory: undefined},
       })
     })
 
@@ -35,7 +35,7 @@ describe('GitHub utils', () => {
 
       expect(jobObject).toStrictEqual({
         uses: 'ottofeller/github-actions/npm-run@main',
-        with: {'node-version': 16, command: `npm run ${command}`, directory},
+        with: {'node-version': 18, command: `npm run ${command}`, directory},
       })
     })
   })
