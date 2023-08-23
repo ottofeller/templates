@@ -116,9 +116,8 @@ describe('GitHub utils', () => {
         workingDirectory,
       })
 
-      setupNodeSteps.forEach((step) => {
-        expect(step.workingDirectory).toEqual(workingDirectory)
-      })
+      const workingDirectories = setupNodeSteps.map((step) => step.workingDirectory)
+      expect(workingDirectories).toEqual([undefined, undefined, undefined, workingDirectory])
     })
 
     test('allows setting projectPackage to pnpm', () => {

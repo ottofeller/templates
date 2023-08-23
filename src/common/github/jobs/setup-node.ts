@@ -58,11 +58,10 @@ export const setupNode = ({
 
   // ANCHOR Basic setup: checkout and node
   const steps: Array<JobStep> = [
-    {uses: 'actions/checkout@v3', with: {'fetch-depth': 0, ref}, workingDirectory},
+    {uses: 'actions/checkout@v3', with: {'fetch-depth': 0, ref}},
     {
       uses: 'actions/setup-node@v3',
       with: {'node-version': nodeVersion, 'registry-url': registryUrl, scope},
-      workingDirectory,
     },
   ]
 
@@ -91,7 +90,6 @@ export const setupNode = ({
       name: 'Cache node_modules',
       uses: 'actions/cache@v3',
       with: {key: `\${{ hashFiles('${directory}/${lockFile}') }}`, path: cachePath},
-      workingDirectory,
     },
     {
       // NOTE: For PNPM we need to install deps from the store.
