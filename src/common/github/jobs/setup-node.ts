@@ -45,7 +45,7 @@ export interface SetupNodeOptions {
  * The steps include dependency installation and caching.
  */
 export const setupNode = ({
-  nodeVersion = 16,
+  nodeVersion = 18,
   projectPackage,
   ref,
   registryUrl,

@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run lint
   test:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run test
   typecheck:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run typecheck
   build:
     needs:
@@ -47,5 +47,5 @@ jobs:
     steps:
       - uses: ottofeller/github-actions/npm-run@main
         with:
-          node-version: 16
+          node-version: 18
           command: npm run build

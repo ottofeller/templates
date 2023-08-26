@@ -6,5 +6,5 @@ import type {JobStep} from 'projen/lib/github/workflows-model'
  */
 export const npmRunJobStep = (command: string, directory?: string): JobStep => ({
   uses: 'ottofeller/github-actions/npm-run@main',
-  with: {'node-version': 16, command: `npm run ${command}`, directory},
+  with: {'node-version': 18, command: `npm run ${command}`, directory},
 })
