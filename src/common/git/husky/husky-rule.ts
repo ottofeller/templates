@@ -1,4 +1,5 @@
 import type {CheckCargoOptions} from './check-cargo-options'
+import type {CustomRuleOptions} from './custom-rule-options'
 
 export interface HuskyRule {
   /**
@@ -14,4 +15,12 @@ export interface HuskyRule {
    * @default true
    */
   readonly commitMsg?: boolean
+
+  /**
+   * A custom rule that specifies a git hook
+   * and a command to run when the hook triggers.
+   *
+   * @default undefined
+   */
+  readonly huskyCustomRules?: Array<CustomRuleOptions>
 }
