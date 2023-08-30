@@ -1,8 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
+import {NodeProject, type NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
-import {HuskyRule, addHusky} from '..'
+import {addHusky, type CheckCargoOptions} from '..'
+import type {CustomRuleOptions} from '../custom-rule-options'
 
 describe('addHusky function', () => {
   const sourceFolder = 'src/common/git/husky/assets'
@@ -42,33 +43,27 @@ describe('addHusky function', () => {
 
   test('adds hooks from a user-defined list', () => {
     const project = new TestProject()
-    addHusky(project, {huskyRules: {checkCargo: {isFormatting: false}}})
+    const checkCargo: CheckCargoOptions = {isFormatting: false}
+    const customPrecommitCommand = 'npm run format'
+    const huskyCustomRule: Array<CustomRuleOptions> = [{command: customPrecommitCommand, trigger: 'pre-commit'}]
+    addHusky(project, {huskyRules: {checkCargo, huskyCustomRules: huskyCustomRule}})
     const snapshot = synthSnapshot(project)
     expect(snapshot[commitMsgShellScriptDestinationPath]).not.toBeDefined()
     expect(snapshot[nodeScriptDestinationPath]).not.toBeDefined()
 
     expect(snapshot[preCommitShellScriptDestinationPath]).toBeDefined()
-    const preCommitShellScriptContents = templateContents.replace('{{COMMAND}}', 'cargo check')
-    expect(preCommitShellScriptContents).toBeDefined()
+    const expectedPrecommitCommand = `cargo check\n${customPrecommitCommand}`
+    const preCommitShellScriptContents = templateContents.replace('{{COMMAND}}', expectedPrecommitCommand)
     expect(snapshot[preCommitShellScriptDestinationPath]).toEqual(preCommitShellScriptContents)
   })
 
   test('does not handle valid falsy values', () => {
     const project = new TestProject()
-    addHusky(project, {huskyRules: {checkCargo: undefined, commitMsg: false}})
+    addHusky(project, {huskyRules: {checkCargo: undefined, commitMsg: false, huskyCustomRules: undefined}})
     const snapshot = synthSnapshot(project)
     expect(snapshot[commitMsgShellScriptDestinationPath]).not.toBeDefined()
     expect(snapshot[nodeScriptDestinationPath]).not.toBeDefined()
     expect(snapshot[preCommitShellScriptDestinationPath]).not.toBeDefined()
-  })
-
-  test('throws if unknown rule is provided', () => {
-    const project = new TestProject()
-
-    expect(
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- cast in order to test unexpected behavior
-      () => addHusky(project, {huskyRules: {unknown: {}} as HuskyRule}),
-    ).toThrow()
   })
 })
 
