@@ -1,4 +1,16 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 . "$(dirname -- "$0")/_/husky.sh"
 
-node .husky/check-commit-msg.js "$(head -1 $@)"
+branch=$(git branch --show-current)
+check_branch () {
+  array=$@
+  if [[ " ${array[*]} " =~ " ${branch} " ]];
+  then return 1;
+  else return 0;
+  fi
+}
+
+if check_branch "main"; then
+  node .husky/check-commit-msg.js "$(head -1 $@)"
+fi
+

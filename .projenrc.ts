@@ -75,7 +75,7 @@ addLinters({
 project.addDevDeps('@types/prettier@2.6.0')
 
 // ANCHOR Setup git hooks with Husky
-addHusky(project, {})
+addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: ['main']}}})
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')

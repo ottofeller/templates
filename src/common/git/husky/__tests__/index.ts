@@ -15,30 +15,91 @@ describe('addHusky function', () => {
   const nodeScriptDestinationPath = path.join(destinationFolder, nodeScriptFileName)
   const preCommitShellScriptDestinationPath = path.join(destinationFolder, 'pre-commit')
 
-  test('sets up husky with a commit-msg hook', () => {
-    const project = new TestProject()
-    addHusky(project, {})
-    const snapshot = synthSnapshot(project)
-    expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+  describe('sets up husky with a commit-msg hook', () => {
+    test('with default settings', () => {
+      const project = new TestProject()
+      addHusky(project, {})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
 
-    const checkMessageCommand = 'node .husky/check-commit-msg.js "$(head -1 $@)"'
-    const commitMsgShellScriptContents = templateContents.replace('{{COMMAND}}', checkMessageCommand)
-    expect(commitMsgShellScriptContents).toBeDefined()
-    expect(snapshot[commitMsgShellScriptDestinationPath]).toEqual(commitMsgShellScriptContents)
+      const checkMessageCommand = [
+        `if check_branch "main" "dev"; then`,
+        '  node .husky/check-commit-msg.js "$(head -1 $@)"',
+        'fi',
+        '',
+      ].join('\n')
 
-    const nodeScriptSourcePath = path.join(sourceFolder, nodeScriptFileName)
-    const nodeScriptContents = fs.readFileSync(nodeScriptSourcePath, {encoding: 'utf-8'})
-    expect(nodeScriptContents).toBeDefined()
-    expect(snapshot[nodeScriptDestinationPath]).toEqual(nodeScriptContents)
-  })
+      const commitMsgShellScriptContents = templateContents.replace('{{COMMAND}}', checkMessageCommand)
+      expect(commitMsgShellScriptContents).toBeDefined()
+      expect(snapshot[commitMsgShellScriptDestinationPath]).toEqual(commitMsgShellScriptContents)
 
-  test('has disabled commit-msg hook with empty rules list', () => {
-    const project = new TestProject()
-    addHusky(project, {huskyRules: {}})
-    const snapshot = synthSnapshot(project)
-    expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
-    expect(snapshot[commitMsgShellScriptDestinationPath]).not.toBeDefined()
-    expect(snapshot[nodeScriptDestinationPath]).not.toBeDefined()
+      const nodeScriptSourcePath = path.join(sourceFolder, nodeScriptFileName)
+      const nodeScriptContents = fs.readFileSync(nodeScriptSourcePath, {encoding: 'utf-8'})
+
+      expect(nodeScriptContents).toBeDefined()
+      expect(snapshot[nodeScriptDestinationPath]).toEqual(nodeScriptContents)
+    })
+
+    test('is disabled with empty rules list', () => {
+      const project = new TestProject()
+      addHusky(project, {huskyRules: {}})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+      expect(snapshot[commitMsgShellScriptDestinationPath]).not.toBeDefined()
+      expect(snapshot[nodeScriptDestinationPath]).not.toBeDefined()
+    })
+
+    test('checks all branches with empty branch list', () => {
+      const project = new TestProject()
+      addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: []}}})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+
+      const checkMessageCommand = 'node .husky/check-commit-msg.js "$(head -1 $@)"'
+      const commitMsgShellScriptContents = templateContents.replace('{{COMMAND}}', checkMessageCommand)
+      expect(commitMsgShellScriptContents).toBeDefined()
+      expect(snapshot[commitMsgShellScriptDestinationPath]).toEqual(commitMsgShellScriptContents)
+
+      const nodeScriptSourcePath = path.join(sourceFolder, nodeScriptFileName)
+      const nodeScriptContents = fs.readFileSync(nodeScriptSourcePath, {encoding: 'utf-8'})
+      expect(nodeScriptContents).toBeDefined()
+      expect(snapshot[nodeScriptDestinationPath]).toEqual(nodeScriptContents)
+    })
+
+    test('allows to ignore particular branches', () => {
+      const project = new TestProject()
+      const ignoredBranch = 'special-branch'
+      const customCommand = 'echo test'
+
+      const huskyCustomRules: Array<CustomRuleOptions> = [
+        {trigger: 'commit-msg', command: customCommand, ignoreBranches: [ignoredBranch]},
+      ]
+
+      addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: [ignoredBranch]}, huskyCustomRules}})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+
+      const allCommands = [
+        `if check_branch "${ignoredBranch}"; then`,
+        '  node .husky/check-commit-msg.js "$(head -1 $@)"',
+        'fi',
+        '',
+        `if check_branch "${ignoredBranch}"; then`,
+        `  ${customCommand}`,
+        'fi',
+        '',
+      ].join('\n')
+
+      const shellScriptContents = templateContents.replace('{{COMMAND}}', allCommands)
+      expect(shellScriptContents).toBeDefined()
+      expect(snapshot[commitMsgShellScriptDestinationPath]).toEqual(shellScriptContents)
+
+      const nodeScriptSourcePath = path.join(sourceFolder, nodeScriptFileName)
+      const nodeScriptContents = fs.readFileSync(nodeScriptSourcePath, {encoding: 'utf-8'})
+
+      expect(nodeScriptContents).toBeDefined()
+      expect(snapshot[nodeScriptDestinationPath]).toEqual(nodeScriptContents)
+    })
   })
 
   test('adds hooks from a user-defined list', () => {
