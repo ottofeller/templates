@@ -10,6 +10,7 @@ import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {addVsCode} from '../common/vscode-settings'
+import {eslintConfigReact} from './eslint-config-react'
 import {eslintConfigTailwind} from './eslint-config-tailwind'
 import {setupJest} from './jest'
 import {sampleCode} from './sample-code'
@@ -113,7 +114,13 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'app', 'src']
-    const extraEslintConfigs = options.isUiConfigEnabled === false ? undefined : [eslintConfigTailwind]
+    const extraEslintConfigs = [eslintConfigReact]
+
+    if (options.isUiConfigEnabled ?? true) {
+      this.addDevDeps('eslint-plugin-react', 'eslint-plugin-react-hooks', 'eslint-plugin-tailwindcss@>=3.12')
+      extraEslintConfigs.push(eslintConfigTailwind)
+    }
+
     addLinters({project: this, lintPaths, extraEslintConfigs})
 
     // ANCHOR Setup git hooks with Husky
