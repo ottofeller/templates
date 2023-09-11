@@ -126,10 +126,10 @@ node_modules
       "@typescript-eslint",
       "eslint-comments",
       "import",
-      "react-hooks",
-      "react",
       "@ottofeller/ottofeller",
       "@cspell",
+      "react",
+      "react-hooks",
       "tailwindcss",
     ],
     "rules": {

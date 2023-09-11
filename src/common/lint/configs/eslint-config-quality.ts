@@ -22,16 +22,8 @@ export const eslintConfigQuality: Linter.Config = {
   ],
 
   parser: '@typescript-eslint/parser',
-  parserOptions: {ecmaFeatures: {jsx: true}, ecmaVersion: 2020, sourceType: 'module'},
-  plugins: [
-    '@typescript-eslint',
-    'eslint-comments',
-    'import',
-    'react-hooks',
-    'react',
-    '@ottofeller/ottofeller',
-    '@cspell',
-  ],
+  parserOptions: {ecmaVersion: 2020, sourceType: 'module'},
+  plugins: ['@typescript-eslint', 'eslint-comments', 'import', '@ottofeller/ottofeller', '@cspell'],
   settings: {react: {pragma: 'React', version: '17'}},
 
   // Static analysis and code quality
@@ -57,16 +49,5 @@ export const eslintConfigQuality: Linter.Config = {
     'eslint-comments/no-unused-enable': ['error'],
     'eslint-comments/no-use': ['error', {allow: ['eslint-disable', 'eslint-disable-next-line', 'eslint-enable']}],
     'eslint-comments/require-description': ['error', {ignore: ['eslint-enable']}],
-
-    // React specific rules
-    'jsx-quotes': ['error', 'prefer-double'],
-    'react-hooks/exhaustive-deps': ['error'],
-    'react-hooks/rules-of-hooks': ['error'],
-    'react/jsx-boolean-value': ['error', 'never'],
-    'react/jsx-curly-brace-presence': ['error', {props: 'never', children: 'never'}],
-    'react/jsx-key': ['error', {checkFragmentShorthand: true}],
-    'react/jsx-uses-vars': ['error'],
-    'react/prefer-stateless-function': ['error'],
-    '@ottofeller/ottofeller/require-comment-before-useeffect': ['error'],
   },
 }

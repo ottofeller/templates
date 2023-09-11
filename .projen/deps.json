@@ -59,19 +59,6 @@
       "type": "build"
     },
     {
-      "name": "eslint-plugin-react",
-      "type": "build"
-    },
-    {
-      "name": "eslint-plugin-react-hooks",
-      "type": "build"
-    },
-    {
-      "name": "eslint-plugin-tailwindcss",
-      "version": ">=3.12",
-      "type": "build"
-    },
-    {
       "name": "eslint",
       "version": "8",
       "type": "build"

@@ -151,42 +151,6 @@
           "eslint-enable"
         ]
       }
-    ],
-    "jsx-quotes": [
-      "error",
-      "prefer-double"
-    ],
-    "react-hooks/exhaustive-deps": [
-      "error"
-    ],
-    "react-hooks/rules-of-hooks": [
-      "error"
-    ],
-    "react/jsx-boolean-value": [
-      "error",
-      "never"
-    ],
-    "react/jsx-curly-brace-presence": [
-      "error",
-      {
-        "props": "never",
-        "children": "never"
-      }
-    ],
-    "react/jsx-key": [
-      "error",
-      {
-        "checkFragmentShorthand": true
-      }
-    ],
-    "react/jsx-uses-vars": [
-      "error"
-    ],
-    "react/prefer-stateless-function": [
-      "error"
-    ],
-    "@ottofeller/ottofeller/require-comment-before-useeffect": [
-      "error"
     ]
   },
   "extends": [
@@ -212,8 +176,6 @@
     "@typescript-eslint",
     "eslint-comments",
     "import",
-    "react-hooks",
-    "react",
     "@ottofeller/ottofeller",
     "@cspell"
   ],

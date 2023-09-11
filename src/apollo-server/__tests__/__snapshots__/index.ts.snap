@@ -138,15 +138,10 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
       "@typescript-eslint",
       "eslint-comments",
       "import",
-      "react-hooks",
-      "react",
       "@ottofeller/ottofeller",
       "@cspell",
     ],
     "rules": {
-      "@ottofeller/ottofeller/require-comment-before-useeffect": [
-        "error",
-      ],
       "@typescript-eslint/ban-ts-comment": [
         "error",
         {
@@ -220,10 +215,6 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
       "import/no-relative-parent-imports": [
         "error",
       ],
-      "jsx-quotes": [
-        "error",
-        "prefer-double",
-      ],
       "no-negated-condition": [
         "error",
       ],
@@ -288,35 +279,6 @@ ACCESS_TOKEN=5aff40b2312321laksdkncKSDA
             "singleline-let",
           ],
         },
-      ],
-      "react-hooks/exhaustive-deps": [
-        "error",
-      ],
-      "react-hooks/rules-of-hooks": [
-        "error",
-      ],
-      "react/jsx-boolean-value": [
-        "error",
-        "never",
-      ],
-      "react/jsx-curly-brace-presence": [
-        "error",
-        {
-          "children": "never",
-          "props": "never",
-        },
-      ],
-      "react/jsx-key": [
-        "error",
-        {
-          "checkFragmentShorthand": true,
-        },
-      ],
-      "react/jsx-uses-vars": [
-        "error",
-      ],
-      "react/prefer-stateless-function": [
-        "error",
       ],
     },
     "settings": {
@@ -619,19 +581,6 @@ tsconfig.tsbuildinfo
       {
         "name": "eslint-plugin-import",
         "type": "build",
-      },
-      {
-        "name": "eslint-plugin-react",
-        "type": "build",
-      },
-      {
-        "name": "eslint-plugin-react-hooks",
-        "type": "build",
-      },
-      {
-        "name": "eslint-plugin-tailwindcss",
-        "type": "build",
-        "version": ">=3.12",
       },
       {
         "name": "eslint",
@@ -1334,9 +1283,6 @@ buildSync({
       "eslint": "8",
       "eslint-plugin-eslint-comments": "*",
       "eslint-plugin-import": "*",
-      "eslint-plugin-react": "*",
-      "eslint-plugin-react-hooks": "*",
-      "eslint-plugin-tailwindcss": ">=3.12",
       "jest": "*",
       "jest-junit": "^15",
       "nodemon": "*",
