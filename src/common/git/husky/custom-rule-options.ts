@@ -1,6 +1,8 @@
+import type {WithIgnoreBranches} from './with-ignore-branches'
+
 export type GitHook = 'commit-msg' | 'pre-commit'
 
-export interface CustomRuleOptions {
+export interface CustomRuleOptions extends WithIgnoreBranches {
   /**
    * A custom command to run in specified hook.
    */

@@ -1,5 +1,6 @@
 import type {CheckCargoOptions} from './check-cargo-options'
 import type {CustomRuleOptions} from './custom-rule-options'
+import type {WithIgnoreBranches} from './with-ignore-branches'
 
 export interface HuskyRule {
   /**
@@ -14,7 +15,7 @@ export interface HuskyRule {
    *
    * @default true
    */
-  readonly commitMsg?: boolean
+  readonly commitMsg?: boolean | WithIgnoreBranches
 
   /**
    * A custom rule that specifies a git hook

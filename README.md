@@ -148,5 +148,5 @@ There are a few other options specific to all the templates within this project:
 - `hasGitHooks` - include `husky` for git hooks management, defaults to `true` (NOTE: `projen` sets up `git` as a final step of project bootstrapping and thus there is no way to run `husky install` within the process. Hence a user has to run it manually after the `git` repo is initialized.);
 - `huskyRules` - an options object for husky rules; if `hasGitHooks` is enabled, sets up the rules from this object:
   - `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default); 
-  - `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`);
+  - `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`); can be set to an object with `ignoreBranches` property which specifies an array of branch names to be ignored while processing commit messages; bu default (with `commitMsg: true` option) the `ignoreBranches` is set to `['main', 'dev']`; in order to perform the check on all branches set either `commitMsg: {}` or `commitMsg: {ignoreBranches: []}`;
   - `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default.
