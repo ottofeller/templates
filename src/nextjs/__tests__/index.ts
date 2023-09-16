@@ -156,8 +156,7 @@ describe('NextJS template', () => {
       expect(snapshot['package.json'].devDependencies).toHaveProperty('jest-environment-jsdom')
       expect(snapshot['package.json'].devDependencies).toHaveProperty('@testing-library/react')
       expect(snapshot['package.json'].scripts).toHaveProperty('test')
-      expect(snapshot['.projen/tasks.json'].tasks.test.steps).toHaveLength(1)
-      expect(snapshot['.projen/tasks.json'].tasks.test.steps[0].exec).toEqual('jest --no-cache --all')
+      expect(snapshot['package.json'].scripts.test).toEqual('jest --no-cache --all')
       expect(snapshot['package.json'].scripts).toHaveProperty('test-unit:watch')
       expect(snapshot['jest.config.defaults.js']).toBeDefined()
       expect(snapshot['jest.config.js']).toBeDefined()
@@ -221,8 +220,17 @@ describe('NextJS template', () => {
   test('has "start" task instead of "server"', () => {
     const project = new TestNextJsTypeScriptProject()
     const snapshot = synthSnapshot(project)
-    expect(snapshot['.projen/tasks.json'].tasks).not.toHaveProperty('server')
-    expect(snapshot['.projen/tasks.json'].tasks).toHaveProperty('start')
+    expect(snapshot['package.json'].scripts).not.toHaveProperty('server')
+    expect(snapshot['package.json'].scripts).toHaveProperty('start')
+  })
+
+  test('contains only tasks created by projen', () => {
+    const project = new TestNextJsTypeScriptProject({hasGitHooks: true})
+    const snapshot = synthSnapshot(project)
+    const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci']
+    const {tasks} = snapshot['.projen/tasks.json']
+    const createdTasks = Object.keys(tasks).filter((task) => !internalTasks.includes(task))
+    expect(createdTasks).toHaveLength(0)
   })
 })
 

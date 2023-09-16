@@ -25,14 +25,11 @@ export function setupJest(
   new projen.SampleFile(project, 'jest.config.js', {sourcePath: path.join(assetsDir, 'jest.config.js')})
 
   // ANCHOR Tasks
-  const testTask = project.tasks.tryFind('test')
-  const testCommand = 'jest --no-cache --all'
+  const testTask = project.removeTask('test')
+  const testTaskName = testTask ? 'test' : 'test-unit'
 
-  if (testTask) {
-    testTask.reset(testCommand)
-  } else {
-    project.addTask('test-unit', {exec: testCommand})
-  }
-
-  project.addTask('test-unit:watch', {exec: 'jest --watch'})
+  project.addScripts({
+    [testTaskName]: 'jest --no-cache --all',
+    'test-unit:watch': 'jest --watch',
+  })
 }

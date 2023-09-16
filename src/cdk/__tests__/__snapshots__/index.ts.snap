@@ -632,105 +632,12 @@ cdk.out/
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
-      "build": {
-        "description": "Full release build",
-        "name": "build",
-        "steps": [
-          {
-            "spawn": "default",
-          },
-          {
-            "spawn": "pre-compile",
-          },
-          {
-            "spawn": "compile",
-          },
-          {
-            "spawn": "post-compile",
-          },
-          {
-            "spawn": "test",
-          },
-          {
-            "spawn": "package",
-          },
-        ],
-      },
-      "bundle": {
-        "description": "Prepare assets",
-        "name": "bundle",
-      },
-      "clobber": {
-        "condition": "git diff --exit-code > /dev/null",
-        "description": "hard resets to HEAD of origin and cleans the local repo",
-        "env": {
-          "BRANCH": "$(git branch --show-current)",
-        },
-        "name": "clobber",
-        "steps": [
-          {
-            "exec": "git checkout -b scratch",
-            "name": "save current HEAD in "scratch" branch",
-          },
-          {
-            "exec": "git checkout $BRANCH",
-          },
-          {
-            "exec": "git fetch origin",
-            "name": "fetch latest changes from origin",
-          },
-          {
-            "exec": "git reset --hard origin/$BRANCH",
-            "name": "hard reset to origin commit",
-          },
-          {
-            "exec": "git clean -fdx",
-            "name": "clean all untracked files",
-          },
-          {
-            "say": "ready to rock! (unpushed commits are under the "scratch" branch)",
-          },
-        ],
-      },
-      "compile": {
-        "description": "Only compile",
-        "name": "compile",
-      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
-          },
-        ],
-      },
-      "deploy": {
-        "description": "Deploys your CDK app to the AWS cloud",
-        "name": "deploy",
-        "steps": [
-          {
-            "exec": "cdk deploy",
-            "receiveArgs": true,
-          },
-        ],
-      },
-      "destroy": {
-        "description": "Destroys your cdk app in the AWS cloud",
-        "name": "destroy",
-        "steps": [
-          {
-            "exec": "cdk destroy",
-            "receiveArgs": true,
-          },
-        ],
-      },
-      "diff": {
-        "description": "Diffs the currently deployed app against your code",
-        "name": "diff",
-        "steps": [
-          {
-            "exec": "cdk diff",
           },
         ],
       },
@@ -743,17 +650,6 @@ cdk.out/
         "steps": [
           {
             "spawn": "default",
-          },
-        ],
-      },
-      "format": {
-        "name": "format",
-        "steps": [
-          {
-            "exec": "prettier --write .projenrc.ts src",
-          },
-          {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src --fix",
           },
         ],
       },
@@ -772,76 +668,6 @@ cdk.out/
         "steps": [
           {
             "exec": "npm ci",
-          },
-        ],
-      },
-      "lint": {
-        "name": "lint",
-        "steps": [
-          {
-            "exec": "prettier --check .projenrc.ts src",
-          },
-          {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src",
-          },
-        ],
-      },
-      "package": {
-        "description": "Creates the distribution package",
-        "name": "package",
-      },
-      "post-compile": {
-        "description": "Runs after successful compilation",
-        "name": "post-compile",
-        "steps": [
-          {
-            "spawn": "synth:silent",
-          },
-        ],
-      },
-      "pre-compile": {
-        "description": "Prepare the project for compilation",
-        "name": "pre-compile",
-      },
-      "synth": {
-        "description": "Synthesizes your cdk app into cdk.out",
-        "name": "synth",
-        "steps": [
-          {
-            "exec": "cdk synth",
-          },
-        ],
-      },
-      "synth:silent": {
-        "description": "Synthesizes your cdk app into cdk.out and suppresses the template in stdout (part of "yarn build")",
-        "name": "synth:silent",
-        "steps": [
-          {
-            "exec": "cdk synth -q",
-          },
-        ],
-      },
-      "test": {
-        "description": "Run tests",
-        "name": "test",
-      },
-      "typecheck": {
-        "name": "typecheck",
-        "steps": [
-          {
-            "exec": "tsc --noEmit --project tsconfig.dev.json",
-          },
-        ],
-      },
-      "watch": {
-        "description": "Watches changes in your source code and rebuilds and deploys to the current account",
-        "name": "watch",
-        "steps": [
-          {
-            "exec": "cdk deploy --hotswap",
-          },
-          {
-            "exec": "cdk watch",
           },
         ],
       },
@@ -1194,26 +1020,19 @@ cdk.out/
     "license": "Apache-2.0",
     "name": "cdk",
     "scripts": {
-      "build": "npx projen build",
-      "bundle": "npx projen bundle",
-      "clobber": "npx projen clobber",
-      "compile": "npx projen compile",
+      "build": "npm run default npm run synth:silent",
       "default": "npx projen default",
-      "deploy": "npx projen deploy",
-      "destroy": "npx projen destroy",
-      "diff": "npx projen diff",
+      "deploy": "cdk deploy",
+      "destroy": "cdk destroy",
+      "diff": "cdk diff",
       "eject": "npx projen eject",
-      "format": "npx projen format",
-      "lint": "npx projen lint",
-      "package": "npx projen package",
-      "post-compile": "npx projen post-compile",
-      "pre-compile": "npx projen pre-compile",
+      "format": "prettier --write .projenrc.ts src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src --fix",
+      "lint": "prettier --check .projenrc.ts src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src",
       "projen": "npx projen",
-      "synth": "npx projen synth",
-      "synth:silent": "npx projen synth:silent",
-      "test": "npx projen test",
-      "typecheck": "npx projen typecheck",
-      "watch": "npx projen watch",
+      "synth": "cdk synth",
+      "synth:silent": "cdk synth -q",
+      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
+      "watch": "cdk deploy --hotswap && cdk watch",
     },
     "version": "0.0.0",
   },

@@ -798,89 +798,12 @@ tsconfig.tsbuildinfo
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
-      "build": {
-        "description": "Full release build",
-        "name": "build",
-        "steps": [
-          {
-            "spawn": "default",
-          },
-          {
-            "spawn": "pre-compile",
-          },
-          {
-            "spawn": "compile",
-          },
-          {
-            "spawn": "post-compile",
-          },
-          {
-            "spawn": "test",
-          },
-          {
-            "spawn": "package",
-          },
-        ],
-      },
-      "clobber": {
-        "condition": "git diff --exit-code > /dev/null",
-        "description": "hard resets to HEAD of origin and cleans the local repo",
-        "env": {
-          "BRANCH": "$(git branch --show-current)",
-        },
-        "name": "clobber",
-        "steps": [
-          {
-            "exec": "git checkout -b scratch",
-            "name": "save current HEAD in "scratch" branch",
-          },
-          {
-            "exec": "git checkout $BRANCH",
-          },
-          {
-            "exec": "git fetch origin",
-            "name": "fetch latest changes from origin",
-          },
-          {
-            "exec": "git reset --hard origin/$BRANCH",
-            "name": "hard reset to origin commit",
-          },
-          {
-            "exec": "git clean -fdx",
-            "name": "clean all untracked files",
-          },
-          {
-            "say": "ready to rock! (unpushed commits are under the "scratch" branch)",
-          },
-        ],
-      },
-      "compile": {
-        "description": "Only compile",
-        "name": "compile",
-        "steps": [
-          {
-            "exec": "tsc --build",
-          },
-          {
-            "exec": "next build",
-          },
-        ],
-      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
-          },
-        ],
-      },
-      "dev": {
-        "description": "Starts the Next.js application in development mode",
-        "name": "dev",
-        "steps": [
-          {
-            "exec": "next dev",
           },
         ],
       },
@@ -893,42 +816,6 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "spawn": "default",
-          },
-        ],
-      },
-      "export": {
-        "description": "Exports the application for production deployment",
-        "name": "export",
-        "steps": [
-          {
-            "exec": "next export",
-          },
-        ],
-      },
-      "format": {
-        "name": "format",
-        "steps": [
-          {
-            "exec": "prettier --write .projenrc.ts app src",
-          },
-          {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src --fix",
-          },
-        ],
-      },
-      "generate-graphql-schema": {
-        "name": "generate-graphql-schema",
-        "steps": [
-          {
-            "exec": "npx apollo schema:download",
-          },
-        ],
-      },
-      "gql-to-ts": {
-        "name": "gql-to-ts",
-        "steps": [
-          {
-            "exec": "graphql-codegen -r dotenv/config --config codegen.ts",
           },
         ],
       },
@@ -947,81 +834,6 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "exec": "npm ci",
-          },
-        ],
-      },
-      "lint": {
-        "name": "lint",
-        "steps": [
-          {
-            "exec": "prettier --check .projenrc.ts app src",
-          },
-          {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src",
-          },
-        ],
-      },
-      "package": {
-        "description": "Creates the distribution package",
-        "name": "package",
-      },
-      "post-compile": {
-        "description": "Runs after successful compilation",
-        "name": "post-compile",
-      },
-      "pre-compile": {
-        "description": "Prepare the project for compilation",
-        "name": "pre-compile",
-      },
-      "start": {
-        "description": "Starts the Next.js application in production mode",
-        "name": "start",
-        "steps": [
-          {
-            "exec": "next start",
-          },
-        ],
-      },
-      "telemetry": {
-        "description": "Checks the status of Next.js telemetry collection",
-        "name": "telemetry",
-        "steps": [
-          {
-            "exec": "next telemetry",
-          },
-        ],
-      },
-      "test": {
-        "description": "Run tests",
-        "name": "test",
-        "steps": [
-          {
-            "exec": "jest --no-cache --all",
-          },
-        ],
-      },
-      "test-unit:watch": {
-        "name": "test-unit:watch",
-        "steps": [
-          {
-            "exec": "jest --watch",
-          },
-        ],
-      },
-      "typecheck": {
-        "name": "typecheck",
-        "steps": [
-          {
-            "exec": "tsc --noEmit --project tsconfig.dev.json",
-          },
-        ],
-      },
-      "watch": {
-        "description": "Watch & compile in the background",
-        "name": "watch",
-        "steps": [
-          {
-            "exec": "tsc --build -w",
           },
         ],
       },
@@ -1557,28 +1369,24 @@ module.exports = {
     "license": "Apache-2.0",
     "name": "nextjs",
     "scripts": {
-      "build": "npx projen build",
-      "clobber": "npx projen clobber",
+      "build": "default && compile && test",
       "codemod:add-src-to-imports": "jscodeshift -t ./node_modules/@ottofeller/templates/lib/nextjs/add-src-reference-codemode.js --extensions=js,jsx,ts,tsx src pages",
-      "compile": "npx projen compile",
+      "compile": "tsc --build && next build",
       "default": "npx projen default",
-      "dev": "npx projen dev",
+      "dev": "next dev",
       "eject": "npx projen eject",
-      "export": "npx projen export",
-      "format": "npx projen format",
-      "generate-graphql-schema": "npx projen generate-graphql-schema",
-      "gql-to-ts": "npx projen gql-to-ts",
-      "lint": "npx projen lint",
-      "package": "npx projen package",
-      "post-compile": "npx projen post-compile",
-      "pre-compile": "npx projen pre-compile",
+      "export": "next export",
+      "format": "prettier --write .projenrc.ts app src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src --fix",
+      "generate-graphql-schema": "npx apollo schema:download",
+      "gql-to-ts": "graphql-codegen -r dotenv/config --config codegen.ts",
+      "lint": "prettier --check .projenrc.ts app src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src",
       "projen": "npx projen",
-      "start": "npx projen start",
-      "telemetry": "npx projen telemetry",
-      "test": "npx projen test",
-      "test-unit:watch": "npx projen test-unit:watch",
-      "typecheck": "npx projen typecheck",
-      "watch": "npx projen watch",
+      "start": "next start",
+      "telemetry": "next telemetry",
+      "test": "jest --no-cache --all",
+      "test-unit:watch": "jest --watch",
+      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
+      "watch": "tsc --build -w",
     },
     "version": "0.0.0",
   },

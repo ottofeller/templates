@@ -105,6 +105,15 @@ describe('CDK template', () => {
     expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.ts')
     expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
   })
+
+  test('contains only tasks created by projen', () => {
+    const project = new TestCDKProject({hasGitHooks: true})
+    const snapshot = synthSnapshot(project)
+    const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci']
+    const {tasks} = snapshot['.projen/tasks.json']
+    const createdTasks = Object.keys(tasks).filter((task) => !internalTasks.includes(task))
+    expect(createdTasks).toHaveLength(0)
+  })
 })
 
 class TestCDKProject extends OttofellerCDKProject {

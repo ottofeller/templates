@@ -61,16 +61,21 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
 
     // ANCHOR Setup tasks
     this.removeTask('build')
+    this.removeTask('clobber')
     this.removeTask('compile')
     this.removeTask('package')
     this.removeTask('post-compile')
     this.removeTask('pre-compile')
+    this.removeTask('test')
     this.removeTask('watch')
-    this.addTask('dev', {exec: 'sst dev'})
-    this.addTask('build', {exec: 'sst build'})
-    this.addTask('deploy', {exec: 'sst deploy'})
-    this.addTask('remove', {exec: 'sst remove'})
-    this.addTask('console', {exec: 'sst console'})
+
+    this.addScripts({
+      dev: 'sst dev',
+      build: 'sst build',
+      deploy: 'sst deploy',
+      remove: 'sst remove',
+      console: 'sst console',
+    })
 
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {

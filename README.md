@@ -37,7 +37,9 @@ To get rid of projen run this command:
 ```sh
 npm run eject 
 ```
-The command removes default projen task, makes projen remove its authority from all the generated files and stop tracking changes. At this moment the project is managed as a regular repository (feel fre to edit and remove files).
+The command removes default projen task, makes projen remove its authority from all the generated files and stop tracking changes. At this moment the project is managed as a regular repository (feel free to edit and remove files).
+
+Note: all the projen tasks are run via a custom runner, so the runner is saved into the project at `scripts/run-task` and the tasks remain in the project in a tasks definition file (`.projen/tasks.json`). All the internal tasks within the templates are saved as npm scripts and thus don't need this task runner. Therefore the task runner and the tasks definition file file can be deleted. If you had any custom tasks created in your project either use this runner or make sure to convert all the tasks into npm scripts before deleting the tasks definition file and the runner.
 
 ## 🛠 Development guide
 ### Install

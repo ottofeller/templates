@@ -61,6 +61,33 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     // ANCHOR Install dependencies
     this.addDeps('cdk-nag@2')
 
+    // ANCHOR Clean out the tasks and replace the necessary ones with npm scripts
+    // NOTE For dependent tasks the order of deletion matters, so be cautious.
+    this.removeTask('build')
+    this.removeTask('bundle')
+    this.removeTask('clobber')
+    this.removeTask('compile')
+    this.removeTask('deploy')
+    this.removeTask('destroy')
+    this.removeTask('diff')
+    this.removeTask('package')
+    this.removeTask('post-compile')
+    this.removeTask('pre-compile')
+    this.removeTask('synth')
+    this.removeTask('synth:silent')
+    this.removeTask('test')
+    this.removeTask('watch')
+
+    this.addScripts({
+      build: `${this.ejected ? '' : 'npm run default '}npm run synth:silent`,
+      deploy: 'cdk deploy',
+      destroy: 'cdk destroy',
+      diff: 'cdk diff',
+      synth: 'cdk synth',
+      'synth:silent': 'cdk synth -q',
+      watch: 'cdk deploy --hotswap && cdk watch',
+    })
+
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {
       addHusky(this, options)

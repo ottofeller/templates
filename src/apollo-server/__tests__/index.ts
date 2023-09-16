@@ -142,6 +142,15 @@ describe('Apollo server template', () => {
       expect(snapshot['Dockerfile']).not.toBeDefined()
     })
   })
+
+  test('contains only tasks created by projen', () => {
+    const project = new TestApolloServerProject({hasGitHooks: true})
+    const snapshot = synthSnapshot(project)
+    const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci']
+    const {tasks} = snapshot['.projen/tasks.json']
+    const createdTasks = Object.keys(tasks).filter((task) => !internalTasks.includes(task))
+    expect(createdTasks).toHaveLength(0)
+  })
 })
 
 class TestApolloServerProject extends OttofellerApolloServerProject {
