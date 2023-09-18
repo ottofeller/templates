@@ -1,6 +1,7 @@
 export * from './apollo-server'
 export * from './cdk'
 export * from './common'
+export * from './components'
 export * from './nextjs'
 export * from './playwright'
 export * from './sst'

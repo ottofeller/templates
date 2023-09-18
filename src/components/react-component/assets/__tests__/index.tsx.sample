@@ -1,0 +1,9 @@
+import {COMPONENT_NAME} from '..'
+import {render} from '@testing-library/react'
+
+describe('COMPONENT_NAME', () => {
+  it('renders properly', async () => {
+    const {container} = render(<COMPONENT_NAME />)
+    expect(container.querySelector('div')?.classList.contains('.container')).toBeTruthy()
+  })
+})

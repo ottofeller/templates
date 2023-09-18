@@ -150,3 +150,42 @@ There are a few other options specific to all the templates within this project:
   - `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default); 
   - `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`); can be set to an object with `ignoreBranches` property which specifies an array of branch names to be ignored while processing commit messages; bu default (with `commitMsg: true` option) the `ignoreBranches` is set to `['main', 'dev']`; in order to perform the check on all branches set either `commitMsg: {}` or `commitMsg: {ignoreBranches: []}`;
   - `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default.
+
+## Components
+The repository contains a collections of react components that can be bootstrapped via `projen`.
+
+All the component templates have the following shared settings:
+- `name` defines the exported name of the component, defaults to the dir from which `projen` was called;
+- `outdir` defines the folder to which the componend will be rendered to, defaults to the dir from which `projen` was called.
+
+> IMPORTANT! In order to create a component one needs to `cd` into a folder without populated `package.json` file, e.g. `src`. It is required to let `projen` run smoothly. Since it is a `jsii` project its `new` command runs only along with other packages built as `jsii` (having a regular package in `node_modules` would fail the run).
+
+> IMPORTANT! By default projen creates a `git` repository and commits the initialized project. In order to avoid this use a `--no-git` or `--git=false` option.
+
+There are two ways to define a component name and destination folder:
+- run `projen` from `src` folder (or any other suitable folder) and define the `name` and `outdir` options;
+```sh
+# Run projen from src folder
+cd src
+npx projen new --no-git --from @ottofeller/templates <component> --outdir components/NewComponent --name NewComponent
+```
+- create manually the destination folder and `cd` into it - then running `projen` would create the component file in that folder and the component would inherit the folder name.
+```sh
+# Create the component folder manually and run projen from that folder
+mkdir src/components/NewComponent
+cd src/components/NewComponent
+npx projen new --no-git --from @ottofeller/templates <component>
+```
+
+### ottofeller-component-react
+A generic component with a simple render test.
+```sh
+# Run projen from src folder
+cd src
+npx projen new --no-git --from @ottofeller/templates ottofeller-component-react --outdir components/NewComponent --name NewComponent
+
+# Or create the component folder manually and run projen from that folder
+mkdir src/components/NewComponent
+cd src/components/NewComponent
+npx projen new --no-git --from @ottofeller/templates ottofeller-component-react
+```

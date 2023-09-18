@@ -53,11 +53,10 @@ export class AssetFile extends TextFile {
       const {template} = options
       const templateArray = Array.isArray(template) ? template : [template]
 
-      lines = templateArray.reduce<Array<string>>(
-        (content, {templateString, replacement}: AssetFileTemplate) =>
-          content.map((line) => (line.includes(templateString) ? line.replace(templateString, replacement) : line)),
-        lines,
-      )
+      lines = templateArray.reduce<Array<string>>((content, {templateString, replacement}: AssetFileTemplate) => {
+        const regexp = new RegExp(templateString, 'g')
+        return content.map((line) => (line.includes(templateString) ? line.replace(regexp, replacement) : line))
+      }, lines)
 
       if (/\.(j|t)sx?$/.test(filePath)) {
         lines = format(lines.join('\n'), prettierConfig).split('\n')

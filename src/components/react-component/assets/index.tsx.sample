@@ -1,0 +1,8 @@
+import cn from 'classnames'
+import {memo} from 'react'
+
+export const COMPONENT_NAME = memo(function COMPONENT_NAME(props: {
+  className?: string
+}) {
+  return <div className={cn(props.className)}>COMPONENT_NAME</div>
+})
