@@ -94,7 +94,11 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     this.tsconfig?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
     this.tsconfigDev?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
 
-    // ANCHOR Move all tasks into simple npm scripts
+    /*
+     * ANCHOR Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * NOTE This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
     const scripts = {
       build: `${this.ejected ? '' : 'default && '}compile && test`,
       compile: 'tsc --build && next build',

@@ -80,6 +80,11 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
     // ANCHOR Scripts
     this.package.addField('type', 'module')
 
+    /*
+     * ANCHOR Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * NOTE This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
     this.removeTask('build')
     this.removeTask('clobber')
     this.removeTask('compile')

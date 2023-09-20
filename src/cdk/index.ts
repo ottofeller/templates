@@ -61,7 +61,11 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     // ANCHOR Install dependencies
     this.addDeps('cdk-nag@2')
 
-    // ANCHOR Clean out the tasks and replace the necessary ones with npm scripts
+    /*
+     * ANCHOR Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * NOTE This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
     // NOTE For dependent tasks the order of deletion matters, so be cautious.
     this.removeTask('build')
     this.removeTask('bundle')
