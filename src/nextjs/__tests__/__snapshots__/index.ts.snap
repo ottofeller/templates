@@ -737,10 +737,6 @@ tsconfig.tsbuildinfo
         "type": "build",
       },
       {
-        "name": "yaml",
-        "type": "build",
-      },
-      {
         "name": "@apollo/client",
         "type": "runtime",
       },
@@ -1362,7 +1358,6 @@ module.exports = {
       "tailwindcss": "*",
       "ts-node": "*",
       "typescript": "*",
-      "yaml": "*",
     },
     "engines": {
       "node": ">= 12.22.0",

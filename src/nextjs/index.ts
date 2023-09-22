@@ -123,9 +123,6 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     tasksToRemove.forEach((task) => this.removeTask(task))
     this.addScripts(scripts)
 
-    // ANCHOR Add required dependencies
-    this.addDevDeps('yaml') // REVIEW Required during "npx projen new", fails without this dependency
-
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
     sampleCode(this, options, assetsDir)
