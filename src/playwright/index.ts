@@ -74,8 +74,8 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
     this.package.file.addDeletionOverride('types')
 
     /*
-     * ANCHOR Clean off the projen tasks and if needed replace them with regular npm scripts.
-     * NOTE This way we ensure smooth ejection experience with all the commands visible in package.json
+     * Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * This way we ensure smooth ejection experience with all the commands visible in package.json
      * and no need to keep the projen task runner within an ejected project.
      */
     const tasksToRemove = [
