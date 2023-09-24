@@ -42,13 +42,6 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
-      scripts: {
-        dev: 'nodemon',
-        start: 'node build/index.js',
-        'generate-graphql-schema': 'npx apollo schema:download',
-        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development',
-      },
-
       // In case Github is enabled remove all default stuff.
       githubOptions: {mergify: false, pullRequestLint: false},
       buildWorkflow: false,
@@ -86,9 +79,39 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     // ANCHOR Scripts
     this.package.addField('type', 'module')
-    const tasksToRemove = ['build', 'compile', 'package', 'post-compile', 'pre-compile', 'watch']
-    tasksToRemove.forEach(this.removeTask.bind(this))
-    this.addTask('build', {exec: 'node esbuild.config.js'})
+
+    /*
+     * Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
+    this.removeTask('build')
+    this.removeTask('clobber')
+    this.removeTask('compile')
+    this.removeTask('dev')
+    this.removeTask('package')
+    this.removeTask('post-compile')
+    this.removeTask('pre-compile')
+    this.removeTask('start')
+    this.removeTask('test:update')
+    this.removeTask('test:watch')
+    this.removeTask('test')
+    this.removeTask('watch')
+
+    this.addScripts({
+      build: 'node esbuild.config.js',
+      dev: 'nodemon',
+      'generate-graphql-schema': 'npx apollo schema:download',
+      'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development',
+      start: 'node build/index.js',
+    })
+
+    if (this.jest) {
+      this.addScripts({
+        test: 'jest --passWithNoTests --updateSnapshot',
+        'test:watch': 'jest --watch',
+      })
+    }
 
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
@@ -148,7 +171,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
   postSynthesize(): void {
     /*
-     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      */
     execSync('prettier --write .projenrc.mjs')

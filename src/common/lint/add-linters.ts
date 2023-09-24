@@ -43,14 +43,10 @@ export const addLinters = (props: AddLintersProps): void => {
   const includeOption = projenrcFile ? `--ignore-pattern "!${projenrcFile}" ` : ''
   const eslintRunCommand = `eslint --ext .js,.jsx,.ts,.tsx ${includeOption}${filteredPaths}`
 
-  project.addTask('typecheck', {exec: 'tsc --noEmit --project tsconfig.dev.json'})
-
-  project.addTask('format', {
-    steps: [{exec: `prettier --write ${filteredPaths}`}, {exec: `${eslintRunCommand} --fix`}],
-  })
-
-  project.addTask('lint', {
-    steps: [{exec: `prettier --check ${filteredPaths}`}, {exec: eslintRunCommand}],
+  project.addScripts({
+    typecheck: 'tsc --noEmit --project tsconfig.dev.json',
+    format: `prettier --write ${filteredPaths} && ${eslintRunCommand} --fix`,
+    lint: `prettier --check ${filteredPaths} && ${eslintRunCommand}`,
   })
 
   // ANCHOR Prettier config

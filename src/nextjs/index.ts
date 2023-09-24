@@ -94,9 +94,34 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     this.tsconfig?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
     this.tsconfigDev?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
 
-    // ANCHOR Rename "server" task to "start"
-    const {steps = [{exec: 'next start'}], description = 'Start next server'} = this.tasks.removeTask('server') || {}
-    this.addTask('start', {steps, description})
+    /*
+     * Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
+    const scripts = {
+      build: `${this.ejected ? '' : 'default && '}compile && test`,
+      compile: 'tsc --build && next build',
+      dev: 'next dev',
+      export: 'next export',
+      start: 'next start',
+      telemetry: 'next telemetry',
+      watch: 'tsc --build -w',
+    }
+
+    const tasksToRemove = [
+      ...Object.keys(scripts),
+      'clobber',
+      // Empty tasks
+      'package',
+      'post-compile',
+      'pre-compile',
+      // Rename "server" task to "start"
+      'server',
+    ]
+
+    tasksToRemove.forEach((task) => this.removeTask(task))
+    this.addScripts(scripts)
 
     // ANCHOR Add required dependencies
     this.addDevDeps('yaml') // REVIEW Required during "npx projen new", fails without this dependency
@@ -156,8 +181,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
         marker: false,
       })
 
-      this.addTask('generate-graphql-schema', {exec: 'npx apollo schema:download'})
-      this.addTask('gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.ts'})
+      this.addScripts({
+        'generate-graphql-schema': 'npx apollo schema:download',
+        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.ts',
+      })
     }
 
     // ANCHOR Set up Lighthouse audit
@@ -202,7 +229,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
   postSynthesize(): void {
     /*
-     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      *
      * The pages/_app.tsx file has optional content which is easier to format after the synthesis,

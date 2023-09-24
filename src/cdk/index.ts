@@ -61,6 +61,37 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     // ANCHOR Install dependencies
     this.addDeps('cdk-nag@2')
 
+    /*
+     * Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
+    // NOTE For dependent tasks the order of deletion matters, so be cautious.
+    this.removeTask('build')
+    this.removeTask('bundle')
+    this.removeTask('clobber')
+    this.removeTask('compile')
+    this.removeTask('deploy')
+    this.removeTask('destroy')
+    this.removeTask('diff')
+    this.removeTask('package')
+    this.removeTask('post-compile')
+    this.removeTask('pre-compile')
+    this.removeTask('synth')
+    this.removeTask('synth:silent')
+    this.removeTask('test')
+    this.removeTask('watch')
+
+    this.addScripts({
+      build: `${this.ejected ? '' : 'npm run default '}npm run synth:silent`,
+      deploy: 'cdk deploy',
+      destroy: 'cdk destroy',
+      diff: 'cdk diff',
+      synth: 'cdk synth',
+      'synth:silent': 'cdk synth -q',
+      watch: 'cdk deploy --hotswap && cdk watch',
+    })
+
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {
       addHusky(this, options)
@@ -87,7 +118,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
   postSynthesize(): void {
     /*
-     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      */
     execSync('prettier --write .projenrc.ts')

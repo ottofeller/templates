@@ -611,76 +611,12 @@ tsconfig.tsbuildinfo
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
-      "build": {
-        "name": "build",
-        "steps": [
-          {
-            "exec": "sst build",
-          },
-        ],
-      },
-      "clobber": {
-        "condition": "git diff --exit-code > /dev/null",
-        "description": "hard resets to HEAD of origin and cleans the local repo",
-        "env": {
-          "BRANCH": "$(git branch --show-current)",
-        },
-        "name": "clobber",
-        "steps": [
-          {
-            "exec": "git checkout -b scratch",
-            "name": "save current HEAD in "scratch" branch",
-          },
-          {
-            "exec": "git checkout $BRANCH",
-          },
-          {
-            "exec": "git fetch origin",
-            "name": "fetch latest changes from origin",
-          },
-          {
-            "exec": "git reset --hard origin/$BRANCH",
-            "name": "hard reset to origin commit",
-          },
-          {
-            "exec": "git clean -fdx",
-            "name": "clean all untracked files",
-          },
-          {
-            "say": "ready to rock! (unpushed commits are under the "scratch" branch)",
-          },
-        ],
-      },
-      "console": {
-        "name": "console",
-        "steps": [
-          {
-            "exec": "sst console",
-          },
-        ],
-      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
-          },
-        ],
-      },
-      "deploy": {
-        "name": "deploy",
-        "steps": [
-          {
-            "exec": "sst deploy",
-          },
-        ],
-      },
-      "dev": {
-        "name": "dev",
-        "steps": [
-          {
-            "exec": "sst dev",
           },
         ],
       },
@@ -693,17 +629,6 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "spawn": "default",
-          },
-        ],
-      },
-      "format": {
-        "name": "format",
-        "steps": [
-          {
-            "exec": "prettier --write .projenrc.ts stacks sst.config.ts",
-          },
-          {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts --fix",
           },
         ],
       },
@@ -722,37 +647,6 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "exec": "npm ci",
-          },
-        ],
-      },
-      "lint": {
-        "name": "lint",
-        "steps": [
-          {
-            "exec": "prettier --check .projenrc.ts stacks sst.config.ts",
-          },
-          {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts",
-          },
-        ],
-      },
-      "remove": {
-        "name": "remove",
-        "steps": [
-          {
-            "exec": "sst remove",
-          },
-        ],
-      },
-      "test": {
-        "description": "Run tests",
-        "name": "test",
-      },
-      "typecheck": {
-        "name": "typecheck",
-        "steps": [
-          {
-            "exec": "tsc --noEmit --project tsconfig.dev.json",
           },
         ],
       },
@@ -1079,19 +973,17 @@ tsconfig.tsbuildinfo
     "license": "Apache-2.0",
     "name": "sst",
     "scripts": {
-      "build": "npx projen build",
-      "clobber": "npx projen clobber",
-      "console": "npx projen console",
+      "build": "sst build",
+      "console": "sst console",
       "default": "npx projen default",
-      "deploy": "npx projen deploy",
-      "dev": "npx projen dev",
+      "deploy": "sst deploy",
+      "dev": "sst dev",
       "eject": "npx projen eject",
-      "format": "npx projen format",
-      "lint": "npx projen lint",
+      "format": "prettier --write .projenrc.ts stacks sst.config.ts && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts --fix",
+      "lint": "prettier --check .projenrc.ts stacks sst.config.ts && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts",
       "projen": "npx projen",
-      "remove": "npx projen remove",
-      "test": "npx projen test",
-      "typecheck": "npx projen typecheck",
+      "remove": "sst remove",
+      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
     },
     "version": "0.0.0",
   },

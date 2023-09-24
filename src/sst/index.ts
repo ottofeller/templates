@@ -59,18 +59,27 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
     // ANCHOR Install dependencies
     this.addDevDeps('sst', 'aws-cdk-lib', 'constructs')
 
-    // ANCHOR Setup tasks
+    /*
+     * Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * This way we ensure smooth ejection experience with all the commands visible in package.json
+     * and no need to keep the projen task runner within an ejected project.
+     */
     this.removeTask('build')
+    this.removeTask('clobber')
     this.removeTask('compile')
     this.removeTask('package')
     this.removeTask('post-compile')
     this.removeTask('pre-compile')
+    this.removeTask('test')
     this.removeTask('watch')
-    this.addTask('dev', {exec: 'sst dev'})
-    this.addTask('build', {exec: 'sst build'})
-    this.addTask('deploy', {exec: 'sst deploy'})
-    this.addTask('remove', {exec: 'sst remove'})
-    this.addTask('console', {exec: 'sst console'})
+
+    this.addScripts({
+      dev: 'sst dev',
+      build: 'sst build',
+      deploy: 'sst deploy',
+      remove: 'sst remove',
+      console: 'sst console',
+    })
 
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {
@@ -104,7 +113,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
 
   postSynthesize(): void {
     /*
-     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      */
     execSync('prettier --write .projenrc.ts')
