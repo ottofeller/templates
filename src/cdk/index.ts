@@ -62,8 +62,8 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     this.addDeps('cdk-nag@2')
 
     /*
-     * ANCHOR Clean off the projen tasks and if needed replace them with regular npm scripts.
-     * NOTE This way we ensure smooth ejection experience with all the commands visible in package.json
+     * Clean off the projen tasks and if needed replace them with regular npm scripts.
+     * This way we ensure smooth ejection experience with all the commands visible in package.json
      * and no need to keep the projen task runner within an ejected project.
      */
     // NOTE For dependent tasks the order of deletion matters, so be cautious.
@@ -118,7 +118,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
   postSynthesize(): void {
     /*
-     * NOTE: The `.projenrc.ts` file is created by projen and its formatting is not controlled.
+     * The `.projenrc.ts` file is created by projen and its formatting is not controlled.
      * Therefore an additional formatting step is required after project initialization.
      */
     execSync('prettier --write .projenrc.ts')
