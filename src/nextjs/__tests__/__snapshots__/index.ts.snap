@@ -149,9 +149,6 @@ node_modules
           "assertionStyle": "never",
         },
       ],
-      "@typescript-eslint/no-duplicate-imports": [
-        "error",
-      ],
       "@typescript-eslint/no-shadow": [
         "error",
       ],
@@ -649,17 +646,17 @@ tsconfig.tsbuildinfo
       {
         "name": "@typescript-eslint/eslint-plugin",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "@typescript-eslint/parser",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "@typescript-eslint/typescript-estree",
         "type": "build",
-        "version": "5",
+        "version": "6",
       },
       {
         "name": "autoprefixer",
@@ -1528,9 +1525,9 @@ module.exports = {
       "@types/node": "^12",
       "@types/react": "*",
       "@types/react-dom": "*",
-      "@typescript-eslint/eslint-plugin": "5",
-      "@typescript-eslint/parser": "5",
-      "@typescript-eslint/typescript-estree": "5",
+      "@typescript-eslint/eslint-plugin": "6",
+      "@typescript-eslint/parser": "6",
+      "@typescript-eslint/typescript-estree": "6",
       "autoprefixer": "*",
       "eslint": "8",
       "eslint-plugin-eslint-comments": "*",
