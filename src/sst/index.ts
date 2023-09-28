@@ -7,6 +7,7 @@ import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescr
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
+import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerSSTProjectOptions
@@ -27,7 +28,9 @@ export interface OttofellerSSTProjectOptions
  *
  * @pjid ottofeller-sst
  */
-export class OttofellerSSTProject extends TypeScriptAppProject {
+export class OttofellerSSTProject extends TypeScriptAppProject implements IWithTelemetryReportUrl {
+  readonly telemetryReportUrl?: string
+
   constructor(options: OttofellerSSTProjectOptions) {
     super({
       // Default options
@@ -109,6 +112,9 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
     // ANCHOR SST config
     const assetsDir = path.join(__dirname, '..', '..', 'src/sst/assets')
     new SampleFile(this, 'sst.config.ts', {sourcePath: path.join(assetsDir, 'sst.config.ts.sample')})
+
+    // ANCHOR Telemetry
+    setupTelemetry(this, options)
   }
 
   postSynthesize(): void {
@@ -118,5 +124,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject {
      */
     execSync('prettier --write .projenrc.ts')
     execSync('eslint --fix .projenrc.ts')
+
+    collectTelemetry(this)
   }
 }

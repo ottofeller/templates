@@ -151,4 +151,5 @@ There are a few other options specific to all the templates within this project:
 - `huskyRules` - an options object for husky rules; if `hasGitHooks` is enabled, sets up the rules from this object:
   - `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default); 
   - `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`); can be set to an object with `ignoreBranches` property which specifies an array of branch names to be ignored while processing commit messages; bu default (with `commitMsg: true` option) the `ignoreBranches` is set to `['main', 'dev']`; in order to perform the check on all branches set either `commitMsg: {}` or `commitMsg: {ignoreBranches: []}`;
-  - `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default.
+  - `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default;
+  - `telemetry` if provided defines an endpoint URL for reporting; with the provided URL sets up a script and a GitHub workflow which collect some data about the project and send it to the URL.

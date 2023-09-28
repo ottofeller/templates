@@ -5,6 +5,7 @@ import {NodePackageManager} from 'projen/lib/javascript'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
+import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
@@ -25,8 +26,9 @@ export interface OttofellerCDKProjectOptions
  *
  * @pjid ottofeller-cdk
  */
-export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
+export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTelemetryReportUrl {
   public readonly initialReleaseVersion: string = '0.0.1'
+  readonly telemetryReportUrl?: string
 
   constructor(options: OttofellerCDKProjectOptions) {
     super({
@@ -117,6 +119,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
 
     // ANCHOR gitignore
     extendGitignore(this)
+
+    // ANCHOR Telemetry
+    setupTelemetry(this, options)
   }
 
   postSynthesize(): void {
@@ -126,5 +131,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
      */
     execSync('prettier --write .projenrc.ts')
     execSync('eslint --fix .projenrc.ts')
+
+    collectTelemetry(this)
   }
 }
