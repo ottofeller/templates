@@ -1,3 +1,4 @@
+import type {Linter} from 'eslint'
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
 import {addHusky} from './src/common/git'
@@ -64,10 +65,15 @@ project.package.addField('version', version)
 project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
 
 // ANCHOR ESLint and prettier setup
+const rules: Linter.RulesRecord = {
+  'import/no-relative-parent-imports': ['off'], // Relative paths are required at runtime
+  '@typescript-eslint/consistent-type-definitions': ['error', 'interface'], // JSII requires interfaces to be exported
+}
+
 addLinters({
   project,
   lintPaths: ['.projenrc.ts', 'src'],
-  extraEslintConfigs: [{rules: {'import/no-relative-parent-imports': ['off']}}],
+  extraEslintConfigs: [{rules}],
 })
 
 // Solves the typescript > 4 problem

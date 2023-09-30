@@ -10,7 +10,7 @@ import {prettierConfig} from './configs/prettier'
 const arrayEslintConfigProperties = ['extends', 'overrides', 'plugins'] as const
 type LinterConfigArrayProperties = Pick<Linter.Config, (typeof arrayEslintConfigProperties)[number]>
 
-type AddLintersProps = {
+interface AddLintersProps {
   readonly project: NodeProject
   readonly lintPaths: Array<string>
   readonly extraEslintConfigs?: Array<Linter.Config>
