@@ -86,6 +86,10 @@
         "assertionStyle": "never"
       }
     ],
+    "@typescript-eslint/consistent-type-definitions": [
+      "error",
+      "interface"
+    ],
     "@typescript-eslint/no-shadow": [
       "error"
     ],

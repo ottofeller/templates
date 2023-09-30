@@ -1,9 +1,9 @@
-type DictionaryDefinition = {
+interface DictionaryDefinition {
   name: string
   path: string
 }
 
-type LanguageSettings = {
+interface LanguageSettings {
   /**
    * VSCode languageId. i.e. typescript, java, go, cpp, javascript, markdown, latex
    * will match against any file type.
@@ -30,7 +30,7 @@ type LanguageSettings = {
 }
 
 /** @see https://cspell.org/configuration/#cspelljson-sections */
-type CSpellConfig = {
+interface CSpellConfig {
   /** Currently always 0.2 - controls how the settings in the configuration file behave. */
   version: string
 
