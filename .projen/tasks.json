@@ -95,17 +95,6 @@
         }
       ]
     },
-    "format": {
-      "name": "format",
-      "steps": [
-        {
-          "exec": "prettier --write .projenrc.ts src"
-        },
-        {
-          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src --fix"
-        }
-      ]
-    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -121,17 +110,6 @@
       "steps": [
         {
           "exec": "npm ci"
-        }
-      ]
-    },
-    "lint": {
-      "name": "lint",
-      "steps": [
-        {
-          "exec": "prettier --check .projenrc.ts src"
-        },
-        {
-          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src"
         }
       ]
     },
@@ -170,14 +148,6 @@
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
     },
-    "prepare": {
-      "name": "prepare",
-      "steps": [
-        {
-          "exec": "husky install"
-        }
-      ]
-    },
     "test": {
       "name": "test",
       "description": "Run tests",
@@ -194,14 +164,6 @@
       "steps": [
         {
           "exec": "jest --watch"
-        }
-      ]
-    },
-    "typecheck": {
-      "name": "typecheck",
-      "steps": [
-        {
-          "exec": "tsc --noEmit --project tsconfig.dev.json"
         }
       ]
     },
