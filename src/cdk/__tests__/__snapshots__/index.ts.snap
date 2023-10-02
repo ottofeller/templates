@@ -633,6 +633,10 @@ cdk.out/
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
+      "bundle": {
+        "description": "Prepare assets",
+        "name": "bundle",
+      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
@@ -1022,6 +1026,7 @@ cdk.out/
     "name": "cdk",
     "scripts": {
       "build": "npm run default npm run synth:silent",
+      "bundle": "npx projen bundle",
       "default": "npx projen default",
       "deploy": "cdk deploy",
       "destroy": "cdk destroy",

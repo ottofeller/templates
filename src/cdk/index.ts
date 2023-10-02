@@ -68,7 +68,6 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
      */
     // NOTE For dependent tasks the order of deletion matters, so be cautious.
     this.removeTask('build')
-    this.removeTask('bundle')
     this.removeTask('clobber')
     this.removeTask('compile')
     this.removeTask('deploy')

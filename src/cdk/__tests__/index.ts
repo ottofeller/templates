@@ -109,7 +109,7 @@ describe('CDK template', () => {
   test('contains only tasks created by projen', () => {
     const project = new TestCDKProject({hasGitHooks: true})
     const snapshot = synthSnapshot(project)
-    const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci']
+    const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci', 'bundle']
     const {tasks} = snapshot['.projen/tasks.json']
     const createdTasks = Object.keys(tasks).filter((task) => !internalTasks.includes(task))
     expect(createdTasks).toHaveLength(0)
