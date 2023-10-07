@@ -107,12 +107,20 @@ describe('CDK template', () => {
   })
 
   test('contains only tasks created by projen', () => {
-    const project = new TestCDKProject({hasGitHooks: true})
+    const project = new TestCDKProject()
     const snapshot = synthSnapshot(project)
     const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci', 'bundle']
     const {tasks} = snapshot['.projen/tasks.json']
     const createdTasks = Object.keys(tasks).filter((task) => !internalTasks.includes(task))
     expect(createdTasks).toHaveLength(0)
+  })
+
+  test('enables test tasks with jest option', () => {
+    const project = new TestCDKProject({jest: true})
+    const snapshot = synthSnapshot(project)
+    const {tasks} = snapshot['.projen/tasks.json']
+    expect(tasks).toHaveProperty('test')
+    expect(tasks).toHaveProperty('test:watch')
   })
 })
 
