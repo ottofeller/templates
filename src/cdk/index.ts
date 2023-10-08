@@ -78,7 +78,6 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
     this.removeTask('pre-compile')
     this.removeTask('synth')
     this.removeTask('synth:silent')
-    this.removeTask('test')
     this.removeTask('watch')
 
     this.addScripts({
@@ -90,6 +89,11 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp {
       'synth:silent': 'cdk synth -q',
       watch: 'cdk deploy --hotswap && cdk watch',
     })
+
+    // Manage test task separately - delete it only if jest is disabled
+    if (!this.jest) {
+      this.removeTask('test')
+    }
 
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {
