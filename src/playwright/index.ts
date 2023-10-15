@@ -59,7 +59,6 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
 
     // ANCHOR playwright config
     new SampleFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts.sample')})
-    new SampleFile(this, '.env.development', {sourcePath: path.join(assetsDir, '.env.development')})
 
     // eslint-disable-next-line @cspell/spellchecker -- the word is used once, so no need to add it to the dictionary
     this.addDeps('@playwright/test', 'playwright-qase-reporter')
