@@ -50,9 +50,6 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
       pullRequestTemplate: false,
     })
 
-    // ANCHOR Add required dependencies
-    this.addDevDeps('yaml') // REVIEW Required during "npx projen new", fails without this dependency
-
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/playwright/assets')
     sampleCode(this, options, assetsDir)
