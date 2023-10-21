@@ -1,11 +1,15 @@
-export interface TelemetryOptions {
-  readonly reportUrl: string
-}
-
 export interface WithTelemetry {
-  readonly telemetry?: TelemetryOptions
-}
+  /**
+   * Enable template usage telemetry.
+   * Collects the data on the template package version, connected git remotes,
+   * applied escape hatches, configured GitHub workflows.
+   *
+   * @default false
+   */
+  readonly isTelemetryEnabled?: boolean
 
-export interface IWithTelemetryReportUrl {
-  readonly telemetryReportUrl?: string
+  /**
+   * Endpoint URL to send telemetry data to.
+   */
+  readonly telemetryUrl?: string
 }

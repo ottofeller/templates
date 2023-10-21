@@ -4,25 +4,53 @@ import fetch from 'node-fetch'
 import * as path from 'path'
 import {ProjenrcFile} from 'projen'
 import type {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
-import type {IWithTelemetryReportUrl} from '../with-telemetry'
+import type {IWithTelemetryReportUrl} from '../i-with-telemetry-report-url'
 import {cloneWorkflow} from './clone-workflow'
+import {EscapeHatches, collectEscapeHatches} from './collect-escape-hatches'
 import {diff} from './diff'
-import {EscapeHatches, getEscapeHatches} from './get-escape-hatches'
 
 interface TelemetryPayload {
-  version?: string
+  /**
+   * Template package version used in the project
+   */
+  templateVersion?: string
+
+  /**
+   * Remote URLs set in git for the project repo
+   */
   gitUrls?: Array<string>
+
+  /**
+   * A collection of escape hatches used to tune the project setup.
+   * Projen has some methods to alter the content of generated files.
+   * Even though these changes might be required by a project,
+   * projen mechanisms might lack versatility and disallow some kind of edits.
+   * We try to find such measures in order to improve the template functionality.
+   *
+   * @see http://projen.io/escape-hatches.html
+   */
   escapeHatches?: {
     files?: EscapeHatches
     overrides?: EscapeHatches
     tasks?: EscapeHatches
   }
+
+  /**
+   * Github workflows set up in the project.
+   * Reports the new workflows added as well as deletion
+   * or modification of the default one.
+   */
   workflows?: {
     deleted?: Array<string>
     new?: Array<object>
     updated?: Array<object>
   }
-  errors?: unknown
+
+  /**
+   * Any errors caught collecting other metrics - mostly related to external process calls,
+   * such as `execSync`, `readFileSync`, etc.
+   */
+  errors?: Array<unknown>
 }
 
 export const telemetryEnableEnvVar = 'IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED' as const
@@ -38,10 +66,10 @@ export const collectTelemetry = async (project: NodeProject & IWithTelemetryRepo
 
   // ANCHOR template version
   try {
-    const version = project.package.tryResolveDependencyVersion('@ottofeller/templates')
+    const templateVersion = project.package.tryResolveDependencyVersion('@ottofeller/templates')
 
-    if (version) {
-      payload.version = version
+    if (templateVersion) {
+      payload.templateVersion = templateVersion
     }
   } catch (e) {
     errors.push(e)
@@ -73,11 +101,11 @@ export const collectTelemetry = async (project: NodeProject & IWithTelemetryRepo
     const rcFilePath = path.resolve(project.outdir, rcFile)
     const projenrcContents = fs.readFileSync(rcFilePath, 'utf-8')
     const fileHandles = ['tryFindFile', 'tryFindObjectFile', 'tryRemoveFile', 'tryFindWorkflow']
-    const files = getEscapeHatches(projenrcContents, fileHandles)
+    const files = collectEscapeHatches(projenrcContents, fileHandles)
     const overrideHandles = ['addOverride', 'addDeletionOverride', 'addToArray', 'patch']
-    const overrides = getEscapeHatches(projenrcContents, overrideHandles)
+    const overrides = collectEscapeHatches(projenrcContents, overrideHandles)
     const taskHandles = ['tryFind', 'addTask', 'removeTask', 'addScripts', 'removeScript']
-    const tasks = getEscapeHatches(projenrcContents, taskHandles)
+    const tasks = collectEscapeHatches(projenrcContents, taskHandles)
 
     if (files || overrides || tasks) {
       payload.escapeHatches = {files, overrides, tasks}
@@ -117,6 +145,8 @@ export const collectTelemetry = async (project: NodeProject & IWithTelemetryRepo
         .github!.workflows.map((defaultWorkflow) => [defaultWorkflow, github.tryFindWorkflow(defaultWorkflow.name)])
         .filter(([, updatedWorkflow]) => updatedWorkflow)
         .map(([defaultWorkflow, updatedWorkflow]) => ({
+          // NOTE Here we create object clones in order to eliminate all circular refs
+          // and leave only the properties essential to GitHub workflows.
           ...diff(cloneWorkflow(defaultWorkflow!), cloneWorkflow(updatedWorkflow!)),
           name: defaultWorkflow!.name,
         }))

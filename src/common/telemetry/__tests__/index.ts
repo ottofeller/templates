@@ -15,7 +15,7 @@ describe('setupTelemetry function', () => {
 
   test('sets up telemetry if requested in options', () => {
     const project = new TestProject({})
-    setupTelemetry(project, {telemetry: {reportUrl: 'http://localhost:3000/telemetry'}})
+    setupTelemetry(project, {isTelemetryEnabled: true, telemetryUrl: 'http://localhost:3000/telemetry'})
     expect(project.telemetryReportUrl).toBeDefined()
 
     const snapshot = synthSnapshot(project)

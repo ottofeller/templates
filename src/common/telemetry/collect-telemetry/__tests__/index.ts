@@ -3,7 +3,7 @@ import {readFileSync} from 'fs'
 import fetch, {RequestInfo, RequestInit, Response} from 'node-fetch'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {collectTelemetry} from '..'
-import {IWithTelemetryReportUrl, TelemetryOptions, WithTelemetry, setupTelemetry} from '../..'
+import {IWithTelemetryReportUrl, WithTelemetry, setupTelemetry} from '../..'
 import {telemetryEnableEnvVar} from '../collect-telemetry'
 
 jest.mock('child_process')
@@ -17,7 +17,7 @@ jest.mock('fs', () => ({
 describe('collectTelemetry function', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
   const mockedNodeFetch = fetch as unknown as jest.Mock<Promise<Response>, [url: RequestInfo, init: RequestInit]>
-  const telemetry: TelemetryOptions = {reportUrl: 'http://localhost:3000/telemetry'}
+  const telemetryOptions: WithTelemetry = {isTelemetryEnabled: true, telemetryUrl: 'http://localhost:3000/telemetry'}
 
   const mockStringify = jest.fn<
     string,
@@ -48,7 +48,6 @@ describe('collectTelemetry function', () => {
 
   test('does nothing if telemetryReportUrl not set', () => {
     const project = new TestProject()
-    setupTelemetry(project, {})
     collectTelemetry(project)
 
     expect(mockedNodeFetch).not.toBeCalled()
@@ -56,26 +55,23 @@ describe('collectTelemetry function', () => {
 
   test('does nothing if IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED env var not set', () => {
     delete process.env[telemetryEnableEnvVar]
-    const project = new TestProject({telemetry})
-    setupTelemetry(project, {telemetry})
+    const project = new TestProject(telemetryOptions)
     collectTelemetry(project)
 
     expect(mockedNodeFetch).not.toBeCalled()
   })
 
   test('collects templates version', () => {
-    const version = '1.1.0'
-    const project = new TestProject({telemetry, devDeps: [`@ottofeller/templates@${version}`]})
-    setupTelemetry(project, {telemetry})
+    const templateVersion = '1.1.0'
+    const project = new TestProject({...telemetryOptions, devDeps: [`@ottofeller/templates@${templateVersion}`]})
     collectTelemetry(project)
 
-    expect(mockStringify).lastCalledWith(expect.objectContaining({version}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetry.reportUrl, fetchOptions)
+    expect(mockStringify).lastCalledWith(expect.objectContaining({templateVersion}))
+    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
   })
 
   test('collects git URLs', () => {
-    const project = new TestProject({telemetry})
-    setupTelemetry(project, {telemetry})
+    const project = new TestProject(telemetryOptions)
 
     const gitUrlsRaw = [
       'origin  https://github.com/ottofeller/sampleProject.git (fetch)',
@@ -87,12 +83,11 @@ describe('collectTelemetry function', () => {
 
     const gitUrls = ['https://github.com/ottofeller/sampleProject.git']
     expect(mockStringify).lastCalledWith(expect.objectContaining({gitUrls}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetry.reportUrl, fetchOptions)
+    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
   })
 
   test('collects escape hatches utilized in projenrc file', () => {
-    const project = new TestProject({telemetry})
-    setupTelemetry(project, {telemetry})
+    const project = new TestProject(telemetryOptions)
 
     const escapeHatches = {
       files: {
@@ -131,15 +126,14 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     expect(mockStringify).lastCalledWith(expect.objectContaining({escapeHatches}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetry.reportUrl, fetchOptions)
+    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
   })
 
   test('collects GitHub workflow data', () => {
-    const project = new TestProject({telemetry})
+    const project = new TestProject(telemetryOptions)
     const updatedWorkflowName = 'build'
     const updatedTrigger = {fork: {}}
     project.github!.tryFindWorkflow(updatedWorkflowName)!.on(updatedTrigger)
-    setupTelemetry(project, {telemetry})
     collectTelemetry(project)
 
     const telemetryWorkflow = {
@@ -199,21 +193,37 @@ describe('collectTelemetry function', () => {
     }
 
     expect(mockStringify).lastCalledWith(expect.objectContaining({workflows}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetry.reportUrl, fetchOptions)
+    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
   })
 
-  test('collects errors', () => {
-    const project = new TestProject({telemetry})
-    setupTelemetry(project, {telemetry})
-    collectTelemetry(project)
+  describe('collects errors', () => {
+    test('if failed to collect git URLs', () => {
+      const project = new TestProject(telemetryOptions)
+      mockedReadFileSync.mockReturnValue('')
+      collectTelemetry(project)
 
-    const errors: unknown[] = [
-      new TypeError("Cannot read properties of undefined (reading 'split')"), // undefined returned from execSync mock in gitUrls
-      new TypeError("Cannot read properties of undefined (reading 'matchAll')"), // undefined returned from readFileSync mock in escape hatches
-    ]
+      const errors: unknown[] = [
+        // undefined returned from execSync mock in gitUrls
+        new TypeError("Cannot read properties of undefined (reading 'split')"),
+      ]
 
-    expect(mockStringify).lastCalledWith(expect.objectContaining({errors}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetry.reportUrl, fetchOptions)
+      expect(mockStringify).lastCalledWith(expect.objectContaining({errors}))
+      expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
+    })
+
+    test('if failed to read projenrc file', () => {
+      const project = new TestProject(telemetryOptions)
+      mockedExecSync.mockReturnValue('')
+      collectTelemetry(project)
+
+      const errors: unknown[] = [
+        // undefined returned from readFileSync mock in escape hatches
+        new TypeError("Cannot read properties of undefined (reading 'matchAll')"),
+      ]
+
+      expect(mockStringify).lastCalledWith(expect.objectContaining({errors}))
+      expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
+    })
   })
 })
 
@@ -227,5 +237,7 @@ class TestProject extends NodeProject implements IWithTelemetryReportUrl {
       defaultReleaseBranch: 'main',
       licensed: false, // NOTE License component interferes with readFileSync mock
     })
+
+    setupTelemetry(this, options)
   }
 }
