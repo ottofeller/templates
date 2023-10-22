@@ -20,7 +20,7 @@ const project = new projen.cdk.JsiiProject({
   deps: ['projen'],
   bundledDeps: ['prettier', 'eslint'],
   peerDeps: ['projen'],
-  devDeps: ['@types/eslint', '@types/jscodeshift', '@graphql-codegen/cli'],
+  devDeps: ['@types/eslint', '@types/jscodeshift', '@graphql-codegen/cli', 'node-fetch@2', '@types/node-fetch'],
 
   jsiiVersion: '5.1.x',
   typescriptVersion: '5.1.x',

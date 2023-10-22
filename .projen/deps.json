@@ -26,6 +26,10 @@
       "type": "build"
     },
     {
+      "name": "@types/node-fetch",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -93,6 +97,11 @@
     {
       "name": "jsii",
       "version": "5.1.x",
+      "type": "build"
+    },
+    {
+      "name": "node-fetch",
+      "version": "2",
       "type": "build"
     },
     {

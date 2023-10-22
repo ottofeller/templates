@@ -9,6 +9,7 @@ import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
+import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 import {eslintConfigReact} from './eslint-config-react'
 import {eslintConfigTailwind} from './eslint-config-tailwind'
@@ -23,7 +24,8 @@ export interface OttofellerNextjsProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks {
+    WithGitHooks,
+    WithTelemetry {
   /**
    * Set up GraphQL dependencies and supplementary script.
    *
@@ -52,8 +54,9 @@ export interface OttofellerNextjsProjectOptions
  *
  * @pjid ottofeller-nextjs
  */
-export class OttofellerNextjsProject extends NextJsTypeScriptProject {
+export class OttofellerNextjsProject extends NextJsTypeScriptProject implements IWithTelemetryReportUrl {
   public postSynthFormattingPaths: Array<string>
+  readonly telemetryReportUrl?: string
 
   constructor(options: OttofellerNextjsProjectOptions) {
     super({
@@ -222,6 +225,9 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
     this.addScripts({
       'codemod:add-src-to-imports': `jscodeshift ${addSrcTransform} ${extensions} ${foldersToProcess}`,
     })
+
+    // ANCHOR Telemetry
+    setupTelemetry(this, options)
   }
 
   postSynthesize(): void {
@@ -238,5 +244,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject {
 
     execSync(`prettier --write ${formattingPaths}`)
     execSync(`eslint --fix ${formattingPaths}`)
+
+    collectTelemetry(this)
   }
 }

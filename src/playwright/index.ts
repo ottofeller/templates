@@ -5,6 +5,7 @@ import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
+import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {PlaywrightWorkflowTest} from './github'
 import {sampleCode} from './sample-code'
 
@@ -19,7 +20,9 @@ export interface OttofellerPlaywrightProjectOptions
  *
  * @pjid ottofeller-playwright
  */
-export class OttofellerPlaywrightProject extends TypeScriptProject {
+export class OttofellerPlaywrightProject extends TypeScriptProject implements IWithTelemetryReportUrl {
+  readonly telemetryReportUrl?: string
+
   constructor(options: OttofellerPlaywrightProjectOptions) {
     super({
       ...options,
@@ -100,6 +103,9 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
 
     // ANCHOR Github workflow
     PlaywrightWorkflowTest.addToProject(this, options)
+
+    // ANCHOR Telemetry
+    setupTelemetry(this, options)
   }
 
   postSynthesize(): void {
@@ -109,5 +115,7 @@ export class OttofellerPlaywrightProject extends TypeScriptProject {
      */
     execSync('prettier --write .projenrc.ts')
     execSync('eslint --fix .projenrc.ts')
+
+    collectTelemetry(this)
   }
 }

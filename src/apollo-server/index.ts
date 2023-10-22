@@ -8,6 +8,7 @@ import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
+import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 import {sampleCode} from './sample-code'
 
@@ -23,7 +24,9 @@ export interface OttofellerApolloServerProjectOptions
  *
  * @pjid ottofeller-apollo-server
  */
-export class OttofellerApolloServerProject extends TypeScriptAppProject {
+export class OttofellerApolloServerProject extends TypeScriptAppProject implements IWithTelemetryReportUrl {
+  readonly telemetryReportUrl?: string
+
   constructor(options: OttofellerApolloServerProjectOptions) {
     super({
       ...options,
@@ -167,6 +170,9 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
 
     // ANCHOR gitignore
     extendGitignore(this)
+
+    // ANCHOR Telemetry
+    setupTelemetry(this, options)
   }
 
   postSynthesize(): void {
@@ -176,5 +182,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject {
      */
     execSync('prettier --write .projenrc.mjs')
     execSync('eslint --fix .projenrc.mjs')
+
+    collectTelemetry(this)
   }
 }
