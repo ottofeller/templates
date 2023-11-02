@@ -146,6 +146,7 @@ describe('collectTelemetry function', () => {
       },
       jobs: {
         telemetry: {
+          env: {IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED: '1'},
           permissions: {contents: 'read'},
           runsOn: ['ubuntu-latest'],
           steps: [
@@ -173,7 +174,7 @@ describe('collectTelemetry function', () => {
             },
             {
               name: 'Execute the command',
-              run: 'yarn run IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED=1 npm run default',
+              run: 'yarn run default',
             },
           ],
         },
