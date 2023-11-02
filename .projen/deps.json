@@ -135,6 +135,10 @@
       "type": "bundled"
     },
     {
+      "name": "node-fetch",
+      "type": "bundled"
+    },
+    {
       "name": "prettier",
       "type": "bundled"
     },
