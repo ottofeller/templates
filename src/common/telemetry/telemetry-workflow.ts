@@ -42,14 +42,14 @@ export class TelemetryWorkflow extends Component {
     workflow.on({pullRequest: {paths, types: ['opened', 'synchronize']}})
 
     const telemetryJob = runScriptJob({
-      command: `${telemetryEnableEnvVar}=1 npm run default`,
+      command: 'default',
       workingDirectory,
       projectPackage: project.package,
       runScriptCommand: project.runScriptCommand,
       nodeVersion,
     })
 
-    workflow.addJob('telemetry', telemetryJob)
+    workflow.addJob('telemetry', {...telemetryJob, env: {[telemetryEnableEnvVar]: '1'}})
   }
 
   /**
