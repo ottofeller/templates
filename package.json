@@ -67,11 +67,13 @@
   },
   "dependencies": {
     "eslint": "8.42.0",
+    "node-fetch": "^2.7.0",
     "prettier": "2.8.0",
     "projen": "^0.71.128"
   },
   "bundledDependencies": [
     "eslint",
+    "node-fetch",
     "prettier"
   ],
   "overrides": {
