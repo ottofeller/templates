@@ -39,6 +39,7 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
         compilerOptions: {
           baseUrl: './',
           target: 'es6',
+          skipLibCheck: true,
           paths: {
             '*': ['./*'],
           },

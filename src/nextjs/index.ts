@@ -73,6 +73,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
         compilerOptions: {
           baseUrl: './',
           target: 'es6',
+          skipLibCheck: true,
         },
         include: ['**/*.ts', '**/*.tsx', '.next/types/**/*.ts'],
       },
