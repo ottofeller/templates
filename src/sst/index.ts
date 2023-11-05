@@ -35,7 +35,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
     super({
       // Default options
       packageManager: options.packageManager ?? NodePackageManager.NPM,
-      tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
+      tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6', skipLibCheck: true}},
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: DependabotScheduleInterval.WEEKLY},
 

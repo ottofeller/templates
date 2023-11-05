@@ -39,7 +39,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
       defaultReleaseBranch: 'main',
       name: 'apollo-server',
       packageManager: options.packageManager ?? NodePackageManager.NPM,
-      tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6'}},
+      tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6', skipLibCheck: true}},
       sampleCode: false,
       eslint: false,
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
