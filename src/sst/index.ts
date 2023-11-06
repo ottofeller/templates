@@ -7,14 +7,15 @@ import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescr
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
-import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
+import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerSSTProjectOptions
   extends TypeScriptProjectOptions,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks {
+    WithGitHooks,
+    WithTelemetry {
   /**
    * The base version of the very first release.
    *

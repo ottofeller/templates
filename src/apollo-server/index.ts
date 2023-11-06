@@ -8,7 +8,7 @@ import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
-import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
+import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 import {sampleCode} from './sample-code'
 
@@ -17,7 +17,8 @@ export interface OttofellerApolloServerProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks {}
+    WithGitHooks,
+    WithTelemetry {}
 
 /**
  * Apollo server template.
