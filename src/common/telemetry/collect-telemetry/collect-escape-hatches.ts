@@ -11,11 +11,15 @@ export type EscapeHatches = Record<string, MaybePlural<string>>
  *
  * @returns A mapping object between found method calls and the call arguments.
  */
-export const collectEscapeHatches = (source: string, methods: Array<string>): EscapeHatches => {
+export const collectEscapeHatches = (source: string, methods: Array<string>): EscapeHatches | undefined => {
   const regex = new RegExp(`\\.(${methods.join('|')})\\((.*)\\)`, 'g')
-  const handles = source.matchAll(regex)
+  const handles = Array.from(source.matchAll(regex))
 
-  return Array.from(handles).reduce<EscapeHatches>((acc, [, method, args]) => {
+  if (handles.length < 1) {
+    return
+  }
+
+  return handles.reduce<EscapeHatches>((acc, [, method, args]) => {
     if (!acc[method]) {
       acc[method] = args
       return acc
