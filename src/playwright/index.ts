@@ -5,7 +5,7 @@ import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
-import {IWithTelemetryReportUrl, collectTelemetry, setupTelemetry} from '../common/telemetry'
+import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {PlaywrightWorkflowTest} from './github'
 import {sampleCode} from './sample-code'
 
@@ -14,7 +14,8 @@ export interface OttofellerPlaywrightProjectOptions
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
-    WithGitHooks {}
+    WithGitHooks,
+    WithTelemetry {}
 /**
  * Playwright template with TypeScript support.
  *
