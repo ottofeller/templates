@@ -129,6 +129,25 @@ describe('collectTelemetry function', () => {
     expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
   })
 
+  test('does not collect empty escape hatches', () => {
+    const project = new TestProject(telemetryOptions)
+    // NOTE: Only this single item will be recorded
+    const escapeHatches = {files: {tryFindFile: "'.eslintrc.json'"}}
+
+    const projenrcTs = [
+      "import {OttofellerNextjsProject} from '@ottofeller/templates'",
+      'const project = new OttofellerNextjsProject({})',
+      `const eslintrc = project.tryFindFile(${escapeHatches.files.tryFindFile}) as unknown as ObjectFile`,
+      'project.synth()',
+    ].join('\n')
+
+    mockedReadFileSync.mockReturnValue(projenrcTs)
+    collectTelemetry(project)
+
+    expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({escapeHatches}))
+    expect(mockedNodeFetch).toHaveBeenLastCalledWith(telemetryOptions.telemetryUrl, fetchOptions)
+  })
+
   test('collects GitHub workflow data', () => {
     const project = new TestProject(telemetryOptions)
     const updatedWorkflowName = 'build'
