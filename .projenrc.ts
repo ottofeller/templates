@@ -12,7 +12,7 @@ const project = new projen.cdk.JsiiProject({
   defaultReleaseBranch: 'main',
   repositoryUrl: 'https://github.com/ottofeller/templates.git',
   name: '@ottofeller/templates',
-  description: 'Projen templates for OttoFeller projects!',
+  description: 'Projen templates for OttoFeller projects',
   packageName: '@ottofeller/templates',
   packageManager: projen.javascript.NodePackageManager.NPM,
   minNodeVersion: '16.0.0',
