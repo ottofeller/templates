@@ -6,6 +6,7 @@
     ".github/workflows/create-release.yml",
     ".github/workflows/publish-release.yml",
     ".github/workflows/test.yml",
+    ".github/workflows/uncomitted-changes.yml",
     ".gitignore",
     ".husky/check-commit-msg.js",
     ".husky/commit-msg",

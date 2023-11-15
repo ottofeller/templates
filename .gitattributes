@@ -7,6 +7,7 @@
 /.github/workflows/create-release.yml linguist-generated
 /.github/workflows/publish-release.yml linguist-generated
 /.github/workflows/test.yml linguist-generated
+/.github/workflows/uncomitted-changes.yml linguist-generated
 /.gitignore linguist-generated
 /.husky/check-commit-msg.js linguist-generated
 /.husky/commit-msg linguist-generated
