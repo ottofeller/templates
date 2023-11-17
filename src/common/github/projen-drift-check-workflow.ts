@@ -6,7 +6,7 @@ import type {WithDefaultWorkflow} from './with-default-workflow'
 /**
  * Options for UncomittedChangesWorkflow
  */
-export interface UncomittedChangesOptions
+export interface ProjenDriftCheckOptions
   extends Partial<Pick<javascript.NodeProject, 'runScriptCommand'>>,
     Pick<NodeProjectOptions, 'workflowNodeVersion'> {
   /**
@@ -14,12 +14,6 @@ export interface UncomittedChangesOptions
    * @default ['ubuntu-latest']
    */
   readonly runsOn?: string[]
-
-  /**
-   * The workflow name
-   * @default 'test'
-   */
-  readonly name?: string
 
   /**
    * Relative output directory of the project.
@@ -36,16 +30,16 @@ export interface UncomittedChangesOptions
 /**
  * Configure a workflow that runs projen default task and checks for any generated but uncomitted changes.
  */
-export class UncomittedChangesWorkflow extends Component {
-  constructor(githubInstance: github.GitHub, options: UncomittedChangesOptions = {}) {
+export class ProjenDriftCheckWorkflow extends Component {
+  constructor(githubInstance: github.GitHub, options: ProjenDriftCheckOptions = {}) {
     const {project} = githubInstance
     super(project)
 
     if (!(project instanceof NodeProject)) {
-      throw new Error('UncomittedChangesWorkflow works only with instances of NodeProject.')
+      throw new Error('ProjenDriftCheckWorkflow works only with instances of NodeProject.')
     }
 
-    const workflowName = options.name ?? 'uncomitted-changes'
+    const workflowName = 'projen-drift-check'
     const workingDirectory = options.outdir
     const paths = [ProjenrcFile.of(project)!.filePath]
     const workflow = githubInstance.addWorkflow(workflowName)
@@ -68,7 +62,7 @@ export class UncomittedChangesWorkflow extends Component {
 
     const checkChangesCommand = 'CHANGES=$(git status --porcelain) && [ -z $CHANGES ] || { echo $CHANGES; exit 1; }'
     uncomittedChangesJob.steps.push({name: 'Check git', run: checkChangesCommand})
-    workflow.addJob('uncomitted-changes', uncomittedChangesJob)
+    workflow.addJob(workflowName, uncomittedChangesJob)
   }
 
   /**
@@ -80,13 +74,13 @@ export class UncomittedChangesWorkflow extends Component {
    * NOTE: Use this method if the described conditional logic is needed.
    * Otherwise just use the constructor.
    */
-  static addToProject(project: javascript.NodeProject, options: UncomittedChangesOptions & WithDefaultWorkflow) {
+  static addToProject(project: javascript.NodeProject, options: ProjenDriftCheckOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
 
     if (!hasDefaultGithubWorkflows || !project.github) {
       return
     }
 
-    new UncomittedChangesWorkflow(project.github, options)
+    new ProjenDriftCheckWorkflow(project.github, options)
   }
 }

@@ -3,7 +3,7 @@ import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
-import {PullRequestTest, ReleaseWorkflow, UncomittedChangesWorkflow, WithDefaultWorkflow} from '../common/github'
+import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
@@ -113,7 +113,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initialReleaseVersion: this.initialReleaseVersion})
       PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
-      UncomittedChangesWorkflow.addToProject(this, options)
+      ProjenDriftCheckWorkflow.addToProject(this, options)
     }
 
     // ANCHOR VSCode settings

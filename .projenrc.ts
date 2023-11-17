@@ -2,7 +2,7 @@ import type {Linter} from 'eslint'
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
 import {addHusky} from './src/common/git'
-import {UncomittedChangesWorkflow, job, npmRunJobStep} from './src/common/github'
+import {ProjenDriftCheckWorkflow, job, npmRunJobStep} from './src/common/github'
 import {addLinters} from './src/common/lint'
 
 // ANCHOR Basic setup
@@ -94,7 +94,7 @@ testGithubWorkflow.addJobs({
   build: {...job([npmRunJobStep('build')]), needs: ['lint', 'test', 'typecheck']},
 })
 
-new UncomittedChangesWorkflow(project.github!, {})
+new ProjenDriftCheckWorkflow(project.github!, {})
 
 const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')
 

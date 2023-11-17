@@ -7,7 +7,7 @@ import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/li
 import {WithDocker} from '../common'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
-import {PullRequestTest, UncomittedChangesWorkflow, WithDefaultWorkflow} from '../common/github'
+import {ProjenDriftCheckWorkflow, PullRequestTest, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
@@ -156,7 +156,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
 
     // ANCHOR Github workflow
     PullRequestTest.addToProject(this, options)
-    UncomittedChangesWorkflow.addToProject(this, options)
+    ProjenDriftCheckWorkflow.addToProject(this, options)
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
