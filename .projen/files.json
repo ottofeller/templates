@@ -4,6 +4,7 @@
     ".gitattributes",
     ".github/dependabot.yml",
     ".github/workflows/create-release.yml",
+    ".github/workflows/projen-drift-check.yml",
     ".github/workflows/publish-release.yml",
     ".github/workflows/test.yml",
     ".gitignore",

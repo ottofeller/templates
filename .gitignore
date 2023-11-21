@@ -47,5 +47,6 @@ tsconfig.json
 !/.husky/check-commit-msg.js
 !/.husky/commit-msg
 !/.github/workflows/test.yml
+!/.github/workflows/projen-drift-check.yml
 !/.github/workflows/create-release.yml
 !/.github/workflows/publish-release.yml

@@ -4,7 +4,7 @@ import {JavaProject} from 'projen/lib/java'
 import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
-import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
+import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
 
 describe('GitHub utils', () => {
   describe('PullRequestTest', () => {
@@ -198,6 +198,91 @@ describe('GitHub utils', () => {
     })
   })
 
+  describe('ProjenDriftCheckWorkflow', () => {
+    const workflowPath = '.github/workflows/projen-drift-check.yml'
+
+    test('throws if called with a project not derived from NodeProject', () => {
+      const project = new JavaProject({name: 'java', groupId: 'java', artifactId: 'app', version: '0', github: true})
+      expect(() => new ProjenDriftCheckWorkflow(project.github!)).toThrow()
+    })
+
+    test('creates a workflow', () => {
+      const project = new TestProject()
+      new ProjenDriftCheckWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      expect(snapshot).toMatchSnapshot()
+      expect(snapshot[workflowPath]).toBeDefined()
+    })
+
+    test('configures the workflow to be run on pull requests and pushes to main branch with changes to projenrc file', () => {
+      const project = new TestProject()
+      const paths = ['.projenrc.js']
+      new ProjenDriftCheckWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+
+      expect(workflow.on).toEqual({
+        pull_request: {paths, types: ['opened', 'synchronize']},
+        push: {paths, branches: ['main']},
+      })
+    })
+
+    test('allows to be run on pushes to specified branches', () => {
+      const project = new TestProject()
+      const branches = ['main', 'dev']
+      const paths = ['.projenrc.js']
+      new ProjenDriftCheckWorkflow(project.github!, {triggerOnPushToBranches: branches})
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+
+      expect(workflow.on).toEqual({
+        pull_request: {paths, types: ['opened', 'synchronize']},
+        push: {paths, branches},
+      })
+    })
+
+    test('adds a check for uncomitted changes to the workflow', () => {
+      const project = new TestProject()
+      new ProjenDriftCheckWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.name)
+      expect(jobs).toHaveLength(1)
+      expect(jobs[0]).toEqual('Check git')
+    })
+
+    describe('addToProject', () => {
+      const name = 'subproject'
+
+      test('does nothing when opted out with hasDefaultGithubWorkflows option', () => {
+        const project = new TestProjectWithProjenDriftCheckWorkflow({hasDefaultGithubWorkflows: false})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).not.toBeDefined()
+      })
+
+      test('does nothing if github disabled', () => {
+        const project = new TestProjectWithProjenDriftCheckWorkflow({github: false})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).not.toBeDefined()
+      })
+
+      test('adds a ProjenDriftCheckWorkflow component to the project with github by default', () => {
+        const project = new TestProjectWithProjenDriftCheckWorkflow()
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).toBeDefined()
+      })
+
+      test('for subprojects does nothing', () => {
+        const parent = new TestProjectWithProjenDriftCheckWorkflow({github: false})
+        const subproject = new TestProjectWithProjenDriftCheckWorkflow({parent, outdir: 'sub', name})
+        const subprojectSnapshot = synthSnapshot(subproject)
+        const parentSnapshot = synthSnapshot(parent)
+        expect(subprojectSnapshot[workflowPath]).not.toBeDefined()
+        expect(parentSnapshot[workflowPath]).not.toBeDefined()
+      })
+    })
+  })
+
   describe('ReleaseWorkflow', () => {
     const releaseWorkflowPath = '.github/workflows/release.yml'
 
@@ -259,5 +344,18 @@ class TestProjectWithTestWorkflow extends NodeProject {
     })
 
     PullRequestTest.addToProject(this, options)
+  }
+}
+
+class TestProjectWithProjenDriftCheckWorkflow extends NodeProject {
+  constructor(options: Partial<NodeProjectOptions & WithDefaultWorkflow> = {}) {
+    super({
+      name: 'test-project-with-test-workflow',
+      defaultReleaseBranch: 'main',
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
+      ...options,
+    })
+
+    ProjenDriftCheckWorkflow.addToProject(this, options)
   }
 }

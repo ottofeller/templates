@@ -5,7 +5,7 @@ import {DependabotScheduleInterval} from 'projen/lib/github'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
-import {PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
+import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
@@ -101,6 +101,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
       const initialReleaseVersion = options.initialReleaseVersion ?? '0.0.1'
       new ReleaseWorkflow(this.github, {initialReleaseVersion})
       PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
+      ProjenDriftCheckWorkflow.addToProject(this, options)
     }
 
     // ANCHOR VSCode settings

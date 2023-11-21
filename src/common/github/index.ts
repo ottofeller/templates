@@ -1,4 +1,5 @@
 export * from './jobs'
+export {ProjenDriftCheckOptions, ProjenDriftCheckWorkflow} from './projen-drift-check-workflow'
 export {PullRequestTest, PullRequestTestOptions} from './pull-request-test-workflow'
 export {ReleaseWorkflow, ReleaseWorkflowOptions} from './release-workflow'
 export {WithDefaultWorkflow} from './with-default-workflow'
