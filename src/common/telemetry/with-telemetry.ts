@@ -12,4 +12,15 @@ export interface WithTelemetry {
    * Endpoint URL to send telemetry data to.
    */
   readonly telemetryUrl?: string
+
+  /**
+   * Authorization header name for telemetry
+   */
+  readonly telemetryAuthHeader?: string
+
+  /**
+   * The name of env var to extract header value from.
+   * The value is expected to be stored in a CI secret.
+   */
+  readonly telemetryAuthTokenVar?: string
 }

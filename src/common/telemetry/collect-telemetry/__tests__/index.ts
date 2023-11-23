@@ -4,7 +4,7 @@ import fetch, {RequestInfo, RequestInit, Response} from 'node-fetch'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {collectTelemetry} from '..'
 import {IWithTelemetryReportUrl, WithTelemetry, setupTelemetry} from '../..'
-import {telemetryEnableEnvVar} from '../collect-telemetry'
+import {telemetryAuthToken, telemetryEnableEnvVar} from '../collect-telemetry'
 
 jest.mock('child_process')
 jest.mock('node-fetch')
@@ -30,7 +30,7 @@ describe('collectTelemetry function', () => {
 
   const testStringifyValue = 'stringifiedPayload'
   JSON.stringify = mockStringify
-  const fetchOptions = {method: 'post', body: testStringifyValue}
+  const fetchOptions = {method: 'post', body: testStringifyValue, headers: {}}
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
   const mockedExecSync = execSync as unknown as jest.Mock<string, [string]>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
@@ -59,6 +59,21 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     expect(mockedNodeFetch).not.toBeCalled()
+  })
+
+  test('sets auth header if it is defined in options', () => {
+    const telemetryAuthHeader = 'Auth'
+    const telemetryAuthTokenVar = 'TELEMETRY_TOKEN'
+    const telemetryAuthTokenValue = 'some-token'
+    Object.assign(process.env, {[telemetryAuthToken]: telemetryAuthTokenValue})
+
+    const project = new TestProject({...telemetryOptions, telemetryAuthHeader, telemetryAuthTokenVar})
+    collectTelemetry(project)
+
+    const headers = {[telemetryAuthHeader]: telemetryAuthTokenValue}
+    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.telemetryUrl, {...fetchOptions, headers})
+
+    delete process.env[telemetryAuthHeader]
   })
 
   test('collects templates version', () => {

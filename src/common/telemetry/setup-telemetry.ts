@@ -15,10 +15,13 @@ export const setupTelemetry = (
   project: NodeProject & Writeable<IWithTelemetryReportUrl>,
   options: WithTelemetry & TelemetryWorkflowOptions,
 ) => {
-  const {isTelemetryEnabled = false, telemetryUrl} = options
+  const {isTelemetryEnabled = false, telemetryUrl, telemetryAuthHeader, telemetryAuthTokenVar} = options
+  const anyOfOptionalTelemetryParams = telemetryUrl || telemetryAuthHeader || telemetryAuthTokenVar
 
-  if (!isTelemetryEnabled && telemetryUrl) {
-    throw Error('Telemetry is disabled, thus "telemetryUrl" won\'t have any effect.')
+  if (!isTelemetryEnabled && anyOfOptionalTelemetryParams) {
+    throw new Error(
+      'Telemetry is disabled, thus "telemetryUrl", "telemetryAuthHeader" or "telemetryAuthTokenVar" won\'t have any effect.',
+    )
   }
 
   if (!isTelemetryEnabled) {
@@ -26,9 +29,18 @@ export const setupTelemetry = (
   }
 
   if (!telemetryUrl) {
-    throw Error('A valid URL is required to be set for telemetry.')
+    throw new Error('A valid URL is required to be set for telemetry.')
+  }
+
+  if ((telemetryAuthHeader && !telemetryAuthTokenVar) || (!telemetryAuthHeader && telemetryAuthTokenVar)) {
+    throw new Error('"telemetryAuthHeader" and "telemetryAuthTokenVar" options should be both set or not.')
   }
 
   project.telemetryReportUrl = telemetryUrl
+
+  if (telemetryAuthHeader) {
+    project.telemetryAuthHeader = telemetryAuthHeader
+  }
+
   TelemetryWorkflow.addToProject(project, options)
 }

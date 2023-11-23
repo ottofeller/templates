@@ -54,6 +54,7 @@ interface TelemetryPayload {
 }
 
 export const telemetryEnableEnvVar = 'IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED' as const
+export const telemetryAuthToken = 'TELEMETRY_AUTH_TOKEN' as const
 
 export const collectTelemetry = async (project: NodeProject & IWithTelemetryReportUrl) => {
   if (!project.telemetryReportUrl || !process.env[telemetryEnableEnvVar]) {
@@ -171,7 +172,14 @@ export const collectTelemetry = async (project: NodeProject & IWithTelemetryRepo
   try {
     const body = JSON.stringify(payload)
     project.logger.info('Collected telemetry:', body)
-    const {status, statusText} = await fetch(project.telemetryReportUrl!, {method: 'post', body})
+    const headers: Record<string, string> = {}
+    const authHeaderName = project.telemetryAuthHeader
+
+    if (authHeaderName) {
+      headers[authHeaderName] = process.env[telemetryAuthToken]!
+    }
+
+    const {status, statusText} = await fetch(project.telemetryReportUrl!, {method: 'post', body, headers})
     project.logger.info('Telemetry endpoint responded with status', status, statusText)
   } catch (e) {
     project.logger.error('Telemetry serialization or network error', e)
