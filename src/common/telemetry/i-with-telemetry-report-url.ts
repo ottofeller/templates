@@ -2,10 +2,10 @@ export interface IWithTelemetryReportUrl {
   /**
    * URL used for telemetry.
    */
-  readonly telemetryReportUrl?: string
+  readonly reportTargetUrl?: string
 
   /**
    * Authorization header name for telemetry
    */
-  readonly telemetryAuthHeader?: string
+  readonly reportTargetAuthHeaderName?: string
 }

@@ -2,7 +2,7 @@ import {Component, ProjenrcFile} from 'projen'
 import type {GitHub} from 'projen/lib/github'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {runScriptJob} from '../github'
-import {telemetryAuthToken, telemetryEnableEnvVar} from './collect-telemetry'
+import {reportTargetAuthToken, telemetryEnableEnvVar} from './collect-telemetry'
 import type {WithTelemetry} from './with-telemetry'
 
 /**
@@ -11,7 +11,7 @@ import type {WithTelemetry} from './with-telemetry'
 export interface TelemetryWorkflowOptions
   extends Partial<Pick<NodeProject, 'runScriptCommand'>>,
     Pick<NodeProjectOptions, 'workflowNodeVersion'>,
-    Pick<WithTelemetry, 'telemetryAuthTokenVar'> {
+    Pick<WithTelemetry, 'reportTargetAuthTokenVar'> {
   /**
    * Project name - used to construct workflow name for subprojects
    */
@@ -52,10 +52,10 @@ export class TelemetryWorkflow extends Component {
     })
 
     const env: Record<string, string> = {[telemetryEnableEnvVar]: '1'}
-    const {telemetryAuthTokenVar} = options
+    const {reportTargetAuthTokenVar} = options
 
-    if (telemetryAuthTokenVar) {
-      env[telemetryAuthToken] = `\${{ secrets.${telemetryAuthTokenVar} }}`
+    if (reportTargetAuthTokenVar) {
+      env[reportTargetAuthToken] = `\${{ secrets.${reportTargetAuthTokenVar} }}`
     }
 
     workflow.addJob('telemetry', {...telemetryJob, env})
@@ -66,8 +66,8 @@ export class TelemetryWorkflow extends Component {
    * or within the project parent (for subprojects).
    */
   static addToProject(project: NodeProject, options: TelemetryWorkflowOptions) {
-    const {outdir, workflowNodeVersion, telemetryAuthTokenVar} = options
-    const commonOptions = {outdir, workflowNodeVersion, telemetryAuthTokenVar}
+    const {outdir, workflowNodeVersion, reportTargetAuthTokenVar} = options
+    const commonOptions: TelemetryWorkflowOptions = {outdir, workflowNodeVersion, reportTargetAuthTokenVar}
 
     if (project.github) {
       new TelemetryWorkflow(project.github, commonOptions)

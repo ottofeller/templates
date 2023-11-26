@@ -29,7 +29,8 @@ export interface OttofellerCDKProjectOptions
  */
 export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTelemetryReportUrl {
   public readonly initialReleaseVersion: string = '0.0.1'
-  readonly telemetryReportUrl?: string
+  readonly reportTargetUrl?: string
+  readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerCDKProjectOptions) {
     super({
