@@ -33,7 +33,7 @@ export const setupTelemetry = (
   }
 
   if ((telemetryAuthHeader && !telemetryAuthTokenVar) || (!telemetryAuthHeader && telemetryAuthTokenVar)) {
-    throw new Error('"telemetryAuthHeader" and "telemetryAuthTokenVar" options should be both set or not.')
+    throw new Error('"telemetryAuthHeader" and "telemetryAuthTokenVar" options should be set together')
   }
 
   project.telemetryReportUrl = telemetryUrl
