@@ -34,22 +34,18 @@ export class TelemetryWorkflow extends Component {
       throw new Error('TelemetryWorkflow works only with instances of NodeProject.')
     }
 
+    const rcFilePath = ProjenrcFile.of(project)?.filePath
+
+    if (!rcFilePath) {
+      throw new Error('TelemetryWorkflow works only with projects that have a ProjenrcFile component.')
+    }
+
     super(project)
 
     const workingDirectory = options.outdir
-    const rcFile = ProjenrcFile.of(project)?.filePath
-    const paths = rcFile ? [rcFile] : undefined
     const nodeVersion = options.workflowNodeVersion ?? project.package.minNodeVersion
     const workflow = githubInstance.addWorkflow('telemetry')
-    workflow.on({pullRequest: {paths, types: ['opened', 'synchronize']}})
-
-    const telemetryJob = runScriptJob({
-      command: 'default',
-      workingDirectory,
-      projectPackage: project.package,
-      runScriptCommand: project.runScriptCommand,
-      nodeVersion,
-    })
+    workflow.on({pullRequest: {paths: [rcFilePath], types: ['opened', 'synchronize']}})
 
     const env: Record<string, string> = {[telemetryEnableEnvVar]: '1'}
     const {reportTargetAuthTokenVar} = options
@@ -58,7 +54,16 @@ export class TelemetryWorkflow extends Component {
       env[reportTargetAuthToken] = `\${{ secrets.${reportTargetAuthTokenVar} }}`
     }
 
-    workflow.addJob('telemetry', {...telemetryJob, env})
+    workflow.addJob('telemetry', {
+      env,
+      ...runScriptJob({
+        command: 'default',
+        workingDirectory,
+        projectPackage: project.package,
+        runScriptCommand: project.runScriptCommand,
+        nodeVersion,
+      }),
+    })
   }
 
   /**
@@ -66,19 +71,10 @@ export class TelemetryWorkflow extends Component {
    * or within the project parent (for subprojects).
    */
   static addToProject(project: NodeProject, options: TelemetryWorkflowOptions) {
-    const {outdir, workflowNodeVersion, reportTargetAuthTokenVar} = options
-    const commonOptions: TelemetryWorkflowOptions = {outdir, workflowNodeVersion, reportTargetAuthTokenVar}
-
-    if (project.github) {
-      new TelemetryWorkflow(project.github, commonOptions)
+    if (!project.github) {
       return
     }
 
-    if (project.parent && project.parent instanceof NodeProject && project.parent.github) {
-      new TelemetryWorkflow(project.parent.github, {
-        name: `telemetry-${options.name}`,
-        ...commonOptions,
-      })
-    }
+    new TelemetryWorkflow(project.github, options)
   }
 }
