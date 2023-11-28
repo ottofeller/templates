@@ -4,6 +4,7 @@ import fetch, {RequestInfo, RequestInit, Response} from 'node-fetch'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {collectTelemetry} from '..'
 import {IWithTelemetryReportUrl, WithTelemetry, setupTelemetry} from '../..'
+import {TelemetryOptions} from '../../with-telemetry'
 import {reportTargetAuthToken, telemetryEnableEnvVar} from '../collect-telemetry'
 
 jest.mock('child_process')
@@ -17,7 +18,8 @@ jest.mock('fs', () => ({
 describe('collectTelemetry function', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
   const mockedNodeFetch = fetch as unknown as jest.Mock<Promise<Response>, [url: RequestInfo, init: RequestInit]>
-  const telemetryOptions: WithTelemetry = {isTelemetryEnabled: true, reportTargetUrl: 'http://localhost:3000/telemetry'}
+  const telemetryOptions: TelemetryOptions = {reportTargetUrl: 'http://localhost:3000/telemetry'}
+  const projectOptionsWithTelemetry: WithTelemetry = {isTelemetryEnabled: true, telemetryOptions}
 
   const mockStringify = jest.fn<
     string,
@@ -55,7 +57,7 @@ describe('collectTelemetry function', () => {
 
   test('does nothing if IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED env var not set', () => {
     delete process.env[telemetryEnableEnvVar]
-    const project = new TestProject(telemetryOptions)
+    const project = new TestProject(projectOptionsWithTelemetry)
     collectTelemetry(project)
 
     expect(mockedNodeFetch).not.toBeCalled()
@@ -68,9 +70,12 @@ describe('collectTelemetry function', () => {
     Object.assign(process.env, {[reportTargetAuthToken]: telemetryAuthTokenValue})
 
     const project = new TestProject({
-      ...telemetryOptions,
-      reportTargetAuthHeaderName: telemetryAuthHeader,
-      reportTargetAuthTokenVar: telemetryAuthTokenVar,
+      ...projectOptionsWithTelemetry,
+      telemetryOptions: {
+        ...telemetryOptions,
+        reportTargetAuthHeaderName: telemetryAuthHeader,
+        reportTargetAuthTokenVar: telemetryAuthTokenVar,
+      },
     })
 
     collectTelemetry(project)
@@ -83,7 +88,12 @@ describe('collectTelemetry function', () => {
 
   test('collects templates version', () => {
     const templateVersion = '1.1.0'
-    const project = new TestProject({...telemetryOptions, devDeps: [`@ottofeller/templates@${templateVersion}`]})
+
+    const project = new TestProject({
+      ...projectOptionsWithTelemetry,
+      devDeps: [`@ottofeller/templates@${templateVersion}`],
+    })
+
     collectTelemetry(project)
 
     expect(mockStringify).lastCalledWith(expect.objectContaining({templateVersion}))
@@ -91,7 +101,7 @@ describe('collectTelemetry function', () => {
   })
 
   test('collects git URLs', () => {
-    const project = new TestProject(telemetryOptions)
+    const project = new TestProject(projectOptionsWithTelemetry)
 
     const gitUrlsRaw = [
       'origin  https://github.com/ottofeller/sampleProject.git (fetch)',
@@ -107,7 +117,7 @@ describe('collectTelemetry function', () => {
   })
 
   test('collects escape hatches utilized in projenrc file', () => {
-    const project = new TestProject(telemetryOptions)
+    const project = new TestProject(projectOptionsWithTelemetry)
 
     const escapeHatches = {
       files: {
@@ -150,7 +160,7 @@ describe('collectTelemetry function', () => {
   })
 
   test('does not collect empty escape hatches', () => {
-    const project = new TestProject(telemetryOptions)
+    const project = new TestProject(projectOptionsWithTelemetry)
     // NOTE: Only this single item will be recorded
     const escapeHatches = {files: {tryFindFile: "'.eslintrc.json'"}}
 
@@ -169,7 +179,7 @@ describe('collectTelemetry function', () => {
   })
 
   test('collects GitHub workflow data', () => {
-    const project = new TestProject(telemetryOptions)
+    const project = new TestProject(projectOptionsWithTelemetry)
     const updatedWorkflowName = 'build'
     const updatedTrigger = {fork: {}}
     project.github!.tryFindWorkflow(updatedWorkflowName)!.on(updatedTrigger)
@@ -238,7 +248,7 @@ describe('collectTelemetry function', () => {
 
   describe('collects errors', () => {
     test('if failed to collect git URLs', () => {
-      const project = new TestProject(telemetryOptions)
+      const project = new TestProject(projectOptionsWithTelemetry)
       mockedReadFileSync.mockReturnValue('')
       collectTelemetry(project)
 
@@ -252,7 +262,7 @@ describe('collectTelemetry function', () => {
     })
 
     test('if failed to read projenrc file', () => {
-      const project = new TestProject(telemetryOptions)
+      const project = new TestProject(projectOptionsWithTelemetry)
       mockedExecSync.mockReturnValue('')
       collectTelemetry(project)
 

@@ -19,7 +19,8 @@ describe('setupTelemetry function', () => {
 
   test('sets up telemetry if requested in options', () => {
     const project = new TestProject({})
-    setupTelemetry(project, {isTelemetryEnabled: true, reportTargetUrl: 'http://localhost:3000/telemetry'})
+    const telemetryOptions = {reportTargetUrl: 'http://localhost:3000/telemetry'}
+    setupTelemetry(project, {isTelemetryEnabled: true, telemetryOptions})
     expect(project.reportTargetUrl).toBeDefined()
 
     const snapshot = synthSnapshot(project)
@@ -36,9 +37,11 @@ describe('setupTelemetry function', () => {
 
     setupTelemetry(project, {
       isTelemetryEnabled: true,
-      reportTargetUrl: 'http://localhost:3000/telemetry',
-      reportTargetAuthHeaderName,
-      reportTargetAuthTokenVar,
+      telemetryOptions: {
+        reportTargetUrl: 'http://localhost:3000/telemetry',
+        reportTargetAuthHeaderName,
+        reportTargetAuthTokenVar,
+      },
     })
 
     expect(project.reportTargetUrl).toBeDefined()

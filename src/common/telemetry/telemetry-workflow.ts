@@ -3,20 +3,14 @@ import type {GitHub} from 'projen/lib/github'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {runScriptJob} from '../github'
 import {reportTargetAuthToken, telemetryEnableEnvVar} from './collect-telemetry'
-import type {WithTelemetry} from './with-telemetry'
+import type {TelemetryOptions} from './with-telemetry'
 
 /**
  * Options for PullRequestLint
  */
 export interface TelemetryWorkflowOptions
-  extends Partial<Pick<NodeProject, 'runScriptCommand'>>,
-    Pick<NodeProjectOptions, 'workflowNodeVersion'>,
-    Pick<WithTelemetry, 'reportTargetAuthTokenVar'> {
-  /**
-   * Project name - used to construct workflow name for subprojects
-   */
-  readonly name?: string
-
+  extends Pick<NodeProjectOptions, 'workflowNodeVersion'>,
+    Pick<TelemetryOptions, 'reportTargetAuthTokenVar'> {
   /**
    * Relative output directory of the project.
    */
