@@ -56,7 +56,8 @@ export interface OttofellerNextjsProjectOptions
  */
 export class OttofellerNextjsProject extends NextJsTypeScriptProject implements IWithTelemetryReportUrl {
   public postSynthFormattingPaths: Array<string>
-  readonly telemetryReportUrl?: string
+  readonly reportTargetUrl?: string
+  readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerNextjsProjectOptions) {
     super({

@@ -22,7 +22,8 @@ export interface OttofellerPlaywrightProjectOptions
  * @pjid ottofeller-playwright
  */
 export class OttofellerPlaywrightProject extends TypeScriptProject implements IWithTelemetryReportUrl {
-  readonly telemetryReportUrl?: string
+  readonly reportTargetUrl?: string
+  readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerPlaywrightProjectOptions) {
     super({

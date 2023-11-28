@@ -26,7 +26,8 @@ export interface OttofellerApolloServerProjectOptions
  * @pjid ottofeller-apollo-server
  */
 export class OttofellerApolloServerProject extends TypeScriptAppProject implements IWithTelemetryReportUrl {
-  readonly telemetryReportUrl?: string
+  readonly reportTargetUrl?: string
+  readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerApolloServerProjectOptions) {
     super({

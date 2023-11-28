@@ -30,7 +30,8 @@ export interface OttofellerSSTProjectOptions
  * @pjid ottofeller-sst
  */
 export class OttofellerSSTProject extends TypeScriptAppProject implements IWithTelemetryReportUrl {
-  readonly telemetryReportUrl?: string
+  readonly reportTargetUrl?: string
+  readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerSSTProjectOptions) {
     super({
