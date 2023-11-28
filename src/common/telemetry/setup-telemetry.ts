@@ -1,6 +1,6 @@
 import type {NodeProject} from 'projen/lib/javascript'
 import type {IWithTelemetryReportUrl} from './i-with-telemetry-report-url'
-import {TelemetryWorkflow, TelemetryWorkflowOptions} from './telemetry-workflow'
+import {TelemetryWorkflow} from './telemetry-workflow'
 import type {WithTelemetry} from './with-telemetry'
 
 type Writeable<T extends object> = {-readonly [P in keyof T]: T[P]}
@@ -11,26 +11,22 @@ type Writeable<T extends object> = {-readonly [P in keyof T]: T[P]}
  * - a URL available for telemetry code;
  * - a special GitHub workflow that runs telemetry collection and sends the data to the predefined URL.
  */
-export const setupTelemetry = (
-  project: NodeProject & Writeable<IWithTelemetryReportUrl>,
-  options: WithTelemetry & TelemetryWorkflowOptions,
-) => {
-  const {isTelemetryEnabled = false, reportTargetUrl, reportTargetAuthHeaderName, reportTargetAuthTokenVar} = options
-  const anyOfOptionalTelemetryParams = reportTargetUrl || reportTargetAuthHeaderName || reportTargetAuthTokenVar
+export const setupTelemetry = (project: NodeProject & Writeable<IWithTelemetryReportUrl>, options: WithTelemetry) => {
+  const {isTelemetryEnabled = false, telemetryOptions} = options
 
-  if (!isTelemetryEnabled && anyOfOptionalTelemetryParams) {
-    throw new Error(
-      'Telemetry is disabled, thus "telemetryUrl", "telemetryAuthHeader" or "telemetryAuthTokenVar" won\'t have any effect.',
-    )
+  if (!isTelemetryEnabled && telemetryOptions) {
+    throw new Error('Telemetry is disabled, thus "telemetryOptions" won\'t have any effect.')
   }
 
   if (!isTelemetryEnabled) {
     return
   }
 
-  if (!reportTargetUrl) {
-    throw new Error('A valid URL is required to be set for telemetry.')
+  if (!telemetryOptions) {
+    throw new Error('telemetryOptions with a valid URL is required to be set for telemetry.')
   }
+
+  const {reportTargetUrl, reportTargetAuthHeaderName, reportTargetAuthTokenVar} = telemetryOptions
 
   if (
     (reportTargetAuthHeaderName && !reportTargetAuthTokenVar) ||
@@ -45,5 +41,5 @@ export const setupTelemetry = (
     project.reportTargetAuthHeaderName = reportTargetAuthHeaderName
   }
 
-  TelemetryWorkflow.addToProject(project, options)
+  TelemetryWorkflow.addToProject(project, telemetryOptions)
 }

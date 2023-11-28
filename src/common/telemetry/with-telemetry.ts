@@ -1,17 +1,8 @@
-export interface WithTelemetry {
-  /**
-   * Enable template usage telemetry.
-   * Collects the data on the template package version, connected git remotes,
-   * applied escape hatches, configured GitHub workflows.
-   *
-   * @default false
-   */
-  readonly isTelemetryEnabled?: boolean
-
+export interface TelemetryOptions {
   /**
    * Endpoint URL to send telemetry data to.
    */
-  readonly reportTargetUrl?: string
+  readonly reportTargetUrl: string
 
   /**
    * Authorization header name for telemetry
@@ -23,4 +14,20 @@ export interface WithTelemetry {
    * The value is expected to be stored in a CI secret.
    */
   readonly reportTargetAuthTokenVar?: string
+}
+
+export interface WithTelemetry {
+  /**
+   * Enable template usage telemetry.
+   * Collects the data on the template package version, connected git remotes,
+   * applied escape hatches, configured GitHub workflows.
+   *
+   * @default false
+   */
+  readonly isTelemetryEnabled?: boolean
+
+  /**
+   * Configuration options for telemetry
+   */
+  readonly telemetryOptions?: TelemetryOptions
 }
