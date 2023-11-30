@@ -85,7 +85,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
     this.removeTask('watch')
 
     this.addScripts({
-      build: `${this.ejected ? '' : 'npm run default '}npm run synth:silent`,
+      build: `${this.ejected ? '' : 'npm run default && '}npm run synth:silent`,
       deploy: 'cdk deploy',
       destroy: 'cdk destroy',
       diff: 'cdk diff',

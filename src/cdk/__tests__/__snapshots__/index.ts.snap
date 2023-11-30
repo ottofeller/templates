@@ -1069,7 +1069,7 @@ cdk.out/
     "license": "Apache-2.0",
     "name": "cdk",
     "scripts": {
-      "build": "npm run default npm run synth:silent",
+      "build": "npm run default && npm run synth:silent",
       "bundle": "npx projen bundle",
       "default": "npx projen default",
       "deploy": "cdk deploy",
