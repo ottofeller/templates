@@ -770,6 +770,18 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "format": {
+        "description": "Perform code formatting and fixes of code-quality rules",
+        "name": "format",
+        "steps": [
+          {
+            "exec": "prettier --write .projenrc.mjs src",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" .projenrc.mjs src --fix",
+          },
+        ],
+      },
       "install": {
         "description": "Install project dependencies and update lockfile (non-frozen)",
         "name": "install",
@@ -785,6 +797,27 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "exec": "npm ci",
+          },
+        ],
+      },
+      "lint": {
+        "description": "Check code formatting and code-quality rules",
+        "name": "lint",
+        "steps": [
+          {
+            "exec": "prettier --check .projenrc.mjs src",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" .projenrc.mjs src",
+          },
+        ],
+      },
+      "typecheck": {
+        "description": "Perform type checking on the source code",
+        "name": "typecheck",
+        "steps": [
+          {
+            "exec": "tsc --noEmit --project tsconfig.dev.json",
           },
         ],
       },
@@ -1264,15 +1297,15 @@ buildSync({
       "default": "npx projen default",
       "dev": "nodemon",
       "eject": "npx projen eject",
-      "format": "prettier --write .projenrc.mjs src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" .projenrc.mjs src --fix",
+      "format": "npx projen format",
       "generate-graphql-schema": "npx apollo schema:download",
       "gql-to-ts": "graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development",
-      "lint": "prettier --check .projenrc.mjs src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" .projenrc.mjs src",
+      "lint": "npx projen lint",
       "projen": "npx projen",
       "start": "node build/index.js",
       "test": "jest --passWithNoTests --updateSnapshot",
       "test:watch": "jest --watch",
-      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
+      "typecheck": "npx projen typecheck",
     },
     "type": "module",
     "version": "0.0.0",

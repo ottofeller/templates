@@ -95,6 +95,18 @@
         }
       ]
     },
+    "format": {
+      "name": "format",
+      "description": "Perform code formatting and fixes of code-quality rules",
+      "steps": [
+        {
+          "exec": "prettier --write .projenrc.ts src"
+        },
+        {
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src --fix"
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -110,6 +122,18 @@
       "steps": [
         {
           "exec": "npm ci"
+        }
+      ]
+    },
+    "lint": {
+      "name": "lint",
+      "description": "Check code formatting and code-quality rules",
+      "steps": [
+        {
+          "exec": "prettier --check .projenrc.ts src"
+        },
+        {
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src"
         }
       ]
     },
@@ -164,6 +188,15 @@
       "steps": [
         {
           "exec": "jest --watch"
+        }
+      ]
+    },
+    "typecheck": {
+      "name": "typecheck",
+      "description": "Perform type checking on the source code",
+      "steps": [
+        {
+          "exec": "tsc --noEmit --project tsconfig.dev.json"
         }
       ]
     },

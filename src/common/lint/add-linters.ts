@@ -2,6 +2,7 @@ import type {Linter} from 'eslint'
 import {JsonFile, SampleFile} from 'projen'
 import {NodeProject} from 'projen/lib/javascript'
 import {deepMerge} from 'projen/lib/util'
+import {addTaskOrScript} from '../tasks/add-task-or-script'
 import {cSpellConfig} from './configs/cspell'
 import {eslintConfigFormatting} from './configs/eslint-config-formatting'
 import {eslintConfigQuality} from './configs/eslint-config-quality'
@@ -43,10 +44,19 @@ export const addLinters = (props: AddLintersProps): void => {
   const includeOption = projenrcFile ? `--ignore-pattern "!${projenrcFile}" ` : ''
   const eslintRunCommand = `eslint --ext .js,.jsx,.ts,.tsx ${includeOption}${filteredPaths}`
 
-  project.addScripts({
-    typecheck: 'tsc --noEmit --project tsconfig.dev.json',
-    format: `prettier --write ${filteredPaths} && ${eslintRunCommand} --fix`,
-    lint: `prettier --check ${filteredPaths} && ${eslintRunCommand}`,
+  addTaskOrScript(project, 'typecheck', {
+    description: 'Perform type checking on the source code',
+    exec: 'tsc --noEmit --project tsconfig.dev.json',
+  })
+
+  addTaskOrScript(project, 'format', {
+    description: 'Perform code formatting and fixes of code-quality rules',
+    steps: [{exec: `prettier --write ${filteredPaths}`}, {exec: `${eslintRunCommand} --fix`}],
+  })
+
+  addTaskOrScript(project, 'lint', {
+    description: 'Check code formatting and code-quality rules',
+    steps: [{exec: `prettier --check ${filteredPaths}`}, {exec: `${eslintRunCommand}`}],
   })
 
   // ANCHOR Prettier config

@@ -680,6 +680,18 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "format": {
+        "description": "Perform code formatting and fixes of code-quality rules",
+        "name": "format",
+        "steps": [
+          {
+            "exec": "prettier --write .projenrc.ts stacks sst.config.ts",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts --fix",
+          },
+        ],
+      },
       "install": {
         "description": "Install project dependencies and update lockfile (non-frozen)",
         "name": "install",
@@ -695,6 +707,27 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "exec": "npm ci",
+          },
+        ],
+      },
+      "lint": {
+        "description": "Check code formatting and code-quality rules",
+        "name": "lint",
+        "steps": [
+          {
+            "exec": "prettier --check .projenrc.ts stacks sst.config.ts",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts",
+          },
+        ],
+      },
+      "typecheck": {
+        "description": "Perform type checking on the source code",
+        "name": "typecheck",
+        "steps": [
+          {
+            "exec": "tsc --noEmit --project tsconfig.dev.json",
           },
         ],
       },
@@ -1027,11 +1060,11 @@ tsconfig.tsbuildinfo
       "deploy": "sst deploy",
       "dev": "sst dev",
       "eject": "npx projen eject",
-      "format": "prettier --write .projenrc.ts stacks sst.config.ts && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts --fix",
-      "lint": "prettier --check .projenrc.ts stacks sst.config.ts && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts",
+      "format": "npx projen format",
+      "lint": "npx projen lint",
       "projen": "npx projen",
       "remove": "sst remove",
-      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
+      "typecheck": "npx projen typecheck",
     },
     "version": "0.0.0",
   },

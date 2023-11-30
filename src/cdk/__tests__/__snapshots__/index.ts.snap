@@ -702,6 +702,18 @@ cdk.out/
           },
         ],
       },
+      "format": {
+        "description": "Perform code formatting and fixes of code-quality rules",
+        "name": "format",
+        "steps": [
+          {
+            "exec": "prettier --write .projenrc.ts src",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src --fix",
+          },
+        ],
+      },
       "install": {
         "description": "Install project dependencies and update lockfile (non-frozen)",
         "name": "install",
@@ -717,6 +729,27 @@ cdk.out/
         "steps": [
           {
             "exec": "npm ci",
+          },
+        ],
+      },
+      "lint": {
+        "description": "Check code formatting and code-quality rules",
+        "name": "lint",
+        "steps": [
+          {
+            "exec": "prettier --check .projenrc.ts src",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src",
+          },
+        ],
+      },
+      "typecheck": {
+        "description": "Perform type checking on the source code",
+        "name": "typecheck",
+        "steps": [
+          {
+            "exec": "tsc --noEmit --project tsconfig.dev.json",
           },
         ],
       },
@@ -1076,12 +1109,12 @@ cdk.out/
       "destroy": "cdk destroy",
       "diff": "cdk diff",
       "eject": "npx projen eject",
-      "format": "prettier --write .projenrc.ts src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src --fix",
-      "lint": "prettier --check .projenrc.ts src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src",
+      "format": "npx projen format",
+      "lint": "npx projen lint",
       "projen": "npx projen",
       "synth": "cdk synth",
       "synth:silent": "cdk synth -q",
-      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
+      "typecheck": "npx projen typecheck",
       "watch": "cdk deploy --hotswap && cdk watch",
     },
     "version": "0.0.0",
