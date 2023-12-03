@@ -9,7 +9,7 @@ import type {WithDefaultWorkflow} from './with-default-workflow'
 export interface PullRequestTestOptions
   extends Partial<Pick<javascript.NodeProject, 'runScriptCommand'>>,
     Partial<Pick<javascript.NodePackage, 'installCommand'>>,
-    Pick<NodeProjectOptions, 'workflowNodeVersion'> {
+    Pick<NodeProjectOptions, 'workflowNodeVersion' | 'jest'> {
   /**
    * Github Runner selection labels
    * @default ['ubuntu-latest']
@@ -75,9 +75,12 @@ export class PullRequestTest extends Component {
 
     workflow.addJobs({
       lint: runScriptJob({command: 'lint', ...commonJobProps}),
-      'unit-tests': runScriptJob({command: 'test', ...commonJobProps}),
       typecheck: runScriptJob({command: 'typecheck', ...commonJobProps}),
     })
+
+    if (options.jest) {
+      workflow.addJob('unit-tests', runScriptJob({command: 'test', ...commonJobProps}))
+    }
 
     if (options.isLighthouseEnabled) {
       workflow.addJob('lighthouse', lighthouseJob(commonJobProps))
@@ -96,6 +99,7 @@ export class PullRequestTest extends Component {
   static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
     const isLighthouseEnabled = options.isLighthouseEnabled ?? false
+    const jest = options.jest ?? true
     const {runsOn, outdir, workflowNodeVersion} = options
 
     if (!hasDefaultGithubWorkflows) {
@@ -103,13 +107,14 @@ export class PullRequestTest extends Component {
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {isLighthouseEnabled, runsOn, workflowNodeVersion})
+      new PullRequestTest(project.github, {isLighthouseEnabled, jest, runsOn, workflowNodeVersion})
       return
     }
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
       new PullRequestTest(project.parent.github, {
         isLighthouseEnabled,
+        jest,
         name: `test-${options.name}`,
         outdir,
         runsOn,
