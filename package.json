@@ -12,6 +12,8 @@
     "compile": "npx projen compile",
     "default": "npx projen default",
     "eject": "npx projen eject",
+    "format": "npx projen format",
+    "lint": "npx projen lint",
     "package": "npx projen package",
     "package-all": "npx projen package-all",
     "package:js": "npx projen package:js",
@@ -19,11 +21,9 @@
     "pre-compile": "npx projen pre-compile",
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
+    "typecheck": "npx projen typecheck",
     "watch": "npx projen watch",
     "projen": "npx projen",
-    "typecheck": "tsc --noEmit --project tsconfig.dev.json",
-    "format": "prettier --write .projenrc.ts src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src --fix",
-    "lint": "prettier --check .projenrc.ts src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" .projenrc.ts src",
     "prepare": "husky install"
   },
   "author": {

@@ -860,6 +860,18 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "format": {
+        "description": "Perform code formatting and fixes of code-quality rules",
+        "name": "format",
+        "steps": [
+          {
+            "exec": "prettier --write .projenrc.ts app src",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src --fix",
+          },
+        ],
+      },
       "install": {
         "description": "Install project dependencies and update lockfile (non-frozen)",
         "name": "install",
@@ -875,6 +887,27 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "exec": "npm ci",
+          },
+        ],
+      },
+      "lint": {
+        "description": "Check code formatting and code-quality rules",
+        "name": "lint",
+        "steps": [
+          {
+            "exec": "prettier --check .projenrc.ts app src",
+          },
+          {
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src",
+          },
+        ],
+      },
+      "typecheck": {
+        "description": "Perform type checking on the source code",
+        "name": "typecheck",
+        "steps": [
+          {
+            "exec": "tsc --noEmit --project tsconfig.dev.json",
           },
         ],
       },
@@ -1416,16 +1449,16 @@ module.exports = {
       "dev": "next dev",
       "eject": "npx projen eject",
       "export": "next export",
-      "format": "prettier --write .projenrc.ts app src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src --fix",
+      "format": "npx projen format",
       "generate-graphql-schema": "npx apollo schema:download",
       "gql-to-ts": "graphql-codegen -r dotenv/config --config codegen.ts",
-      "lint": "prettier --check .projenrc.ts app src && eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src",
+      "lint": "npx projen lint",
       "projen": "npx projen",
       "start": "next start",
       "telemetry": "next telemetry",
       "test": "jest --no-cache --all",
       "test-unit:watch": "jest --watch",
-      "typecheck": "tsc --noEmit --project tsconfig.dev.json",
+      "typecheck": "npx projen typecheck",
       "watch": "tsc --build -w",
     },
     "version": "0.0.0",

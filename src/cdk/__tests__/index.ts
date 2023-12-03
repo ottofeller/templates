@@ -106,13 +106,20 @@ describe('CDK template', () => {
     expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
   })
 
-  test('contains only tasks created by projen', () => {
+  test('when ejected contains only tasks created by projen', () => {
+    const PROJEN_EJECTING = process.env
+    process.env.PROJEN_EJECTING = '1'
+
     const project = new TestCDKProject()
     const snapshot = synthSnapshot(project)
     const internalTasks = ['default', 'eject', 'projen', 'install', 'install:ci', 'bundle']
     const {tasks} = snapshot['.projen/tasks.json']
     const createdTasks = Object.keys(tasks).filter((task) => !internalTasks.includes(task))
     expect(createdTasks).toHaveLength(0)
+
+    if (PROJEN_EJECTING !== undefined) {
+      delete process.env.PROJEN_EJECTING
+    }
   })
 
   test('enables test tasks with jest option', () => {

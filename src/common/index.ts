@@ -20,5 +20,6 @@ export {
   setupNode,
 } from './github'
 export {WithCustomLintPaths, addLinters} from './lint'
+export {addTaskOrScript} from './tasks'
 export {IWithTelemetryReportUrl, TelemetryOptions, WithTelemetry, collectTelemetry, setupTelemetry} from './telemetry'
 export {addVsCode} from './vscode-settings'
