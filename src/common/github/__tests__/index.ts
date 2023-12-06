@@ -54,9 +54,19 @@ describe('GitHub utils', () => {
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
-      expect(jobs).toHaveLength(3)
+      expect(jobs).toHaveLength(2)
       expect(jobs).toContain('npm run typecheck')
       expect(jobs).toContain('npm run lint')
+    })
+
+    test('adds test job to the test workflow if jest is enabled', () => {
+      const options: Partial<NodeProjectOptions> = {jest: true}
+      const project = new TestProject(options)
+      new PullRequestTest(project.github!, options)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[testWorkflowPath])
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
+      expect(jobs).toHaveLength(3)
       expect(jobs).toContain('npm run test')
     })
 
@@ -66,10 +76,9 @@ describe('GitHub utils', () => {
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
-      expect(jobs).toHaveLength(3)
+      expect(jobs).toHaveLength(2)
       expect(jobs).toContain('pnpm run typecheck')
       expect(jobs).toContain('pnpm run lint')
-      expect(jobs).toContain('pnpm run test')
     })
 
     test('allows runsOn override', () => {
