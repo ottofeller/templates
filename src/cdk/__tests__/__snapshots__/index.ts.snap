@@ -663,10 +663,10 @@ cdk.out/
         "name": "format",
         "steps": [
           {
-            "exec": "prettier --write .projenrc.ts src",
+            "exec": "prettier --write src .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src --fix",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" src .projenrc.ts --fix",
           },
         ],
       },
@@ -693,10 +693,10 @@ cdk.out/
         "name": "lint",
         "steps": [
           {
-            "exec": "prettier --check .projenrc.ts src",
+            "exec": "prettier --check src .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts src",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" src .projenrc.ts",
           },
         ],
       },

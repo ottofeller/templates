@@ -72,7 +72,7 @@ const rules: Linter.RulesRecord = {
 
 addLinters({
   project,
-  lintPaths: ['.projenrc.ts', 'src'],
+  lintPaths: ['src'],
   extraEslintConfigs: [{rules}],
 })
 

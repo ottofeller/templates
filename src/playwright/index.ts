@@ -101,7 +101,7 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
     tasksToRemove.forEach(this.removeTask.bind(this))
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    const lintPaths = options.lintPaths ?? ['src']
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github workflow

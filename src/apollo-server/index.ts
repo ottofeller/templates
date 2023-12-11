@@ -152,7 +152,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
     }
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.mjs', 'src']
+    const lintPaths = options.lintPaths ?? ['src']
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github workflow

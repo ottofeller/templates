@@ -1,5 +1,5 @@
 import type {Linter} from 'eslint'
-import {JsonFile, SampleFile} from 'projen'
+import {JsonFile, ProjenrcFile, SampleFile} from 'projen'
 import {NodeProject} from 'projen/lib/javascript'
 import {deepMerge} from 'projen/lib/util'
 import {addTaskOrScript} from '../tasks/add-task-or-script'
@@ -37,10 +37,13 @@ export const addLinters = (props: AddLintersProps): void => {
   project.addDevDeps(...linterDependencies)
 
   // ANCHOR Scripts
-  const projenrcRegex = /.projenrc.(?:js|mjs|ts|json)/
-  const filterPredicate = project.parent ? (path: string) => !projenrcRegex.test(path) : Boolean
-  const filteredPaths = lintPaths.filter(filterPredicate).join(' ')
-  const projenrcFile = filteredPaths.match(projenrcRegex)?.[0]
+  const projenrcFile = ProjenrcFile.of(project)?.filePath
+
+  const filteredPaths = lintPaths
+    .concat(projenrcFile ?? '')
+    .filter(Boolean)
+    .join(' ')
+
   const includeOption = projenrcFile ? `--ignore-pattern "!${projenrcFile}" ` : ''
   const eslintRunCommand = `eslint --ext .js,.jsx,.ts,.tsx ${includeOption}${filteredPaths}`
 

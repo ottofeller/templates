@@ -685,10 +685,10 @@ tsconfig.tsbuildinfo
         "name": "format",
         "steps": [
           {
-            "exec": "prettier --write .projenrc.ts stacks sst.config.ts",
+            "exec": "prettier --write stacks sst.config.ts .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts --fix",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" stacks sst.config.ts .projenrc.ts --fix",
           },
         ],
       },
@@ -715,10 +715,10 @@ tsconfig.tsbuildinfo
         "name": "lint",
         "steps": [
           {
-            "exec": "prettier --check .projenrc.ts stacks sst.config.ts",
+            "exec": "prettier --check stacks sst.config.ts .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts stacks sst.config.ts",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" stacks sst.config.ts .projenrc.ts",
           },
         ],
       },

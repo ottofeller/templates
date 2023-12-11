@@ -140,7 +140,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     new SampleFile(this, 'next-env.d.ts', {sourcePath: path.join(assetsDir, 'next-env.d.ts.sample')})
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'app', 'src']
+    const lintPaths = options.lintPaths ?? ['app', 'src']
     const extraEslintConfigs = [eslintConfigReact]
 
     if (options.isUiConfigEnabled ?? true) {
