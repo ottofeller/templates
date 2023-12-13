@@ -1,6 +1,8 @@
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {IWithTelemetryReportUrl} from '../common'
+import * as path from 'path'
+import { sampleCode } from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions extends TypeScriptProjectOptions {}
 
@@ -54,5 +56,8 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       depsUpgrade: false,
       pullRequestTemplate: false,
     })
+
+    const assetsDir = path.join(__dirname, '..', '..', 'src/backend-test/assets')
+    sampleCode(this, options, assetsDir)
   }
 }
