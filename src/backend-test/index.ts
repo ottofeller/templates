@@ -6,6 +6,12 @@ import { sampleCode } from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions extends TypeScriptProjectOptions {}
 
+/**
+ * Backend-test template with TypeScript support.
+ *
+ * @pjid ottofeller-backend-test
+ */
+
 export class OttofellerBackendTestProject extends TypeScriptProject implements IWithTelemetryReportUrl {
   readonly reportTargetUrl?: string
   readonly reportTargetAuthHeaderName?: string
@@ -59,5 +65,9 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     const assetsDir = path.join(__dirname, '..', '..', 'src/backend-test/assets')
     sampleCode(this, options, assetsDir)
+
+    this.addScripts({
+      'test': 'jest --detectOpenHandles',
+    })
   }
 }
