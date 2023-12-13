@@ -2,10 +2,22 @@ import {execSync} from 'child_process'
 import * as path from 'path'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {IWithTelemetryReportUrl, collectTelemetry} from '../common'
+import {
+  IWithTelemetryReportUrl,
+  WithCustomLintPaths,
+  WithDefaultWorkflow,
+  WithGitHooks,
+  WithTelemetry,
+  collectTelemetry,
+} from '../common'
 import {sampleCode} from './sample-code'
 
-export interface OttofellerBackendTestProjectOptions extends TypeScriptProjectOptions {}
+export interface OttofellerBackendTestProjectOptions
+  extends TypeScriptProjectOptions,
+    WithTelemetry,
+    WithGitHooks,
+    WithCustomLintPaths,
+    WithDefaultWorkflow {}
 
 /**
  * Backend-test template with TypeScript support.
