@@ -5,15 +5,22 @@ import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript
 import {IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 // import {eslintConfigQa} from './eslint-config-qa'
+import {AssetFile} from '../common/files/AssetFile'
 import {sampleCode} from './sample-code'
-import { eslintConfigQa } from './eslint-config-qa'
 
 export interface OttofellerBackendTestProjectOptions
   extends TypeScriptProjectOptions,
     WithTelemetry,
     WithGitHooks,
     WithCustomLintPaths,
-    WithDefaultWorkflow {}
+    WithDefaultWorkflow {
+  /**
+   * Set up GraphQL dependencies and supplementary script.
+   *
+   * @default true
+   */
+  readonly isGraphqlEnabled?: boolean
+}
 
 /**
  * Backend-test template with TypeScript support.
@@ -109,10 +116,41 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
-    const extraEslintConfigs = [eslintConfigQa]
-    addLinters({project: this.parent.li, lintPaths, extraEslintConfigs})
+    // const extraEslintConfigs = [eslintConfigQa]
+    addLinters({project: this, lintPaths})
 
     // this.eslint?.
+
+    // ANCHOR Set up GraphQL
+    const isGraphqlEnabled = options.isGraphqlEnabled ?? true
+
+    if (isGraphqlEnabled) {
+      this.addDevDeps(
+        '@graphql-codegen/add',
+        '@graphql-codegen/cli',
+        '@graphql-codegen/import-types-preset',
+        '@graphql-codegen/introspection',
+        '@graphql-codegen/named-operations-object',
+        '@graphql-codegen/typescript',
+        '@graphql-codegen/typescript-graphql-request',
+        '@graphql-codegen/typescript-operations',
+        '@graphql-codegen/typescript-react-apollo',
+      )
+
+      this.addDeps('@apollo/client', 'graphql')
+
+      // ANCHOR Codegen
+      new AssetFile(this, 'codegen.ts', {
+        sourcePath: path.join(assetsDir, 'codegen.ts'),
+        readonly: false,
+        marker: false,
+      })
+
+      this.addScripts({
+        'generate-graphql-schema': 'npx apollo schema:download',
+        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.ts',
+      })
+    }
 
     this.package.file.addDeletionOverride('main')
     this.package.file.addDeletionOverride('types')
