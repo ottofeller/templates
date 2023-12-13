@@ -1,15 +1,12 @@
+import {execSync} from 'child_process'
 import * as path from 'path'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {
-  IWithTelemetryReportUrl,
-  WithCustomLintPaths,
-  WithDefaultWorkflow,
-  WithGitHooks,
-  WithTelemetry,
-  collectTelemetry,
-} from '../common'
+import {IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
+import {WithCustomLintPaths, addLinters} from '../common/lint'
+// import {eslintConfigQa} from './eslint-config-qa'
 import {sampleCode} from './sample-code'
+import { eslintConfigQa } from './eslint-config-qa'
 
 export interface OttofellerBackendTestProjectOptions
   extends TypeScriptProjectOptions,
@@ -109,11 +106,21 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     ]
 
     tasksToRemove.forEach(this.removeTask.bind(this))
+
+    // ANCHOR ESLint and prettier setup
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    const extraEslintConfigs = [eslintConfigQa]
+    addLinters({project: this.parent.li, lintPaths, extraEslintConfigs})
+
+    // this.eslint?.
+
+    this.package.file.addDeletionOverride('main')
+    this.package.file.addDeletionOverride('types')
   }
 
   postSynthesize(): void {
-    // execSync('prettier --write .projenrc.ts')
-    // execSync('eslint --fix .projenrc.ts')
+    execSync('prettier --write .projenrc.ts')
+    execSync('eslint --fix .projenrc.ts')
 
     collectTelemetry(this)
   }
