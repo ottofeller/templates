@@ -1,8 +1,9 @@
+import {execSync} from 'child_process'
+import * as path from 'path'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {IWithTelemetryReportUrl} from '../common'
-import * as path from 'path'
-import { sampleCode } from './sample-code'
+import {IWithTelemetryReportUrl, collectTelemetry} from '../common'
+import {sampleCode} from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions extends TypeScriptProjectOptions {}
 
@@ -67,7 +68,14 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     sampleCode(this, options, assetsDir)
 
     this.addScripts({
-      'test': 'jest --detectOpenHandles',
+      test: 'jest --detectOpenHandles',
     })
+  }
+
+  postSynthesize(): void {
+    execSync('prettier --write .projenrc.ts')
+    execSync('eslint --fix .projenrc.ts')
+
+    collectTelemetry(this)
   }
 }
