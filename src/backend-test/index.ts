@@ -52,7 +52,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
           esModuleInterop: true,
           skipLibCheck: true,
           forceConsistentCasingInFileNames: true,
-          resolveJsonModule: true,
         },
       },
 
