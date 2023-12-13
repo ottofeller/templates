@@ -1,11 +1,11 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
+import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
-// import {eslintConfigQa} from './eslint-config-qa'
-import {AssetFile} from '../common/files/AssetFile'
+import {eslintConfigQa} from './eslint-config-qa'
 import {sampleCode} from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions
@@ -46,27 +46,12 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
       tsconfig: {
         compilerOptions: {
-          target: 'esnext',
-          module: 'esnext',
-          noEmit: true,
-          isolatedModules: false,
-          strict: true,
-          noImplicitAny: true,
-          strictNullChecks: true,
-          strictPropertyInitialization: true,
-          noImplicitThis: true,
-          alwaysStrict: true,
-          noUnusedParameters: true,
-          noImplicitReturns: true,
-          noFallthroughCasesInSwitch: true,
-          noUncheckedIndexedAccess: true,
           baseUrl: './',
+          target: 'es6',
+          skipLibCheck: true,
           paths: {
             '*': ['./*'],
           },
-          esModuleInterop: true,
-          skipLibCheck: true,
-          forceConsistentCasingInFileNames: true,
         },
       },
 
@@ -114,12 +99,12 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     tasksToRemove.forEach(this.removeTask.bind(this))
 
+    this.addDeps('dotenv')
+
     // ANCHOR ESLint and prettier setup
     const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
-    // const extraEslintConfigs = [eslintConfigQa]
-    addLinters({project: this, lintPaths})
-
-    // this.eslint?.
+    const extraEslintConfigs = [eslintConfigQa]
+    addLinters({project: this, lintPaths, extraEslintConfigs})
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
@@ -140,10 +125,8 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       this.addDeps('@apollo/client', 'graphql')
 
       // ANCHOR Codegen
-      new AssetFile(this, 'codegen.ts', {
-        sourcePath: path.join(assetsDir, 'codegen.ts'),
-        readonly: false,
-        marker: false,
+      new SampleFile(this, 'codegen.ts', {
+        sourcePath: path.join(assetsDir, 'codegen.ts.sample'),
       })
 
       this.addScripts({
