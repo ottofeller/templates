@@ -148,8 +148,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       })
 
       this.addScripts({
-        'generate-graphql-schema': 'npx apollo schema:download',
-        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.ts',
+        'gql-to-ts': 'graphql-codegen',
       })
     }
 
