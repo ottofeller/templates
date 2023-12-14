@@ -1,6 +1,5 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
-import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {AssetFile, IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
@@ -104,14 +103,10 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     this.addDeps('dotenv')
 
     // // ANCHOR ESLint and prettier setup
-    // const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
-    // const extraEslintConfigs = [eslintConfigQa]
-    // addLinters({project: this, lintPaths, extraEslintConfigs})
-
-  
-
-    new SampleFile(this, 'eslintrc.json', {
-      sourcePath: path.join(assetsDir, 'eslintrc.json.sample'),
+    new AssetFile(this, '.eslintrc.json', {
+      sourcePath: path.join(assetsDir, 'eslintrc.json'),
+      readonly: false,
+      marker: false,
     })
 
     //ANCHOR - Set up AWS DynamoDb Client
