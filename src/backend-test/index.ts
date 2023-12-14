@@ -101,6 +101,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     tasksToRemove.forEach(this.removeTask.bind(this))
 
     this.addDeps('dotenv')
+    this.addDeps('axios')
 
     // // ANCHOR ESLint and prettier setup
     new AssetFile(this, '.eslintrc.json', {
