@@ -4,8 +4,7 @@ import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
-import {WithCustomLintPaths, addLinters} from '../common/lint'
-import {eslintConfigQa} from './eslint-config-qa'
+import {WithCustomLintPaths} from '../common/lint'
 import {sampleCode} from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions
@@ -20,6 +19,12 @@ export interface OttofellerBackendTestProjectOptions
    * @default true
    */
   readonly isGraphqlEnabled?: boolean
+  /**
+   * Set up AWS DynamoDb dependencies and supplementary script.
+   *
+   * @default true
+   */
+  readonly isAWSDynamoDBlEnabled?: boolean
 }
 
 /**
@@ -67,9 +72,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     const assetsDir = path.join(__dirname, '..', '..', 'src/backend-test/assets')
     sampleCode(this, options, assetsDir)
 
-    // // ANCHOR playwright config
-    // new SampleFile(this, 'playwright.config.ts', {sourcePath: path.join(assetsDir, 'playwright.config.ts.sample')})
-
     this.addScripts({
       test: 'jest --detectOpenHandles',
     })
@@ -101,10 +103,26 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     this.addDeps('dotenv')
 
-    // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
-    const extraEslintConfigs = [eslintConfigQa]
-    addLinters({project: this, lintPaths, extraEslintConfigs})
+    // // ANCHOR ESLint and prettier setup
+    // const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    // const extraEslintConfigs = [eslintConfigQa]
+    // addLinters({project: this, lintPaths, extraEslintConfigs})
+
+  
+
+    new SampleFile(this, 'eslintrc.json', {
+      sourcePath: path.join(assetsDir, 'eslintrc.json.sample'),
+    })
+
+    //ANCHOR - Set up AWS DynamoDb Client
+    const isAWSDynamoDBlEnabled = options.isAWSDynamoDBlEnabled ?? true
+
+    if(isAWSDynamoDBlEnabled) {
+      this.addDevDeps(
+        '@aws-sdk/client-dynamodb',
+        '@aws-sdk/lib-dynamodb'
+      )
+    }
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
