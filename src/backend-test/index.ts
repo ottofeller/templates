@@ -2,7 +2,14 @@ import {execSync} from 'child_process'
 import * as path from 'path'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {AssetFile, IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
+import {
+  AssetFile,
+  IWithTelemetryReportUrl,
+  WithDefaultWorkflow,
+  WithGitHooks,
+  WithTelemetry,
+  collectTelemetry,
+} from '../common'
 import {WithCustomLintPaths} from '../common/lint'
 import {sampleCode} from './sample-code'
 
@@ -113,11 +120,8 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     //ANCHOR - Set up AWS DynamoDb Client
     const isAWSDynamoDBlEnabled = options.isAWSDynamoDBlEnabled ?? true
 
-    if(isAWSDynamoDBlEnabled) {
-      this.addDevDeps(
-        '@aws-sdk/client-dynamodb',
-        '@aws-sdk/lib-dynamodb'
-      )
+    if (isAWSDynamoDBlEnabled) {
+      this.addDevDeps('@aws-sdk/client-dynamodb', '@aws-sdk/lib-dynamodb')
     }
 
     // ANCHOR Set up GraphQL
