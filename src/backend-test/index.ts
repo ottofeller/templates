@@ -3,7 +3,7 @@ import * as path from 'path'
 import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
+import {AssetFile, IWithTelemetryReportUrl, WithDefaultWorkflow, WithGitHooks, WithTelemetry, collectTelemetry} from '../common'
 import {WithCustomLintPaths} from '../common/lint'
 import {sampleCode} from './sample-code'
 
@@ -143,8 +143,10 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       this.addDeps('@apollo/client', 'graphql')
 
       // ANCHOR Codegen
-      new SampleFile(this, 'codegen.ts', {
-        sourcePath: path.join(assetsDir, 'codegen.ts.sample'),
+      new AssetFile(this, 'codegen.ts', {
+        sourcePath: path.join(assetsDir, 'codegen.ts'),
+        readonly: false,
+        marker: false,
       })
 
       this.addScripts({

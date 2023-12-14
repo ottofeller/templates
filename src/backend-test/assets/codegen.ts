@@ -1,5 +1,5 @@
 import {CodegenConfig} from '@graphql-codegen/cli'
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 
 dotenv.config({path: '.env.local'})
 dotenv.config({path: '.env.development'})
