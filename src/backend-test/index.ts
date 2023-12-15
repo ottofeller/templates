@@ -107,6 +107,8 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     tasksToRemove.forEach(this.removeTask.bind(this))
 
+    this.tryRemoveFile('tsconfig.dev.json')
+
     this.addDeps('dotenv')
     this.addDeps('axios')
     this.addDeps('jest')
@@ -127,9 +129,26 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       marker: false,
     })
 
-    this.addScripts({
-      format: 'prettier --write ./ && eslint --ext .ts ./ --fix',
-      lint: 'prettier --check ./ && eslint --ext .ts ./',
+    this.tasks.addTask('format', {
+      steps: [
+        {
+          exec: 'prettier --write ./',
+        },
+        {
+          exec: 'eslint --ext .ts ./ --fix',
+        },
+      ],
+    })
+
+    this.tasks.addTask('lint', {
+      steps: [
+        {
+          exec: 'prettier --check ./',
+        },
+        {
+          exec: 'eslint --ext .ts ./',
+        },
+      ],
     })
 
     //ANCHOR - Set up AWS DynamoDb Client

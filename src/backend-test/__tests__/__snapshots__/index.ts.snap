@@ -353,7 +353,6 @@ tsconfig.tsbuildinfo
       ".projen/files.json",
       ".projen/tasks.json",
       "LICENSE",
-      "tsconfig.dev.json",
       "tsconfig.json",
     ],
   },
@@ -384,6 +383,17 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "format": {
+        "name": "format",
+        "steps": [
+          {
+            "exec": "prettier --write ./",
+          },
+          {
+            "exec": "eslint --ext .ts ./ --fix",
+          },
+        ],
+      },
       "install": {
         "description": "Install project dependencies and update lockfile (non-frozen)",
         "name": "install",
@@ -399,6 +409,17 @@ tsconfig.tsbuildinfo
         "steps": [
           {
             "exec": "npm ci",
+          },
+        ],
+      },
+      "lint": {
+        "name": "lint",
+        "steps": [
+          {
+            "exec": "prettier --check ./",
+          },
+          {
+            "exec": "eslint --ext .ts ./",
           },
         ],
       },
@@ -789,9 +810,9 @@ export default config
     "scripts": {
       "default": "npx projen default",
       "eject": "npx projen eject",
-      "format": "prettier --write ./ && eslint --ext .ts ./ --fix",
+      "format": "npx projen format",
       "gql-to-ts": "graphql-codegen",
-      "lint": "prettier --check ./ && eslint --ext .ts ./",
+      "lint": "npx projen lint",
       "projen": "npx projen",
       "test": "jest --detectOpenHandles",
     },
@@ -840,50 +861,6 @@ describe('Authorization & Authentication', () => {
     })
   })
 })",
-  "tsconfig.dev.json": {
-    "compilerOptions": {
-      "alwaysStrict": true,
-      "baseUrl": "./",
-      "declaration": true,
-      "esModuleInterop": true,
-      "experimentalDecorators": true,
-      "inlineSourceMap": true,
-      "inlineSources": true,
-      "lib": [
-        "es2019",
-      ],
-      "module": "CommonJS",
-      "noEmitOnError": false,
-      "noFallthroughCasesInSwitch": true,
-      "noImplicitAny": true,
-      "noImplicitReturns": true,
-      "noImplicitThis": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "paths": {
-        "*": [
-          "./*",
-        ],
-      },
-      "resolveJsonModule": true,
-      "skipLibCheck": true,
-      "strict": true,
-      "strictNullChecks": true,
-      "strictPropertyInitialization": true,
-      "stripInternal": true,
-      "target": "es6",
-    },
-    "exclude": [
-      "node_modules",
-    ],
-    "include": [
-      ".projenrc.js",
-      "./**/*.ts",
-      "test/**/*.ts",
-      ".projenrc.ts",
-      "projenrc/**/*.ts",
-    ],
-  },
   "tsconfig.json": {
     "compilerOptions": {
       "alwaysStrict": true,
