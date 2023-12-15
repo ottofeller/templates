@@ -120,12 +120,16 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       marker: false,
     })
 
-
     // ANCHOR ESLint and prettier setup
     new AssetFile(this, '.eslintrc.json', {
       sourcePath: path.join(assetsDir, 'eslintrc.json'),
       readonly: false,
       marker: false,
+    })
+
+    this.addScripts({
+      format: 'prettier --write ./ && eslint --ext .ts ./ --fix',
+      lint: 'prettier --check ./ && eslint --ext .ts ./',
     })
 
     //ANCHOR - Set up AWS DynamoDb Client

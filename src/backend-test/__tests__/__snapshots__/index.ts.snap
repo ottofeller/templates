@@ -4,7 +4,10 @@ exports[`Backend-test template sets defaults 1`] = `
 {
   ".env.development": "HASURA_GRAPHQL_URL=http://localhost:8080/v1/graphql
 HASURA_GRAPHQL_ADMIN_SECRET=111
-UPLOAD_AVATAR_URL=https://api.worldcoin-distributors.com/user/upload-avatar",
+UPLOAD_AVATAR_URL=https://api.worldcoin-distributors.com/user/upload-avatar
+BASE_URL=https://paysis.cyclic.app/
+USERNAME=adminius
+PASSWORD=supers3cret",
   ".eslintrc.json": {
     "env": {
       "jest": true,
@@ -738,8 +741,8 @@ export const client = axios.create({
   validateStatus: () => true,
 })",
   "common/index.ts": "export * from './client'",
-  "jest.config.ts": "import type {Config} from 'jest'
-import * as dotenv from 'dotenv'
+  "jest.config.ts": "import * as dotenv from 'dotenv'
+import type {Config} from 'jest'
 
 dotenv.config({path: './.env.local'})
 dotenv.config({path: './.env.development'})
@@ -786,7 +789,9 @@ export default config
     "scripts": {
       "default": "npx projen default",
       "eject": "npx projen eject",
+      "format": "prettier --write ./ && eslint --ext .ts ./ --fix",
       "gql-to-ts": "graphql-codegen",
+      "lint": "prettier --check ./ && eslint --ext .ts ./",
       "projen": "npx projen",
       "test": "jest --detectOpenHandles",
     },

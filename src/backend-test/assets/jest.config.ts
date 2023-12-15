@@ -1,5 +1,5 @@
-import type {Config} from 'jest'
 import * as dotenv from 'dotenv'
+import type {Config} from 'jest'
 
 dotenv.config({path: './.env.local'})
 dotenv.config({path: './.env.development'})
