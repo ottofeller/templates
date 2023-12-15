@@ -47,7 +47,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     super({
       ...options,
       bundlerOptions: {},
-      jest: true,
+      jest: false,
       eslint: false,
       projenrcTs: true,
       projenrcJs: false,
