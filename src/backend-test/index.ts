@@ -151,6 +151,15 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       ],
     })
 
+    this.tasks.addTask('typecheck', {
+      steps: [
+        {
+          exec: 'tsc',
+        },
+      ],
+    })
+    
+
     //ANCHOR - Set up AWS DynamoDb Client
     const isAWSDynamoDBlEnabled = options.isAWSDynamoDBlEnabled ?? true
 
