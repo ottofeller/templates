@@ -109,8 +109,19 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     this.addDeps('dotenv')
     this.addDeps('axios')
+    this.addDeps('jest')
+    this.addDeps('ts-jest')
+    this.addDeps('jest-extended')
 
-    // // ANCHOR ESLint and prettier setup
+    // ANCHOR Jest setup
+    new AssetFile(this, 'jest.config.ts', {
+      sourcePath: path.join(assetsDir, 'jest.config.ts'),
+      readonly: false,
+      marker: false,
+    })
+
+
+    // ANCHOR ESLint and prettier setup
     new AssetFile(this, '.eslintrc.json', {
       sourcePath: path.join(assetsDir, 'eslintrc.json'),
       readonly: false,
