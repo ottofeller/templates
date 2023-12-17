@@ -25,6 +25,12 @@ export interface ProjenDriftCheckOptions
    * @default ['main']
    */
   readonly triggerOnPushToBranches?: Array<string>
+
+  /**
+   * By default the check runs only on projenrc file changes.
+   * This option allows adding paths that trigger the check.
+   */
+  readonly additionalPaths?: string[]
 }
 
 /**
@@ -41,7 +47,8 @@ export class ProjenDriftCheckWorkflow extends Component {
 
     const workflowName = 'projen-drift-check'
     const workingDirectory = options.outdir
-    const paths = [ProjenrcFile.of(project)!.filePath]
+    const additionalPaths = options.additionalPaths ?? []
+    const paths = [ProjenrcFile.of(project)!.filePath, ...additionalPaths]
     const workflow = githubInstance.addWorkflow(workflowName)
     const branches = options.triggerOnPushToBranches ?? ['main']
     const nodeVersion = options.workflowNodeVersion ?? project.package.minNodeVersion
