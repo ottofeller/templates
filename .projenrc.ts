@@ -94,7 +94,7 @@ testGithubWorkflow.addJobs({
   build: {...job([npmRunJobStep('build')]), needs: ['lint', 'test', 'typecheck']},
 })
 
-new ProjenDriftCheckWorkflow(project.github!, {})
+new ProjenDriftCheckWorkflow(project.github!, {additionalPaths: ['src/common/**']})
 
 const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')
 
