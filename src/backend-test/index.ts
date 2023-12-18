@@ -89,7 +89,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       release: false,
       depsUpgrade: false,
       pullRequestTemplate: false,
-      deps: ['dotenv', 'axios', 'jest', 'ts-jest', 'jest-extended', 'prettier']
+      deps: ['dotenv', 'axios', 'jest', 'ts-jest', 'jest-extended', 'prettier', 'eslint-plugin-prettier']
     })
 
     // ANCHOR Source code
@@ -137,6 +137,12 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     // ANCHOR ESLint and prettier setup
     new AssetFile(this, '.eslintrc.json', {
       sourcePath: path.join(assetsDir, 'eslintrc.json'),
+      readonly: false,
+      marker: false,
+    })
+
+    new AssetFile(this, '.prettierignore', {
+      sourcePath: path.join(assetsDir, '.prettierignore'),
       readonly: false,
       marker: false,
     })
