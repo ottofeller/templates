@@ -89,15 +89,12 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       release: false,
       depsUpgrade: false,
       pullRequestTemplate: false,
+      deps: ['dotenv', 'axios', 'jest', 'ts-jest', 'jest-extended', 'prettier']
     })
 
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/backend-test/assets')
     sampleCode(this, options, assetsDir)
-
-    this.addScripts({
-      test: 'jest --detectOpenHandles',
-    })
 
     /*
      * Clean off the projen tasks and if needed replace them with regular npm scripts.
@@ -126,14 +123,11 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     this.tryRemoveFile('tsconfig.dev.json')
 
-    this.addDeps('dotenv')
-    this.addDeps('axios')
-    this.addDeps('jest')
-    this.addDeps('ts-jest')
-    this.addDeps('jest-extended')
-    this.addDeps('prettier')
-
     // ANCHOR Jest setup
+    this.addScripts({
+      test: 'jest --detectOpenHandles',
+    })
+
     new AssetFile(this, 'jest.config.ts', {
       sourcePath: path.join(assetsDir, 'jest.config.ts'),
       readonly: false,
