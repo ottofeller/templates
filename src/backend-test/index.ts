@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
-import {NodePackageManager} from 'projen/lib/javascript'
+import {NodePackageManager, TypeScriptModuleResolution} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {
   AssetFile,
@@ -57,6 +57,22 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
       tsconfig: {
         compilerOptions: {
+          declaration: undefined,
+          experimentalDecorators: undefined,
+          inlineSourceMap: undefined,
+          inlineSources: undefined,
+          noEmitOnError: undefined,
+          noUnusedLocals: undefined,
+          lib: undefined,
+          outDir: undefined,
+          rootDir: undefined,
+          stripInternal: undefined,
+          forceConsistentCasingInFileNames: true,
+          isolatedModules: false,
+          module: 'esnext',
+          moduleResolution: TypeScriptModuleResolution.NODE,
+          noEmit: true,
+          noUncheckedIndexedAccess: true,
           baseUrl: './',
           target: 'es6',
           skipLibCheck: true,
@@ -64,6 +80,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
             '*': ['./*'],
           },
         },
+
       },
 
       // In case Github is enabled remove all default stuff.
@@ -114,6 +131,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     this.addDeps('jest')
     this.addDeps('ts-jest')
     this.addDeps('jest-extended')
+    this.addDeps('prettier')
 
     // ANCHOR Jest setup
     new AssetFile(this, 'jest.config.ts', {
