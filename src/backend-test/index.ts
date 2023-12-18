@@ -1,5 +1,6 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
+import {JsonFile} from 'projen'
 import {NodePackageManager, TypeScriptModuleResolution} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {
@@ -11,6 +12,8 @@ import {
   collectTelemetry,
 } from '../common'
 import {WithCustomLintPaths} from '../common/lint'
+import {prettierConfig} from '../common/lint/configs/prettier'
+import {eslintConfig} from './assets/eslint-config'
 import {sampleCode} from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions
@@ -80,7 +83,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
             '*': ['./*'],
           },
         },
-
       },
 
       // In case Github is enabled remove all default stuff.
@@ -89,7 +91,16 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       release: false,
       depsUpgrade: false,
       pullRequestTemplate: false,
-      deps: ['dotenv', 'axios', 'jest', 'ts-jest', 'jest-extended', 'prettier', 'eslint-plugin-prettier']
+      deps: [
+        'dotenv',
+        'axios',
+        'jest',
+        'ts-jest',
+        'jest-extended',
+        'prettier',
+        'eslint-plugin-prettier',
+        'eslint-config-prettier',
+      ],
     })
 
     // ANCHOR Source code
@@ -135,11 +146,9 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     })
 
     // ANCHOR ESLint and prettier setup
-    new AssetFile(this, '.eslintrc.json', {
-      sourcePath: path.join(assetsDir, 'eslintrc.json'),
-      readonly: false,
-      marker: false,
-    })
+    new JsonFile(this, '.eslintrc.json', {obj: eslintConfig, marker: false})
+
+    new JsonFile(this, '.prettierrc.json', {obj: prettierConfig, marker: false})
 
     new AssetFile(this, '.prettierignore', {
       sourcePath: path.join(assetsDir, '.prettierignore'),
@@ -176,7 +185,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
         },
       ],
     })
-    
 
     //ANCHOR - Set up AWS DynamoDb Client
     const isAWSDynamoDBlEnabled = options.isAWSDynamoDBlEnabled ?? true
