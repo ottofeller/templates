@@ -1,5 +1,6 @@
 import {execSync} from 'child_process'
 import {synthSnapshot} from 'projen/lib/util/synth'
+import * as YAML from 'yaml'
 import {OttofellerCDKProject, OttofellerCDKProjectOptions} from '..'
 
 jest.mock('child_process')
@@ -122,12 +123,32 @@ describe('CDK template', () => {
     }
   })
 
-  test('enables test tasks with jest option', () => {
-    const project = new TestCDKProject({jest: true})
-    const snapshot = synthSnapshot(project)
-    const {tasks} = snapshot['.projen/tasks.json']
-    expect(tasks).toHaveProperty('test')
-    expect(tasks).toHaveProperty('test:watch')
+  describe('test tasks and job', () => {
+    test('are not included by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      const {scripts} = snapshot['package.json']
+      expect(scripts).not.toHaveProperty('test')
+      expect(scripts).not.toHaveProperty('test:watch')
+      const {tasks} = snapshot['.projen/tasks.json']
+      expect(tasks).not.toHaveProperty('test')
+      expect(tasks).not.toHaveProperty('test:watch')
+      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      expect(jobs).not.toHaveProperty('unit-tests')
+    })
+
+    test('are included with jest option', () => {
+      const project = new TestCDKProject({jest: true})
+      const snapshot = synthSnapshot(project)
+      const {scripts} = snapshot['package.json']
+      expect(scripts).toHaveProperty('test')
+      expect(scripts).toHaveProperty('test:watch')
+      const {tasks} = snapshot['.projen/tasks.json']
+      expect(tasks).toHaveProperty('test')
+      expect(tasks).toHaveProperty('test:watch')
+      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      expect(jobs).toHaveProperty('unit-tests')
+    })
   })
 })
 

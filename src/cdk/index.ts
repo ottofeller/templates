@@ -34,6 +34,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
 
   constructor(options: OttofellerCDKProjectOptions) {
     const srcdir = options.srcdir ?? 'src'
+    const jest = options.jest ?? false
 
     super({
       // Default options
@@ -42,7 +43,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
       tsconfig: {compilerOptions: {paths: {'*': [`./${srcdir}/*`]}, target: 'es6', skipLibCheck: true}},
       sampleCode: false,
       eslint: false,
-      jest: false,
+      jest,
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
@@ -116,7 +117,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
 
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initialReleaseVersion: this.initialReleaseVersion})
-      PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
+      PullRequestTest.addToProject(this, {...options, jest, isLighthouseEnabled: false})
       ProjenDriftCheckWorkflow.addToProject(this, options)
     }
 
