@@ -132,8 +132,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     tasksToRemove.forEach(this.removeTask.bind(this))
 
-    this.tryRemoveFile('tsconfig.dev.json')
-
     // ANCHOR Jest setup
     this.addScripts({
       test: 'jest --detectOpenHandles',
@@ -200,13 +198,12 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       this.addDevDeps(
         '@graphql-codegen/add',
         '@graphql-codegen/cli',
-        '@graphql-codegen/import-types-preset',
         '@graphql-codegen/introspection',
         '@graphql-codegen/named-operations-object',
+        "@graphql-codegen/near-operation-file-preset",
         '@graphql-codegen/typescript',
         '@graphql-codegen/typescript-graphql-request',
         '@graphql-codegen/typescript-operations',
-        '@graphql-codegen/typescript-react-apollo',
       )
 
       this.addDeps('@apollo/client', 'graphql')
