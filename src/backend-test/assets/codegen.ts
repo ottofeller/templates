@@ -5,7 +5,7 @@ dotenv.config({path: '.env.local'})
 dotenv.config({path: '.env.development'})
 
 if (!process.env.HASURA_GRAPHQL_URL || !process.env.HASURA_GRAPHQL_ADMIN_SECRET) {
-  throw new Error('HASURA_GRAPHQL_URL or HASURA_GRAPHQL_ADMIN_SECRET is not exist. Check your .env files')
+  throw new Error('HASURA_GRAPHQL_URL or HASURA_GRAPHQL_ADMIN_SECRET does not exist. Check your .env files')
 }
 
 const config: CodegenConfig = {

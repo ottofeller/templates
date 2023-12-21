@@ -33,7 +33,7 @@ export interface OttofellerBackendTestProjectOptions
    *
    * @default true
    */
-  readonly isAWSDynamoDBlEnabled?: boolean
+  readonly isAWSDynamoDBEnabled?: boolean
 }
 
 /**
@@ -187,7 +187,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     })
 
     //ANCHOR - Set up AWS DynamoDb Client
-    const isAWSDynamoDBlEnabled = options.isAWSDynamoDBlEnabled ?? true
+    const isAWSDynamoDBlEnabled = options.isAWSDynamoDBEnabled ?? true
 
     if (isAWSDynamoDBlEnabled) {
       this.addDevDeps('@aws-sdk/client-dynamodb', '@aws-sdk/lib-dynamodb')
