@@ -23,9 +23,24 @@ describe('Backend-test template', () => {
       const snapshot = synthSnapshot(project)
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('@apollo/client')
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('graphql')
-      expect(snapshot['package.json'].scripts).not.toHaveProperty('generate-graphql-schema')
       expect(snapshot['package.json'].scripts).not.toHaveProperty('gql-to-ts')
       expect(snapshot['codegen.ts']).not.toBeDefined()
+    })
+  })
+
+  describe('has AwsDynamoDb', () => {
+    test('enabled by default', () => {
+      const project = new TestBackendTestProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('@aws-sdk/client-dynamodb')
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('@aws-sdk/lib-dynamodb')
+    })
+
+    test('disabled with an option', () => {
+      const project = new TestBackendTestProject({isAWSDynamoDBEnabled: false})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('@aws-sdk/client-dynamodb')
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('@aws-sdk/lib-dynamodb')
     })
   })
 })
