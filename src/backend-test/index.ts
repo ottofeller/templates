@@ -1,6 +1,5 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
-import {JsonFile} from 'projen'
 import {NodePackageManager, TypeScriptModuleResolution} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {
@@ -10,9 +9,9 @@ import {
   WithGitHooks,
   WithTelemetry,
   collectTelemetry,
+  setupTelemetry,
 } from '../common'
-import {WithCustomLintPaths} from '../common/lint'
-import {prettierConfig} from '../common/lint/configs/prettier'
+import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {eslintConfig} from './assets/eslint-config'
 import {sampleCode} from './sample-code'
 
@@ -144,15 +143,17 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     })
 
     // ANCHOR ESLint and prettier setup
-    new JsonFile(this, '.eslintrc.json', {obj: eslintConfig, marker: false})
 
-    new JsonFile(this, '.prettierrc.json', {obj: prettierConfig, marker: false})
+    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    addLinters({project: this, lintPaths, extraEslintConfigs: [eslintConfig]})
 
     new AssetFile(this, '.prettierignore', {
       sourcePath: path.join(assetsDir, '.prettierignore'),
       readonly: false,
       marker: false,
     })
+
+    this.removeTask('format')
 
     this.tasks.addTask('format', {
       steps: [
@@ -165,6 +166,8 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       ],
     })
 
+    this.removeTask('lint')
+
     this.tasks.addTask('lint', {
       steps: [
         {
@@ -176,6 +179,8 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       ],
     })
 
+    this.removeTask('typecheck')
+
     this.tasks.addTask('typecheck', {
       steps: [
         {
@@ -185,9 +190,9 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     })
 
     //ANCHOR - Set up AWS DynamoDb Client
-    const isAWSDynamoDBlEnabled = options.isAWSDynamoDBEnabled ?? true
+    const isAWSDynamoDBEnabled = options.isAWSDynamoDBEnabled ?? true
 
-    if (isAWSDynamoDBlEnabled) {
+    if (isAWSDynamoDBEnabled) {
       this.addDevDeps('@aws-sdk/client-dynamodb', '@aws-sdk/lib-dynamodb')
     }
 
@@ -200,7 +205,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
         '@graphql-codegen/cli',
         '@graphql-codegen/introspection',
         '@graphql-codegen/named-operations-object',
-        "@graphql-codegen/near-operation-file-preset",
+        '@graphql-codegen/near-operation-file-preset',
         '@graphql-codegen/typescript',
         '@graphql-codegen/typescript-graphql-request',
         '@graphql-codegen/typescript-operations',
@@ -222,6 +227,9 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     this.package.file.addDeletionOverride('main')
     this.package.file.addDeletionOverride('types')
+
+    // ANCHOR Telemetry
+    setupTelemetry(this, options)
   }
 
   postSynthesize(): void {

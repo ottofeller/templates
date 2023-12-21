@@ -108,6 +108,6 @@ export const eslintConfig: Linter.Config = {
       },
     ],
   },
-  extends: ['plugin:prettier/recommended'],
+  extends: ['plugin:import/typescript', 'plugin:prettier/recommended'],
   plugins: ['@typescript-eslint', 'eslint-comments', 'import', '@ottofeller/ottofeller'],
 }
