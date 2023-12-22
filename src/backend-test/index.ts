@@ -211,7 +211,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
         '@graphql-codegen/typescript-operations',
       )
 
-      this.addDeps('@apollo/client', 'graphql')
+      this.addDeps('graphql')
 
       // ANCHOR Codegen
       new AssetFile(this, 'codegen.ts', {
