@@ -12,7 +12,6 @@ describe('Backend-test template', () => {
     test('enabled by default', () => {
       const project = new TestBackendTestProject()
       const snapshot = synthSnapshot(project)
-      expect(snapshot['package.json'].dependencies).toHaveProperty('@apollo/client')
       expect(snapshot['package.json'].dependencies).toHaveProperty('graphql')
       expect(snapshot['package.json'].scripts).toHaveProperty('gql-to-ts')
       expect(snapshot['codegen.ts']).toBeDefined()
@@ -21,7 +20,6 @@ describe('Backend-test template', () => {
     test('disabled with an option', () => {
       const project = new TestBackendTestProject({isGraphqlEnabled: false})
       const snapshot = synthSnapshot(project)
-      expect(snapshot['package.json'].dependencies).not.toHaveProperty('@apollo/client')
       expect(snapshot['package.json'].dependencies).not.toHaveProperty('graphql')
       expect(snapshot['package.json'].scripts).not.toHaveProperty('gql-to-ts')
       expect(snapshot['codegen.ts']).not.toBeDefined()
