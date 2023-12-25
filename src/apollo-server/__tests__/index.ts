@@ -97,9 +97,9 @@ describe('Apollo server template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestApolloServerProject()
     project.postSynthesize()
-    expect(mockedExecSync).toBeCalledTimes(2)
-    expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.mjs')
-    expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.mjs')
+    expect(mockedExecSync).toHaveBeenCalledTimes(2)
+    expect(mockedExecSync).toHaveBeenCalledWith('prettier --write .projenrc.mjs')
+    expect(mockedExecSync).toHaveBeenCalledWith('eslint --fix .projenrc.mjs')
   })
 
   test('has gitignore file extended', () => {

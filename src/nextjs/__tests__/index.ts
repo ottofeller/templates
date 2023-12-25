@@ -130,9 +130,9 @@ describe('NextJS template', () => {
       .join(' ')
 
     project.postSynthesize()
-    expect(mockedExecSync).toBeCalledTimes(2)
-    expect(mockedExecSync).toBeCalledWith(`prettier --write ${formattingPaths}`)
-    expect(mockedExecSync).toBeCalledWith(`eslint --fix ${formattingPaths}`)
+    expect(mockedExecSync).toHaveBeenCalledTimes(2)
+    expect(mockedExecSync).toHaveBeenCalledWith(`prettier --write ${formattingPaths}`)
+    expect(mockedExecSync).toHaveBeenCalledWith(`eslint --fix ${formattingPaths}`)
   })
 
   test('has gitignore file extended', () => {

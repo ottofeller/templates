@@ -35,8 +35,8 @@ describe('AssetFile util', () => {
     const project = new TestProject()
     new AssetFile(project, 'asset.ts', {sourcePath, template})
     synthSnapshot(project)
-    expect(mockedFormat).toBeCalledTimes(1)
-    expect(mockedFormat).toBeCalledWith('test asset updated\n', expect.any(Object))
+    expect(mockedFormat).toHaveBeenCalledTimes(1)
+    expect(mockedFormat).toHaveBeenCalledWith('test asset updated\n', expect.any(Object))
   })
 })
 
