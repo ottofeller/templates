@@ -84,6 +84,36 @@ describe('CDK template', () => {
     })
   })
 
+  describe('GraphQL', () => {
+    test('is disabled by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      const {dependencies, devDependencies, scripts} = snapshot['package.json']
+      expect(dependencies).not.toHaveProperty('graphql')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/cli')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/typescript-graphql-request')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/typescript-operations')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/typescript')
+      expect(scripts).not.toHaveProperty('generate-graphql-schema')
+      expect(scripts).not.toHaveProperty('gql-to-ts')
+      expect(snapshot['codegen.ts']).not.toBeDefined()
+    })
+
+    test('has related packages and scripts if enabled', () => {
+      const project = new TestCDKProject({isGraphqlCodegenEnabled: true})
+      const snapshot = synthSnapshot(project)
+      const {dependencies, devDependencies, scripts} = snapshot['package.json']
+      expect(dependencies).toHaveProperty('graphql')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/cli')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/typescript-graphql-request')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/typescript-operations')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/typescript')
+      expect(scripts).toHaveProperty('generate-graphql-schema')
+      expect(scripts).toHaveProperty('gql-to-ts')
+      expect(snapshot['codegen.ts']).toBeDefined()
+    })
+  })
+
   test('includes VSCode settings', () => {
     const project = new TestCDKProject()
     const snapshot = synthSnapshot(project)
