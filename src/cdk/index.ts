@@ -5,7 +5,14 @@ import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk
 import {NodePackageManager} from 'projen/lib/javascript'
 import {AssetFile} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
-import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
+import {
+  ProjenDriftCheckWorkflow,
+  PullRequestTest,
+  ReleaseWorkflow,
+  RustTestWorkflow,
+  WithDefaultWorkflow,
+  WithRustTestWorkflow,
+} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
@@ -13,6 +20,7 @@ import {addVsCode} from '../common/vscode-settings'
 export interface OttofellerCDKProjectOptions
   extends AwsCdkTypeScriptAppOptions,
     WithDefaultWorkflow,
+    WithRustTestWorkflow,
     WithCustomLintPaths,
     WithGitHooks,
     WithTelemetry {
@@ -129,6 +137,8 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
       PullRequestTest.addToProject(this, {...options, jest, isLighthouseEnabled: false})
       ProjenDriftCheckWorkflow.addToProject(this, options)
     }
+
+    RustTestWorkflow.addToProject(this, options)
 
     // ANCHOR Set up GraphQL
     const isGraphqlCodegenEnabled = options.isGraphqlCodegenEnabled ?? false

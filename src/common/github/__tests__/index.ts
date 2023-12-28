@@ -4,7 +4,14 @@ import {JavaProject} from 'projen/lib/java'
 import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
-import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '..'
+import {
+  ProjenDriftCheckWorkflow,
+  PullRequestTest,
+  ReleaseWorkflow,
+  RustTestWorkflow,
+  WithDefaultWorkflow,
+  WithRustTestWorkflow,
+} from '..'
 
 describe('GitHub utils', () => {
   describe('PullRequestTest', () => {
@@ -343,6 +350,95 @@ describe('GitHub utils', () => {
       expect(() => new ReleaseWorkflow(project.github!)).toThrow()
     })
   })
+
+  describe('RustTestWorkflow', () => {
+    const workflowPath = '.github/workflows/rust-test.yml'
+
+    test('creates a workflow', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      expect(snapshot).toMatchSnapshot()
+      expect(snapshot[workflowPath]).toBeDefined()
+    })
+
+    test('configures the workflow to be run on pull requests and pushes to main branch with changes any file', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+
+      expect(workflow.on).toEqual({
+        pull_request: {types: ['opened', 'synchronize']},
+        push: {branches: ['main']},
+      })
+    })
+
+    test('allows setting custom paths to trigger the workflow', () => {
+      const paths = ['some/path', 'another/path']
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!, {triggerOnPaths: paths})
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+
+      expect(workflow.on).toEqual({
+        pull_request: {paths, types: ['opened', 'synchronize']},
+        push: {paths, branches: ['main']},
+      })
+    })
+
+    test('allows to be run on pushes to specified branches', () => {
+      const project = new TestProject()
+      const branches = ['main', 'dev']
+      new RustTestWorkflow(project.github!, {triggerOnBranches: branches})
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+
+      expect(workflow.on).toEqual({
+        pull_request: {types: ['opened', 'synchronize']},
+        push: {branches},
+      })
+    })
+
+    test('adds four checks to the workflow', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps[1].run)
+      expect(jobs).toHaveLength(4)
+      expect(jobs).toContain('cargo clippy --all-targets --all-features -- -D warnings')
+      expect(jobs).toContain('cargo check')
+      expect(jobs).toContain('cargo fmt --check')
+      expect(jobs).toContain('cargo test')
+    })
+
+    describe('addToProject', () => {
+      test('does nothing by default', () => {
+        const project = new TestProjectWithRustTestWorkflow({})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).not.toBeDefined()
+      })
+
+      test('does nothing when opted out explicitly', () => {
+        const project = new TestProjectWithRustTestWorkflow({hasRustTestWorkflow: false})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).not.toBeDefined()
+      })
+
+      test('does nothing if github disabled', () => {
+        const project = new TestProjectWithRustTestWorkflow({github: false, hasRustTestWorkflow: true})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).not.toBeDefined()
+      })
+
+      test('adds a RustTestWorkflow component to the project with github and explicit option', () => {
+        const project = new TestProjectWithRustTestWorkflow({hasRustTestWorkflow: true})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[workflowPath]).toBeDefined()
+      })
+    })
+  })
 })
 
 class TestProject extends NodeProject {
@@ -380,5 +476,18 @@ class TestProjectWithProjenDriftCheckWorkflow extends NodeProject {
     })
 
     ProjenDriftCheckWorkflow.addToProject(this, options)
+  }
+}
+
+class TestProjectWithRustTestWorkflow extends NodeProject {
+  constructor(options: Partial<NodeProjectOptions & WithRustTestWorkflow> = {}) {
+    super({
+      name: 'test-project-with-rust-test-workflow',
+      defaultReleaseBranch: 'main',
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
+      ...options,
+    })
+
+    RustTestWorkflow.addToProject(this, options)
   }
 }

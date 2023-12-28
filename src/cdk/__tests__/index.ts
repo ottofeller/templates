@@ -84,6 +84,21 @@ describe('CDK template', () => {
     })
   })
 
+  describe('has rust test workflow', () => {
+    test('excluded by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.github/workflows/rust-test.yml']).not.toBeDefined()
+    })
+
+    test('included with an option', () => {
+      const project = new TestCDKProject({hasRustTestWorkflow: true})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.github/workflows/rust-test.yml']).toBeDefined()
+      expect(snapshot['.github/workflows/rust-test.yml']).toMatchSnapshot()
+    })
+  })
+
   describe('GraphQL', () => {
     test('is disabled by default', () => {
       const project = new TestCDKProject()
