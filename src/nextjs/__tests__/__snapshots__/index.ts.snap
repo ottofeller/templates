@@ -865,10 +865,10 @@ tsconfig.tsbuildinfo
         "name": "format",
         "steps": [
           {
-            "exec": "prettier --write .projenrc.ts app src",
+            "exec": "prettier --write app src .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src --fix",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" app src .projenrc.ts --fix",
           },
         ],
       },
@@ -895,10 +895,10 @@ tsconfig.tsbuildinfo
         "name": "lint",
         "steps": [
           {
-            "exec": "prettier --check .projenrc.ts app src",
+            "exec": "prettier --check app src .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts app src",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" app src .projenrc.ts",
           },
         ],
       },

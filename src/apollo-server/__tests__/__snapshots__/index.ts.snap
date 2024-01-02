@@ -775,10 +775,10 @@ tsconfig.tsbuildinfo
         "name": "format",
         "steps": [
           {
-            "exec": "prettier --write .projenrc.mjs src",
+            "exec": "prettier --write src .projenrc.mjs",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" .projenrc.mjs src --fix",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" src .projenrc.mjs --fix",
           },
         ],
       },
@@ -805,10 +805,10 @@ tsconfig.tsbuildinfo
         "name": "lint",
         "steps": [
           {
-            "exec": "prettier --check .projenrc.mjs src",
+            "exec": "prettier --check src .projenrc.mjs",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" .projenrc.mjs src",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" src .projenrc.mjs",
           },
         ],
       },

@@ -92,7 +92,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
     }
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'stacks', 'sst.config.ts']
+    const lintPaths = options.lintPaths ?? ['stacks', 'sst.config.ts']
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github

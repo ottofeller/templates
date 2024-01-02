@@ -118,7 +118,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
     }
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    const lintPaths = options.lintPaths ?? ['src']
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github
