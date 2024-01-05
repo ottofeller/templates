@@ -1,3 +1,4 @@
+export {CodeOwners, CodeOwnersOptions, PatternOwners, WithCodeOwners} from './codeowners'
 export * from './jobs'
 export {ProjenDriftCheckOptions, ProjenDriftCheckWorkflow} from './projen-drift-check-workflow'
 export {PullRequestTest, PullRequestTestOptions} from './pull-request-test-workflow'
