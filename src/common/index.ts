@@ -14,8 +14,11 @@ export {
 export {
   NodeJobOptions,
   RunScriptJobOptions,
+  RustTestWorkflow,
+  RustTestWorkflowOptions,
   SetupNodeOptions,
   WithDefaultWorkflow,
+  WithRustTestWorkflow,
   runScriptJob,
   setupNode,
 } from './github'
