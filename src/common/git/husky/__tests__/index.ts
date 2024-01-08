@@ -102,6 +102,55 @@ describe('addHusky function', () => {
     })
   })
 
+  describe('pre-commit hook with checkCargo rule', () => {
+    const cargoCheckCommand = 'cargo check'
+
+    test('is skiped by default', () => {
+      const project = new TestProject()
+      addHusky(project, {})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('husky')
+      expect(snapshot[preCommitShellScriptDestinationPath]).not.toBeDefined()
+    })
+
+    test('runs check and formatting commands with default settings', () => {
+      const project = new TestProject()
+      addHusky(project, {huskyRules: {checkCargo: {ignoreBranches: []}}})
+      const snapshot = synthSnapshot(project)
+      const fullCommand = ['cargo fmt --all', cargoCheckCommand].join('\n')
+      const shellScriptContents = templateContents.replace('{{COMMAND}}', fullCommand)
+      expect(snapshot[preCommitShellScriptDestinationPath]).toEqual(shellScriptContents)
+    })
+
+    test('checks all branches with empty branch list', () => {
+      const project = new TestProject()
+      addHusky(project, {huskyRules: {checkCargo: {ignoreBranches: [], isFormatting: false}}})
+      const snapshot = synthSnapshot(project)
+      const shellScriptContents = templateContents.replace('{{COMMAND}}', cargoCheckCommand)
+      expect(snapshot[preCommitShellScriptDestinationPath]).toEqual(shellScriptContents)
+    })
+
+    test('allows to ignore particular branches', () => {
+      const project = new TestProject()
+      const ignoredBranch = 'special-branch'
+      addHusky(project, {huskyRules: {checkCargo: {ignoreBranches: [ignoredBranch], isFormatting: false}}})
+      const snapshot = synthSnapshot(project)
+      const fullCommand = `if check_branch "${ignoredBranch}"; then\n  ${cargoCheckCommand}\nfi\n`
+      const shellScriptContents = templateContents.replace('{{COMMAND}}', fullCommand)
+      expect(snapshot[preCommitShellScriptDestinationPath]).toEqual(shellScriptContents)
+    })
+
+    test('performs the check in the specified workingDirectory', () => {
+      const project = new TestProject()
+      const workingDirectory = 'testDir'
+      addHusky(project, {huskyRules: {checkCargo: {ignoreBranches: [], isFormatting: false, workingDirectory}}})
+      const snapshot = synthSnapshot(project)
+      const fullCommand = [`cd ${workingDirectory}`, cargoCheckCommand, 'cd ..'].join('\n')
+      const shellScriptContents = templateContents.replace('{{COMMAND}}', fullCommand)
+      expect(snapshot[preCommitShellScriptDestinationPath]).toEqual(shellScriptContents)
+    })
+  })
+
   test('adds hooks from a user-defined list', () => {
     const project = new TestProject()
     const checkCargo: CheckCargoOptions = {isFormatting: false}
