@@ -20,7 +20,7 @@ export const diff = (initial: ObjectLike, updated: ObjectLike): ObjectLike => {
   const allKeys = Array.from(new Set(Object.keys(initial).concat(Object.keys(updated))))
 
   return allKeys.reduce((acc, key) => {
-    if (!initial.hasOwnProperty(key)) {
+    if (!initial.hasOwnProperty(key) && typeof updated[key] !== 'function') {
       // new property
       acc[key] = updated[key]
       return acc

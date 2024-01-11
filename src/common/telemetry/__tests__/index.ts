@@ -1,12 +1,14 @@
+import {JavaProject} from 'projen/lib/java'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
 import {IWithTelemetryReportUrl, WithTelemetry, setupTelemetry} from '..'
 import {reportTargetAuthToken} from '../collect-telemetry'
+import {TelemetryWorkflow} from '../telemetry-workflow'
+
+const telemetryWorkflowPath = '.github/workflows/telemetry.yml'
 
 describe('setupTelemetry function', () => {
-  const telemetryWorkflowPath = '.github/workflows/telemetry.yml'
-
   test('does nothing if telemetry options are not provided', () => {
     const project = new TestProject()
     setupTelemetry(project, {})
@@ -15,6 +17,41 @@ describe('setupTelemetry function', () => {
     const snapshot = synthSnapshot(project)
     const telemetryWorkflow = snapshot[telemetryWorkflowPath]
     expect(telemetryWorkflow).toBeUndefined()
+  })
+
+  describe('throws in case if unexpected usage', () => {
+    test('if telemetryOptions are set without enabling telemetry', () => {
+      const project = new TestProject()
+      const telemetryOptions = {reportTargetUrl: 'http://localhost:3000/telemetry'}
+      expect(() => setupTelemetry(project, {telemetryOptions})).toThrow()
+    })
+
+    test('if telemetry enabling without any options', () => {
+      const project = new TestProject()
+      expect(() => setupTelemetry(project, {isTelemetryEnabled: true})).toThrow()
+    })
+
+    test('if reportTargetAuthHeaderName set without reportTargetAuthTokenVar', () => {
+      const project = new TestProject()
+
+      const telemetryOptions = {
+        reportTargetUrl: 'http://localhost:3000/telemetry',
+        reportTargetAuthHeaderName: 'auth',
+      }
+
+      expect(() => setupTelemetry(project, {telemetryOptions})).toThrow()
+    })
+
+    test('if reportTargetAuthTokenVar set without reportTargetAuthHeaderName', () => {
+      const project = new TestProject()
+
+      const telemetryOptions = {
+        reportTargetUrl: 'http://localhost:3000/telemetry',
+        reportTargetAuthTokenVar: 'auth',
+      }
+
+      expect(() => setupTelemetry(project, {telemetryOptions})).toThrow()
+    })
   })
 
   test('sets up telemetry if requested in options', () => {
@@ -52,6 +89,26 @@ describe('setupTelemetry function', () => {
     expect(telemetryWorkflow).toBeDefined()
     const {env} = YAML.parse(telemetryWorkflow).jobs.telemetry
     expect(env[reportTargetAuthToken]).toEqual(`\${{ secrets.${reportTargetAuthTokenVar} }}`)
+  })
+})
+
+describe('TelemetryWorkflow', () => {
+  test('throws for projects other than NodeProject', () => {
+    const project = new JavaProject({name: 'java', groupId: 'java', artifactId: 'app', version: '0', github: true})
+    expect(() => new TelemetryWorkflow(project.github!)).toThrow()
+  })
+
+  test('throws for projects without projenrc file', () => {
+    const parent = new TestProject()
+    const subproject = new TestProject({parent, name: 'subproject', outdir: 'sub'})
+    expect(() => new TelemetryWorkflow(subproject.github!)).toThrow()
+  })
+
+  test('is not added to projects without github', () => {
+    const project = new TestProject({github: false})
+    TelemetryWorkflow.addToProject(project, {})
+    const snapshot = synthSnapshot(project)
+    expect(snapshot[telemetryWorkflowPath]).not.toBeDefined()
   })
 })
 
