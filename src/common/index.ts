@@ -12,11 +12,15 @@ export {
   extendGitignore,
 } from './git'
 export {
+  CodeOwners,
+  CodeOwnersOptions,
   NodeJobOptions,
+  PatternOwners,
   RunScriptJobOptions,
   RustTestWorkflow,
   RustTestWorkflowOptions,
   SetupNodeOptions,
+  WithCodeOwners,
   WithDefaultWorkflow,
   WithRustTestWorkflow,
   runScriptJob,

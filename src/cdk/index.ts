@@ -6,10 +6,12 @@ import {NodePackageManager} from 'projen/lib/javascript'
 import {AssetFile} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
+  CodeOwners,
   ProjenDriftCheckWorkflow,
   PullRequestTest,
   ReleaseWorkflow,
   RustTestWorkflow,
+  WithCodeOwners,
   WithDefaultWorkflow,
   WithRustTestWorkflow,
 } from '../common/github'
@@ -19,6 +21,7 @@ import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
   extends AwsCdkTypeScriptAppOptions,
+    WithCodeOwners,
     WithDefaultWorkflow,
     WithRustTestWorkflow,
     WithCustomLintPaths,
@@ -139,6 +142,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
     }
 
     RustTestWorkflow.addToProject(this, options)
+    CodeOwners.addToProject(this, options)
 
     // ANCHOR Set up GraphQL
     const isGraphqlCodegenEnabled = options.isGraphqlCodegenEnabled ?? false

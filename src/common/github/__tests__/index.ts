@@ -5,10 +5,13 @@ import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/ja
 import {synthSnapshot} from 'projen/lib/util/synth'
 import * as YAML from 'yaml'
 import {
+  CodeOwners,
+  PatternOwners,
   ProjenDriftCheckWorkflow,
   PullRequestTest,
   ReleaseWorkflow,
   RustTestWorkflow,
+  WithCodeOwners,
   WithDefaultWorkflow,
   WithRustTestWorkflow,
 } from '..'
@@ -439,6 +442,75 @@ describe('GitHub utils', () => {
       })
     })
   })
+
+  describe('CodeOwners', () => {
+    const codeOwnersFilePath = 'CODEOWNERS'
+
+    test('creates CODEOWNERS file', () => {
+      const project = new TestProject({})
+      new CodeOwners(project.github!)
+      const snapshot = synthSnapshot(project)
+      expect(snapshot).toMatchSnapshot()
+      expect(snapshot[codeOwnersFilePath]).toBeDefined()
+    })
+
+    test('adds owners via constructor option', () => {
+      const project = new TestProject({})
+      const codeOwners: Array<PatternOwners> = [{pattern: '/apps/', owners: ['@ottofeller']}, {pattern: '/apps/github'}]
+      new CodeOwners(project.github!, {codeOwners})
+      const snapshot = synthSnapshot(project)
+      const ownersFile: Array<string> = snapshot[codeOwnersFilePath].split('\n')
+      expect(ownersFile).toHaveLength(4)
+      const [marker, apps, appsGithub] = ownersFile
+      expect(marker.startsWith('#')).toEqual(true)
+      expect(apps).toEqual('/apps/ @ottofeller')
+      expect(appsGithub).toEqual('/apps/github')
+    })
+
+    test('adds owners via a method', () => {
+      const project = new TestProject({})
+      const codeOwners = new CodeOwners(project.github!)
+      codeOwners.addOwners({pattern: '/apps/', owners: ['@ottofeller']}, {pattern: '/apps/github'})
+      const snapshot = synthSnapshot(project)
+      const ownersFile: Array<string> = snapshot[codeOwnersFilePath].split('\n')
+      expect(ownersFile).toHaveLength(4)
+      const [marker, apps, appsGithub] = ownersFile
+      expect(marker.startsWith('#')).toEqual(true)
+      expect(apps).toEqual('/apps/ @ottofeller')
+      expect(appsGithub).toEqual('/apps/github')
+    })
+
+    describe('addToProject', () => {
+      const name = 'subproject'
+
+      test('does nothing when not requested with option', () => {
+        const project = new TestProjectWithCodeOwners()
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[codeOwnersFilePath]).not.toBeDefined()
+      })
+
+      test('does nothing if github disabled', () => {
+        const project = new TestProjectWithCodeOwners({github: false})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[codeOwnersFilePath]).not.toBeDefined()
+      })
+
+      test('adds a CodeOwners component to the project with codeOwners option', () => {
+        const project = new TestProjectWithCodeOwners({codeOwners: [{pattern: '*', owners: ['@ottofeller']}]})
+        const snapshot = synthSnapshot(project)
+        expect(snapshot[codeOwnersFilePath]).toBeDefined()
+      })
+
+      test('for subprojects does nothing', () => {
+        const parent = new TestProjectWithCodeOwners({github: false})
+        const subproject = new TestProjectWithCodeOwners({parent, outdir: 'sub', name})
+        const subprojectSnapshot = synthSnapshot(subproject)
+        const parentSnapshot = synthSnapshot(parent)
+        expect(subprojectSnapshot[codeOwnersFilePath]).not.toBeDefined()
+        expect(parentSnapshot[codeOwnersFilePath]).not.toBeDefined()
+      })
+    })
+  })
 })
 
 class TestProject extends NodeProject {
@@ -489,5 +561,18 @@ class TestProjectWithRustTestWorkflow extends NodeProject {
     })
 
     RustTestWorkflow.addToProject(this, options)
+  }
+}
+
+class TestProjectWithCodeOwners extends NodeProject {
+  constructor(options: Partial<NodeProjectOptions & WithCodeOwners> = {}) {
+    super({
+      name: 'test-project-with-test-workflow',
+      defaultReleaseBranch: 'main',
+      packageManager: options.packageManager ?? NodePackageManager.NPM,
+      ...options,
+    })
+
+    CodeOwners.addToProject(this, options)
   }
 }
