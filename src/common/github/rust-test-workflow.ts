@@ -1,5 +1,5 @@
 import {GitHub, GitHubProject, GithubWorkflow, GithubWorkflowOptions} from 'projen/lib/github'
-import type {JobStep} from 'projen/lib/github/workflows-model'
+import type {Job} from 'projen/lib/github/workflows-model'
 import {job} from './jobs/job'
 
 export interface WithRustTestWorkflow {
@@ -19,7 +19,7 @@ export interface RustTestWorkflowOptions extends GithubWorkflowOptions {
    * Github Runner selection labels
    * @default ['ubuntu-latest']
    */
-  readonly runsOn?: string[]
+  readonly runsOn?: Array<string>
 
   /**
    * The workflow name
@@ -41,6 +41,27 @@ export interface RustTestWorkflowOptions extends GithubWorkflowOptions {
 }
 
 /**
+ * Input parameters to the cargo action.
+ * @see https://github.com/actions-rs/cargo#inputs
+ */
+interface CargoActionParams {
+  /**
+   * Cargo command to run, ex. check or build
+   */
+  command: string
+
+  /**
+   * Rust toolchain name to use
+   */
+  toolchain?: string
+
+  /**
+   * Arguments for the cargo command
+   */
+  args?: string
+}
+
+/**
  * Configure a testing workflow with basic checks on a rust project.
  */
 export class RustTestWorkflow extends GithubWorkflow {
@@ -56,17 +77,29 @@ export class RustTestWorkflow extends GithubWorkflow {
       push: {paths, branches},
     })
 
-    const checkoutStep: JobStep = {uses: 'actions/checkout@v3'}
-    const {runsOn} = options
+    const cargoJob = ({command, args, toolchain = 'nightly'}: CargoActionParams): Job =>
+      job(
+        [
+          {uses: 'actions/checkout@v3'},
+          {
+            name: 'Install latest nightly',
+            uses: 'actions-rs/toolchain@v1',
+            with: {toolchain, components: 'rustfmt, clippy'},
+          },
+          {
+            name: `Run ${command}`,
+            uses: 'actions-rs/cargo@v1',
+            with: {command, args, toolchain},
+          },
+        ],
+        options.runsOn,
+      )
 
     this.addJobs({
-      clippy: job(
-        [checkoutStep, {name: 'Run Clippy', run: 'cargo clippy --all-targets --all-features -- -D warnings'}],
-        runsOn,
-      ),
-      check: job([checkoutStep, {name: 'Run compilation check', run: 'cargo check'}], runsOn),
-      format: job([checkoutStep, {name: 'Run format', run: 'cargo fmt --check'}], runsOn),
-      test: job([checkoutStep, {name: 'Run tests', run: 'cargo test'}], runsOn),
+      clippy: cargoJob({command: 'clippy', args: '--all-targets --all-features -- -D warnings'}),
+      check: cargoJob({command: 'check'}),
+      format: cargoJob({command: 'fmt', args: '--check'}),
+      test: cargoJob({command: 'test'}),
     })
   }
 

@@ -403,17 +403,34 @@ describe('GitHub utils', () => {
       })
     })
 
+    test('uses rust nightly toolchain with required components', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs)
+
+      jobs.forEach((job) => {
+        const {toolchain: toolchainSetup, components} = job.steps[1]!.with!
+        expect(toolchainSetup).toEqual('nightly')
+        expect(components).toEqual('rustfmt, clippy')
+        const toolchainUse = job.steps[2]!.with!.toolchain
+        expect(toolchainUse).toEqual('nightly')
+      })
+    })
+
     test('adds four checks to the workflow', () => {
       const project = new TestProject()
       new RustTestWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[workflowPath])
-      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps[1].run)
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs)
       expect(jobs).toHaveLength(4)
-      expect(jobs).toContain('cargo clippy --all-targets --all-features -- -D warnings')
-      expect(jobs).toContain('cargo check')
-      expect(jobs).toContain('cargo fmt --check')
-      expect(jobs).toContain('cargo test')
+      const commands = jobs.map((j) => j.steps[2]!.with!.command)
+      expect(commands).toContain('clippy')
+      expect(commands).toContain('check')
+      expect(commands).toContain('fmt')
+      expect(commands).toContain('test')
     })
 
     describe('addToProject', () => {

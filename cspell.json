@@ -67,6 +67,7 @@
     "Println",
     "projen",
     "projenrc",
+    "rustfmt",
     "testid",
     "timestamptz",
     "webm"
