@@ -505,10 +505,10 @@ tsconfig.dev.json
         "name": "format",
         "steps": [
           {
-            "exec": "prettier --write .projenrc.ts .",
+            "exec": "prettier --write . .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts . --fix",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" . .projenrc.ts --fix",
           },
         ],
       },
@@ -535,10 +535,10 @@ tsconfig.dev.json
         "name": "lint",
         "steps": [
           {
-            "exec": "prettier --check .projenrc.ts .",
+            "exec": "prettier --check . .projenrc.ts",
           },
           {
-            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" .projenrc.ts .",
+            "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" . .projenrc.ts",
           },
         ],
       },

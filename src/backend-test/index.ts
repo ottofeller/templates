@@ -145,7 +145,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     // ANCHOR ESLint and prettier setup
 
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', '.']
+    const lintPaths = options.lintPaths ?? ['.']
     addLinters({project: this, lintPaths, extraEslintConfigs: [eslintConfig]})
 
     new AssetFile(this, '.prettierignore', {
