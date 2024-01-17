@@ -99,7 +99,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
         'prettier',
         'eslint-plugin-prettier',
         'eslint-config-prettier',
-        '@types/jest'
+        '@types/jest',
       ],
     })
 
