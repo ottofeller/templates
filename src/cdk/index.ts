@@ -1,16 +1,29 @@
 import {execSync} from 'child_process'
+import * as path from 'path'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
+import {AssetFile} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
-import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
+import {
+  CodeOwners,
+  ProjenDriftCheckWorkflow,
+  PullRequestTest,
+  ReleaseWorkflow,
+  RustTestWorkflow,
+  WithCodeOwners,
+  WithDefaultWorkflow,
+  WithRustTestWorkflow,
+} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerCDKProjectOptions
   extends AwsCdkTypeScriptAppOptions,
+    WithCodeOwners,
     WithDefaultWorkflow,
+    WithRustTestWorkflow,
     WithCustomLintPaths,
     WithGitHooks,
     WithTelemetry {
@@ -20,6 +33,13 @@ export interface OttofellerCDKProjectOptions
    * @default 0.0.1
    */
   readonly initialReleaseVersion?: string
+
+  /**
+   * Set up GraphQL dependencies and supplementary script.
+   *
+   * @default false
+   */
+  readonly isGraphqlCodegenEnabled?: boolean
 }
 
 /**
@@ -34,6 +54,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
 
   constructor(options: OttofellerCDKProjectOptions) {
     const srcdir = options.srcdir ?? 'src'
+    const jest = options.jest ?? false
 
     super({
       // Default options
@@ -42,7 +63,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
       tsconfig: {compilerOptions: {paths: {'*': [`./${srcdir}/*`]}, target: 'es6', skipLibCheck: true}},
       sampleCode: false,
       eslint: false,
-      jest: false,
+      jest,
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
 
@@ -108,7 +129,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
     }
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    const lintPaths = options.lintPaths ?? ['src']
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github
@@ -116,8 +137,36 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
 
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initialReleaseVersion: this.initialReleaseVersion})
-      PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
+      PullRequestTest.addToProject(this, {...options, jest, isLighthouseEnabled: false})
       ProjenDriftCheckWorkflow.addToProject(this, options)
+    }
+
+    RustTestWorkflow.addToProject(this, options)
+    CodeOwners.addToProject(this, options)
+
+    // ANCHOR Set up GraphQL
+    const isGraphqlCodegenEnabled = options.isGraphqlCodegenEnabled ?? false
+
+    if (isGraphqlCodegenEnabled) {
+      this.addDevDeps(
+        '@graphql-codegen/add',
+        '@graphql-codegen/cli',
+        '@graphql-codegen/named-operations-object',
+        '@graphql-codegen/typescript-graphql-request',
+        '@graphql-codegen/typescript-operations',
+        '@graphql-codegen/typescript',
+      )
+
+      this.addDeps('graphql')
+
+      // ANCHOR Codegen
+      const codegenPath = path.join(__dirname, '..', '..', 'src/cdk/assets/codegen.ts')
+      new AssetFile(this, 'codegen.ts', {sourcePath: codegenPath, readonly: false, marker: false})
+
+      this.addScripts({
+        'generate-graphql-schema': 'npx apollo schema:download',
+        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.ts',
+      })
     }
 
     // ANCHOR VSCode settings

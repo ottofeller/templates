@@ -4,6 +4,7 @@ import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
+import {CodeOwners, WithCodeOwners} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {PlaywrightWorkflowTest} from './github'
@@ -11,6 +12,7 @@ import {sampleCode} from './sample-code'
 
 export interface OttofellerPlaywrightProjectOptions
   extends TypeScriptProjectOptions,
+    WithCodeOwners,
     WithDocker,
     WithDefaultWorkflow,
     WithCustomLintPaths,
@@ -101,11 +103,12 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
     tasksToRemove.forEach(this.removeTask.bind(this))
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'src']
+    const lintPaths = options.lintPaths ?? ['src']
     addLinters({project: this, lintPaths})
 
-    // ANCHOR Github workflow
+    // ANCHOR Github
     PlaywrightWorkflowTest.addToProject(this, options)
+    CodeOwners.addToProject(this, options)
 
     // ANCHOR Telemetry
     setupTelemetry(this, options)

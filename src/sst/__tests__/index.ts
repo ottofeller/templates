@@ -90,9 +90,9 @@ describe('SST template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestSSTProject()
     project.postSynthesize()
-    expect(mockedExecSync).toBeCalledTimes(2)
-    expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.ts')
-    expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
+    expect(mockedExecSync).toHaveBeenCalledTimes(2)
+    expect(mockedExecSync).toHaveBeenCalledWith('prettier --write .projenrc.ts')
+    expect(mockedExecSync).toHaveBeenCalledWith('eslint --fix .projenrc.ts')
   })
 
   test('when ejected contains only tasks created by projen', () => {

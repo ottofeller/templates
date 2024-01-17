@@ -1,5 +1,6 @@
 import {execSync} from 'child_process'
 import {synthSnapshot} from 'projen/lib/util/synth'
+import * as YAML from 'yaml'
 import {OttofellerCDKProject, OttofellerCDKProjectOptions} from '..'
 
 jest.mock('child_process')
@@ -83,6 +84,51 @@ describe('CDK template', () => {
     })
   })
 
+  describe('has rust test workflow', () => {
+    test('excluded by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.github/workflows/rust-test.yml']).not.toBeDefined()
+    })
+
+    test('included with an option', () => {
+      const project = new TestCDKProject({hasRustTestWorkflow: true})
+      const snapshot = synthSnapshot(project)
+      expect(snapshot['.github/workflows/rust-test.yml']).toBeDefined()
+      expect(snapshot['.github/workflows/rust-test.yml']).toMatchSnapshot()
+    })
+  })
+
+  describe('GraphQL', () => {
+    test('is disabled by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      const {dependencies, devDependencies, scripts} = snapshot['package.json']
+      expect(dependencies).not.toHaveProperty('graphql')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/cli')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/typescript-graphql-request')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/typescript-operations')
+      expect(devDependencies).not.toHaveProperty('@graphql-codegen/typescript')
+      expect(scripts).not.toHaveProperty('generate-graphql-schema')
+      expect(scripts).not.toHaveProperty('gql-to-ts')
+      expect(snapshot['codegen.ts']).not.toBeDefined()
+    })
+
+    test('has related packages and scripts if enabled', () => {
+      const project = new TestCDKProject({isGraphqlCodegenEnabled: true})
+      const snapshot = synthSnapshot(project)
+      const {dependencies, devDependencies, scripts} = snapshot['package.json']
+      expect(dependencies).toHaveProperty('graphql')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/cli')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/typescript-graphql-request')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/typescript-operations')
+      expect(devDependencies).toHaveProperty('@graphql-codegen/typescript')
+      expect(scripts).toHaveProperty('generate-graphql-schema')
+      expect(scripts).toHaveProperty('gql-to-ts')
+      expect(snapshot['codegen.ts']).toBeDefined()
+    })
+  })
+
   test('includes VSCode settings', () => {
     const project = new TestCDKProject()
     const snapshot = synthSnapshot(project)
@@ -101,9 +147,9 @@ describe('CDK template', () => {
     const mockedExecSync = execSync as unknown as jest.Mock<Buffer, [string]>
     const project = new TestCDKProject()
     project.postSynthesize()
-    expect(mockedExecSync).toBeCalledTimes(2)
-    expect(mockedExecSync).toBeCalledWith('prettier --write .projenrc.ts')
-    expect(mockedExecSync).toBeCalledWith('eslint --fix .projenrc.ts')
+    expect(mockedExecSync).toHaveBeenCalledTimes(2)
+    expect(mockedExecSync).toHaveBeenCalledWith('prettier --write .projenrc.ts')
+    expect(mockedExecSync).toHaveBeenCalledWith('eslint --fix .projenrc.ts')
   })
 
   test('when ejected contains only tasks created by projen', () => {
@@ -122,12 +168,32 @@ describe('CDK template', () => {
     }
   })
 
-  test('enables test tasks with jest option', () => {
-    const project = new TestCDKProject({jest: true})
-    const snapshot = synthSnapshot(project)
-    const {tasks} = snapshot['.projen/tasks.json']
-    expect(tasks).toHaveProperty('test')
-    expect(tasks).toHaveProperty('test:watch')
+  describe('test tasks and job', () => {
+    test('are not included by default', () => {
+      const project = new TestCDKProject()
+      const snapshot = synthSnapshot(project)
+      const {scripts} = snapshot['package.json']
+      expect(scripts).not.toHaveProperty('test')
+      expect(scripts).not.toHaveProperty('test:watch')
+      const {tasks} = snapshot['.projen/tasks.json']
+      expect(tasks).not.toHaveProperty('test')
+      expect(tasks).not.toHaveProperty('test:watch')
+      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      expect(jobs).not.toHaveProperty('unit-tests')
+    })
+
+    test('are included with jest option', () => {
+      const project = new TestCDKProject({jest: true})
+      const snapshot = synthSnapshot(project)
+      const {scripts} = snapshot['package.json']
+      expect(scripts).toHaveProperty('test')
+      expect(scripts).toHaveProperty('test:watch')
+      const {tasks} = snapshot['.projen/tasks.json']
+      expect(tasks).toHaveProperty('test')
+      expect(tasks).toHaveProperty('test:watch')
+      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      expect(jobs).toHaveProperty('unit-tests')
+    })
   })
 })
 

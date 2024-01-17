@@ -1,4 +1,5 @@
 import type {Linter} from 'eslint'
+import type {TaskStep} from 'projen'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {synthSnapshot} from 'projen/lib/util/synth'
 import {addLinters, linterDependencies} from '..'
@@ -25,24 +26,30 @@ describe('addLinters function', () => {
     })
   })
 
-  test('adds linting scripts for provided paths to package.json', () => {
+  test('adds linting tasks for provided paths to .projen/tasks.json', () => {
     const project = new TestProject()
     addLinters({project, lintPaths: ['folderPath', 'file/path.ts', 'pattern/path/*.ts']})
     const snapshot = synthSnapshot(project)
-    const scriptNames = Object.keys(snapshot['package.json'].scripts)
-    expect(scriptNames).toContain('format')
-    expect(scriptNames).toContain('typecheck')
-    expect(scriptNames).toContain('lint')
+    const {tasks} = snapshot['.projen/tasks.json']
+    expect(tasks).toHaveProperty('format')
+    expect(tasks).toHaveProperty('typecheck')
+    expect(tasks).toHaveProperty('lint')
   })
 
   test('ignores projenrc in lint paths for subprojects', () => {
     const parent = new TestProject()
     const subproject = new TestProject({parent, outdir: 'subproject'})
-    const projenrcPath = '.projenrc.ts'
-    addLinters({project: subproject, lintPaths: [projenrcPath, 'src/index.ts']})
-    const snapshot = synthSnapshot(subproject)
-    expect(snapshot['package.json'].scripts['format']).not.toContain(projenrcPath)
-    expect(snapshot['package.json'].scripts['lint']).not.toContain(projenrcPath)
+    const projenrcPath = '.projenrc.js'
+    addLinters({project: parent, lintPaths: ['src/index.ts']})
+    addLinters({project: subproject, lintPaths: ['src/index.ts']})
+
+    const parentTasks = synthSnapshot(parent)['.projen/tasks.json'].tasks
+    parentTasks.format.steps.forEach(({exec}: TaskStep) => expect(exec).toContain(projenrcPath))
+    parentTasks.lint.steps.forEach(({exec}: TaskStep) => expect(exec).toContain(projenrcPath))
+
+    const subprojectTasks = synthSnapshot(subproject)['.projen/tasks.json'].tasks
+    subprojectTasks.format.steps.forEach(({exec}: TaskStep) => expect(exec).not.toContain(projenrcPath))
+    subprojectTasks.lint.steps.forEach(({exec}: TaskStep) => expect(exec).not.toContain(projenrcPath))
   })
 
   test('creates prettier and eslint configs', () => {

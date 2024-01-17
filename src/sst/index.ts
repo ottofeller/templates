@@ -5,13 +5,21 @@ import {DependabotScheduleInterval} from 'projen/lib/github'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
-import {ProjenDriftCheckWorkflow, PullRequestTest, ReleaseWorkflow, WithDefaultWorkflow} from '../common/github'
+import {
+  CodeOwners,
+  ProjenDriftCheckWorkflow,
+  PullRequestTest,
+  ReleaseWorkflow,
+  WithCodeOwners,
+  WithDefaultWorkflow,
+} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 
 export interface OttofellerSSTProjectOptions
   extends TypeScriptProjectOptions,
+    WithCodeOwners,
     WithDefaultWorkflow,
     WithCustomLintPaths,
     WithGitHooks,
@@ -92,7 +100,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
     }
 
     // ANCHOR ESLint and prettier setup
-    const lintPaths = options.lintPaths ?? ['.projenrc.ts', 'stacks', 'sst.config.ts']
+    const lintPaths = options.lintPaths ?? ['stacks', 'sst.config.ts']
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github
@@ -104,6 +112,8 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
       PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
       ProjenDriftCheckWorkflow.addToProject(this, options)
     }
+
+    CodeOwners.addToProject(this, options)
 
     // ANCHOR VSCode settings
     addVsCode(this)

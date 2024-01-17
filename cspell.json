@@ -39,6 +39,7 @@
   ],
   "words": [
     "cicd",
+    "clippy",
     "dangerules",
     "devs",
     "estree",
@@ -66,6 +67,7 @@
     "Println",
     "projen",
     "projenrc",
+    "rustfmt",
     "testid",
     "timestamptz",
     "webm"

@@ -52,7 +52,7 @@ describe('collectTelemetry function', () => {
     const project = new TestProject()
     collectTelemetry(project)
 
-    expect(mockedNodeFetch).not.toBeCalled()
+    expect(mockedNodeFetch).not.toHaveBeenCalled()
   })
 
   test('does nothing if IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED env var not set', () => {
@@ -60,7 +60,7 @@ describe('collectTelemetry function', () => {
     const project = new TestProject(projectOptionsWithTelemetry)
     collectTelemetry(project)
 
-    expect(mockedNodeFetch).not.toBeCalled()
+    expect(mockedNodeFetch).not.toHaveBeenCalled()
   })
 
   test('sets auth header if it is defined in options', () => {
@@ -96,8 +96,8 @@ describe('collectTelemetry function', () => {
 
     collectTelemetry(project)
 
-    expect(mockStringify).lastCalledWith(expect.objectContaining({templateVersion}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({templateVersion}))
+    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('collects git URLs', () => {
@@ -112,8 +112,8 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     const gitUrls = ['https://github.com/ottofeller/sampleProject.git']
-    expect(mockStringify).lastCalledWith(expect.objectContaining({gitUrls}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({gitUrls}))
+    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('collects escape hatches utilized in projenrc file', () => {
@@ -155,8 +155,8 @@ describe('collectTelemetry function', () => {
     mockedReadFileSync.mockReturnValue(projenrcTs)
     collectTelemetry(project)
 
-    expect(mockStringify).lastCalledWith(expect.objectContaining({escapeHatches}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({escapeHatches}))
+    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('does not collect empty escape hatches', () => {
@@ -242,8 +242,8 @@ describe('collectTelemetry function', () => {
       updated: [{events: updatedTrigger, name: updatedWorkflowName}],
     }
 
-    expect(mockStringify).lastCalledWith(expect.objectContaining({workflows}))
-    expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({workflows}))
+    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   describe('collects errors', () => {
@@ -257,8 +257,8 @@ describe('collectTelemetry function', () => {
         new TypeError("Cannot read properties of undefined (reading 'split')"),
       ]
 
-      expect(mockStringify).lastCalledWith(expect.objectContaining({errors}))
-      expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+      expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({errors}))
+      expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
     })
 
     test('if failed to read projenrc file', () => {
@@ -271,8 +271,8 @@ describe('collectTelemetry function', () => {
         new TypeError("Cannot read properties of undefined (reading 'matchAll')"),
       ]
 
-      expect(mockStringify).lastCalledWith(expect.objectContaining({errors}))
-      expect(mockedNodeFetch).toBeCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+      expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({errors}))
+      expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
     })
   })
 })
