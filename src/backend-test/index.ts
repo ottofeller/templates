@@ -99,6 +99,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
         'prettier',
         'eslint-plugin-prettier',
         'eslint-config-prettier',
+        '@types/jest'
       ],
     })
 
@@ -151,42 +152,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       sourcePath: path.join(assetsDir, '.prettierignore'),
       readonly: false,
       marker: false,
-    })
-
-    this.removeTask('format')
-
-    this.tasks.addTask('format', {
-      steps: [
-        {
-          exec: 'prettier --write ./',
-        },
-        {
-          exec: 'eslint --ext .ts ./ --fix',
-        },
-      ],
-    })
-
-    this.removeTask('lint')
-
-    this.tasks.addTask('lint', {
-      steps: [
-        {
-          exec: 'prettier --check ./',
-        },
-        {
-          exec: 'eslint --ext .ts ./',
-        },
-      ],
-    })
-
-    this.removeTask('typecheck')
-
-    this.tasks.addTask('typecheck', {
-      steps: [
-        {
-          exec: 'tsc',
-        },
-      ],
     })
 
     //ANCHOR - Set up AWS DynamoDb Client
