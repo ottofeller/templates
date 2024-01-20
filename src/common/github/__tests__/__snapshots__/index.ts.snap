@@ -3928,10 +3928,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install latest nightly
+        id: toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           components: rustfmt, clippy
+      - uses: actions/cache@v3
+        with:
+          path: |-
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: cargo-\${{ runner.os }}-\${{ steps.toolchain.outputs.rustc_hash }}-\${{ hashFiles('**/Cargo.lock') }}-clippy
       - name: Run clippy
         uses: actions-rs/cargo@v1
         with:
@@ -3945,10 +3955,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install latest nightly
+        id: toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           components: rustfmt, clippy
+      - uses: actions/cache@v3
+        with:
+          path: |-
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: cargo-\${{ runner.os }}-\${{ steps.toolchain.outputs.rustc_hash }}-\${{ hashFiles('**/Cargo.lock') }}-check
       - name: Run check
         uses: actions-rs/cargo@v1
         env:
@@ -3963,10 +3983,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install latest nightly
+        id: toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           components: rustfmt, clippy
+      - uses: actions/cache@v3
+        with:
+          path: |-
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: cargo-\${{ runner.os }}-\${{ steps.toolchain.outputs.rustc_hash }}-\${{ hashFiles('**/Cargo.lock') }}-fmt
       - name: Run fmt
         uses: actions-rs/cargo@v1
         with:
@@ -3980,10 +4010,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install latest nightly
+        id: toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           components: rustfmt, clippy
+      - uses: actions/cache@v3
+        with:
+          path: |-
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: cargo-\${{ runner.os }}-\${{ steps.toolchain.outputs.rustc_hash }}-\${{ hashFiles('**/Cargo.lock') }}-test
       - name: Run test
         uses: actions-rs/cargo@v1
         with:

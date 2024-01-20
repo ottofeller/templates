@@ -466,8 +466,27 @@ describe('GitHub utils', () => {
         const {toolchain: toolchainSetup, components} = job.steps[1]!.with!
         expect(toolchainSetup).toEqual('nightly')
         expect(components).toEqual('rustfmt, clippy')
-        const toolchainUse = job.steps[2]!.with!.toolchain
+        const toolchainUse = job.steps[3]!.with!.toolchain
         expect(toolchainUse).toEqual('nightly')
+      })
+    })
+
+    test('Caches cargo home and target folders', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs)
+
+      jobs.forEach((job) => {
+        const cacheStep = job.steps[2]
+        expect(cacheStep.uses).toEqual('actions/cache@v3')
+        const {path, key} = cacheStep.with!
+        expect(path).toContain('\n~/.cargo')
+        expect(path).toContain('\ntarget/')
+        expect(key).toContain('runner.os')
+        expect(key).toContain('steps.toolchain.outputs.rustc_hash')
+        expect(key).toContain("hashFiles('**/Cargo.lock')")
       })
     })
 
@@ -478,7 +497,7 @@ describe('GitHub utils', () => {
       const workflow = YAML.parse(snapshot[workflowPath])
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs)
       expect(jobs).toHaveLength(4)
-      const commands = jobs.map((j) => j.steps[2]!.with!.command)
+      const commands = jobs.map((j) => j.steps[3]!.with!.command)
       expect(commands).toContain('clippy')
       expect(commands).toContain('check')
       expect(commands).toContain('fmt')
