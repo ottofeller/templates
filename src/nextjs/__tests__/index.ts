@@ -1,5 +1,6 @@
 import {execSync} from 'child_process'
 import {synthSnapshot} from 'projen/lib/util/synth'
+import * as YAML from 'yaml'
 import {OttofellerNextjsProject, OttofellerNextjsProjectOptions} from '..'
 
 jest.mock('child_process')
@@ -63,6 +64,28 @@ describe('NextJS template', () => {
       const project = new TestNextJsTypeScriptProject({hasDefaultGithubWorkflows: false})
       const snapshot = synthSnapshot(project)
       expect(snapshot['.github/workflows/test.yml']).not.toBeDefined()
+    })
+  })
+
+  describe('has lighthouse test workflow', () => {
+    test('excluded by default', () => {
+      const project = new TestNextJsTypeScriptProject()
+      const snapshot = synthSnapshot(project)
+      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      expect(jobs).not.toHaveProperty('lighthouse')
+      expect(snapshot['lighthouserc.js']).not.toBeDefined()
+      expect(snapshot['package.json'].scripts).not.toHaveProperty('lighthouse')
+      expect(snapshot['package.json'].devDependencies).not.toHaveProperty('@lhci/cli')
+    })
+
+    test('included with an option', () => {
+      const project = new TestNextJsTypeScriptProject({isLighthouseEnabled: true})
+      const snapshot = synthSnapshot(project)
+      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      expect(jobs).toHaveProperty('lighthouse')
+      expect(snapshot['lighthouserc.js']).toBeDefined()
+      expect(snapshot['package.json'].scripts).toHaveProperty('lighthouse')
+      expect(snapshot['package.json'].devDependencies).toHaveProperty('@lhci/cli')
     })
   })
 
