@@ -57,11 +57,28 @@ describe('addTaskOrScript function', () => {
     const taskName = 'do-some-work'
     const step1 = 'dig'
     const step2 = 'rest'
-    addTaskOrScript(project, taskName, {steps: [{exec: step1}, {exec: step2}]})
+    addTaskOrScript(project, taskName, {steps: [{exec: step1}, {spawn: step2}]})
 
     const snapshot = synthSnapshot(project)
     const {scripts} = snapshot['package.json']
     expect(scripts[taskName]).toEqual(`${step1} && ${step2}`)
+
+    if (PROJEN_EJECTING !== undefined) {
+      delete process.env.PROJEN_EJECTING
+    }
+  })
+
+  test('adds an empty script to package.json of an ejected project as a final fallback', () => {
+    const PROJEN_EJECTING = process.env
+    process.env.PROJEN_EJECTING = '1'
+
+    const project = new TestProject()
+    const taskName = 'do-some-work'
+    addTaskOrScript(project, taskName, {})
+
+    const snapshot = synthSnapshot(project)
+    const {scripts} = snapshot['package.json']
+    expect(scripts[taskName]).toEqual('')
 
     if (PROJEN_EJECTING !== undefined) {
       delete process.env.PROJEN_EJECTING

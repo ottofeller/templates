@@ -133,6 +133,14 @@ describe('GitHub utils', () => {
       })
     })
 
+    test('includes lighthouse job when requested', () => {
+      const project = new TestProject()
+      new PullRequestTest(project.github!, {isLighthouseEnabled: true})
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[testWorkflowPath])
+      expect(workflow.jobs.lighthouse.steps.at(-2).run).toEqual('npm run lighthouse')
+    })
+
     describe('addToProject', () => {
       const name = 'subproject'
       const subprojectTestWorkflowPath = `.github/workflows/test-${name}.yml`
@@ -214,6 +222,20 @@ describe('GitHub utils', () => {
             })
         })
       })
+
+      test('does not add test job only if jest is disabled', () => {
+        const project = new TestProjectWithTestWorkflow({jest: false})
+        const snapshot = synthSnapshot(project)
+        const workflow = YAML.parse(snapshot[testWorkflowPath])
+        expect(workflow.jobs.test).not.toBeDefined()
+      })
+
+      test('propagates isLighthouseEnabled option to constructor', () => {
+        const project = new TestProjectWithTestWorkflow({isLighthouseEnabled: true})
+        const snapshot = synthSnapshot(project)
+        const workflow = YAML.parse(snapshot[testWorkflowPath])
+        expect(workflow.jobs.lighthouse.steps.at(-2).run).toEqual('npm run lighthouse')
+      })
     })
   })
 
@@ -282,6 +304,36 @@ describe('GitHub utils', () => {
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.name)
       expect(jobs).toHaveLength(1)
       expect(jobs[0]).toEqual('Check git')
+    })
+
+    describe('allows setting nodeVersion', () => {
+      const nodeVersion = '18.15.0'
+
+      test('from workflow options', () => {
+        const project = new TestProject()
+        new ProjenDriftCheckWorkflow(project.github!, {workflowNodeVersion: nodeVersion})
+        const snapshot = synthSnapshot(project)
+        const workflow = YAML.parse(snapshot[workflowPath])
+
+        Object.values<Job>(workflow.jobs)
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .forEach((job) => {
+            expect(job!.with!['node-version']).toEqual(nodeVersion)
+          })
+      })
+
+      test('from project package', () => {
+        const project = new TestProject({minNodeVersion: nodeVersion})
+        new ProjenDriftCheckWorkflow(project.github!)
+        const snapshot = synthSnapshot(project)
+        const workflow = YAML.parse(snapshot[workflowPath])
+
+        Object.values<Job>(workflow.jobs)
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .forEach((job) => {
+            expect(job!.with!['node-version']).toEqual(nodeVersion)
+          })
+      })
     })
 
     describe('addToProject', () => {
@@ -543,7 +595,7 @@ class TestProject extends NodeProject {
 }
 
 class TestProjectWithTestWorkflow extends NodeProject {
-  constructor(options: Partial<NodeProjectOptions & WithDefaultWorkflow> = {}) {
+  constructor(options: Partial<NodeProjectOptions & WithDefaultWorkflow & {isLighthouseEnabled: boolean}> = {}) {
     super({
       name: 'test-project-with-test-workflow',
       defaultReleaseBranch: 'main',

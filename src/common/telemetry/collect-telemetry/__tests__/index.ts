@@ -2,9 +2,10 @@ import {execSync} from 'child_process'
 import {readFileSync} from 'fs'
 import fetch, {RequestInfo, RequestInit, Response} from 'node-fetch'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
-import {collectTelemetry} from '..'
+import {cloneWorkflow, collectTelemetry, diff} from '..'
 import {IWithTelemetryReportUrl, WithTelemetry, setupTelemetry} from '../..'
 import {TelemetryOptions} from '../../with-telemetry'
+import {collectEscapeHatches} from '../collect-escape-hatches'
 import {reportTargetAuthToken, telemetryEnableEnvVar} from '../collect-telemetry'
 
 jest.mock('child_process')
@@ -14,6 +15,48 @@ jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
   readFileSync: jest.fn<string, [string, BufferEncoding]>(),
 }))
+
+describe('cloneWorkflow function', () => {
+  test('creates a clone without certain properties', () => {
+    const project = new TestProject()
+    const workflow = project.github!.workflows[0]
+    const clonedWorkflow = cloneWorkflow(workflow)
+    expect(clonedWorkflow).not.toHaveProperty('project')
+    expect(clonedWorkflow).not.toHaveProperty('file')
+    expect(clonedWorkflow).not.toHaveProperty('github')
+  })
+})
+
+describe('collectEscapeHatches function', () => {
+  const projenRcCode = (inject?: Array<string>) => `import {NodeProject} from 'projen'
+    const project = new NodeProject({
+      devDeps: ['projen'],
+      name: 'test project',
+    })
+
+    ${inject ? inject.join('\n') : ''}
+
+    project.synth()
+  `
+
+  test('does nothing if no matches found', () => {
+    const code = projenRcCode()
+    const result = collectEscapeHatches(code, ['tryFindFile'])
+    expect(result).toEqual(undefined)
+  })
+
+  test('reports call arguments for each found match', () => {
+    const code = projenRcCode([
+      'project.tryFindFile("someFile")',
+      'project.package.addOverride("type", "module")',
+      'project.package.addDeletionOverride("main")',
+      'project.package.addDeletionOverride("license")',
+    ])
+
+    const result = collectEscapeHatches(code, ['addOverride', 'addDeletionOverride'])
+    expect(result).toEqual({addOverride: '"type", "module"', addDeletionOverride: ['"main"', '"license"']})
+  })
+})
 
 describe('collectTelemetry function', () => {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
@@ -274,6 +317,57 @@ describe('collectTelemetry function', () => {
       expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({errors}))
       expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
     })
+  })
+})
+
+describe('diff function', () => {
+  test('returns empty object for equal objects', () => {
+    const obj = {someKey: 'someValue'}
+    const result = diff(obj, obj)
+    expect(result).toEqual({})
+  })
+
+  test('returns updated value for primitives', () => {
+    const initial = 7
+    const updated = 2
+    // @ts-expect-error -- test for unexpected inputs
+    const result = diff(initial, updated)
+    expect(result).toEqual(updated)
+  })
+
+  test('records new keys', () => {
+    const initial = {one: 1}
+    const updated = {one: 1, two: 2}
+    const result = diff(initial, updated)
+    expect(result).toEqual({two: 2})
+  })
+
+  test('records deleted keys as null', () => {
+    const initial = {one: 1}
+    const updated = {}
+    const result = diff(initial, updated)
+    expect(result).toEqual({one: null})
+  })
+
+  test('does not record functions', () => {
+    const initial = {one: 1}
+    const updated = {one: 1, two: () => 2}
+    const result = diff(initial, updated)
+    expect(result).toEqual({})
+  })
+
+  test('returns updated key-value for primitives', () => {
+    const initial = {one: 1, two: 2}
+    const updated = {one: 2, two: 2}
+    const result = diff(initial, updated)
+    expect(result).toEqual({one: 2})
+  })
+
+  test('recursively compares object values', () => {
+    const initial = {one: {two: 2}, three: 3}
+    const updated = {one: {four: 4}, three: 3}
+    const result = diff(initial, updated)
+    expect(result).toEqual({one: {two: null, four: 4}})
   })
 })
 

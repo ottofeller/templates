@@ -36,7 +36,7 @@ export interface PullRequestTestOptions
   /**
    * Setup Lighthouse audit script & GitHub job.
    *
-   * @default true
+   * @default false
    */
   readonly isLighthouseEnabled?: boolean
 }
