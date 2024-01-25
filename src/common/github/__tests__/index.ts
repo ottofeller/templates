@@ -485,6 +485,16 @@ describe('GitHub utils', () => {
       expect(commands).toContain('test')
     })
 
+    test.only('enables additional lints in cargo check', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const {name, env} = workflow.jobs.check.steps.at(-1)!
+      expect(name).toEqual('Run check')
+      expect(env!.RUSTFLAGS).toEqual('-D unused_crate_dependencies')
+    })
+
     describe('addToProject', () => {
       test('does nothing by default', () => {
         const project = new TestProjectWithRustTestWorkflow({})
