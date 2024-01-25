@@ -59,6 +59,11 @@ interface CargoActionParams {
    * Arguments for the cargo command
    */
   args?: string
+
+  /**
+   * Environment variables for the cargo command
+   */
+  env?: Record<string, string>
 }
 
 /**
@@ -77,7 +82,7 @@ export class RustTestWorkflow extends GithubWorkflow {
       push: {paths, branches},
     })
 
-    const cargoJob = ({command, args, toolchain = 'nightly'}: CargoActionParams): Job =>
+    const cargoJob = ({command, args, env, toolchain = 'nightly'}: CargoActionParams): Job =>
       job(
         [
           {uses: 'actions/checkout@v3'},
@@ -90,6 +95,7 @@ export class RustTestWorkflow extends GithubWorkflow {
             name: `Run ${command}`,
             uses: 'actions-rs/cargo@v1',
             with: {command, args, toolchain},
+            env,
           },
         ],
         options.runsOn,
@@ -97,7 +103,7 @@ export class RustTestWorkflow extends GithubWorkflow {
 
     this.addJobs({
       clippy: cargoJob({command: 'clippy', args: '--all-targets --all-features -- -D warnings'}),
-      check: cargoJob({command: 'check'}),
+      check: cargoJob({command: 'check', env: {RUSTFLAGS: '-D unused_crate_dependencies'}}),
       format: cargoJob({command: 'fmt', args: '--check'}),
       test: cargoJob({command: 'test'}),
     })

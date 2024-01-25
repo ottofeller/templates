@@ -3951,6 +3951,8 @@ jobs:
           components: rustfmt, clippy
       - name: Run check
         uses: actions-rs/cargo@v1
+        env:
+          RUSTFLAGS: -D unused_crate_dependencies
         with:
           command: check
           toolchain: nightly
