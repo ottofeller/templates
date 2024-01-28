@@ -485,7 +485,7 @@ describe('GitHub utils', () => {
       expect(commands).toContain('test')
     })
 
-    test.only('enables additional lints in cargo check', () => {
+    test('enables additional lints in cargo check', () => {
       const project = new TestProject()
       new RustTestWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
