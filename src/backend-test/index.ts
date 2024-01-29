@@ -153,6 +153,12 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       marker: false,
     })
 
+    new AssetFile(this, '.eslintignore', {
+      sourcePath: path.join(assetsDir, '.eslintignore'),
+      readonly: false,
+      marker: false,
+    })
+
     //ANCHOR - Set up AWS DynamoDb Client
     const isAWSDynamoDBEnabled = options.isAWSDynamoDBEnabled ?? true
 
