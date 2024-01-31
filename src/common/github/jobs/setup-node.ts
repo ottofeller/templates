@@ -43,6 +43,7 @@ export interface SetupNodeOptions {
 /**
  * Create an array of GitHub workflow jobs which set up node.js for the specified package manager.
  * The steps include dependency installation and caching.
+ * @internal
  */
 export const setupNode = ({
   nodeVersion = 18,

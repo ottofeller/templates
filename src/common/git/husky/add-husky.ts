@@ -14,6 +14,7 @@ const wrapCommandWithBranchCheck = (command: string, ignoreBranches: Array<strin
 fi
 `
 
+/** @internal */
 export const addHusky = (project: NodeProject, options: WithGitHooks): void => {
   project.addDevDeps('husky')
   project.addScripts({prepare: 'husky install'})

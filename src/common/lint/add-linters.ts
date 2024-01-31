@@ -30,6 +30,7 @@ export const linterDependencies = [
   'prettier-plugin-organize-imports',
 ]
 
+/** @internal */
 export const addLinters = (props: AddLintersProps): void => {
   const {project, lintPaths, extraEslintConfigs = []} = props
 

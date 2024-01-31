@@ -22,6 +22,7 @@
     "test": "npx projen test",
     "test:watch": "npx projen test:watch",
     "typecheck": "npx projen typecheck",
+    "typedoc": "npx projen typedoc",
     "watch": "npx projen watch",
     "projen": "npx projen",
     "prepare": "husky install"
@@ -35,6 +36,7 @@
     "@cspell/eslint-plugin": "6.31.1",
     "@graphql-codegen/cli": "^5.0.0",
     "@ottofeller/eslint-plugin-ottofeller": "0.1.4",
+    "@sisense/typedoc-plugin-markdown": "^4.0.0-next.45",
     "@types/eslint": "8.40.0",
     "@types/jest": "29",
     "@types/jscodeshift": "^0.11.6",
@@ -60,6 +62,7 @@
     "projen": "^0.71.128",
     "ts-jest": "29",
     "ts-node": "10.8.1",
+    "typedoc": "^0.25.7",
     "typescript": "5.1.x"
   },
   "peerDependencies": {

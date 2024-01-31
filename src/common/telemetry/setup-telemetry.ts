@@ -10,6 +10,7 @@ type Writeable<T extends object> = {-readonly [P in keyof T]: T[P]}
  * and configure the project to have:
  * - a URL available for telemetry code;
  * - a special GitHub workflow that runs telemetry collection and sends the data to the predefined URL.
+ * @internal
  */
 export const setupTelemetry = (project: NodeProject & Writeable<IWithTelemetryReportUrl>, options: WithTelemetry) => {
   const {isTelemetryEnabled = false, telemetryOptions} = options

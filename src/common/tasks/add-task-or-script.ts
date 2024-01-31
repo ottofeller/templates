@@ -8,6 +8,7 @@ import type {NodeProject} from 'projen/lib/javascript'
  *
  * @param name — The task name to add
  * @param props — Task properties
+ * @internal
  */
 export const addTaskOrScript = (project: NodeProject, name: string, props: TaskOptions): void => {
   if (!project.ejected) {

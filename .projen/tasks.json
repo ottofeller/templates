@@ -100,10 +100,10 @@
       "description": "Perform code formatting and fixes of code-quality rules",
       "steps": [
         {
-          "exec": "prettier --write src .projenrc.ts"
+          "exec": "prettier --write src typedoc.config.js .projenrc.ts"
         },
         {
-          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" src .projenrc.ts --fix"
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" src typedoc.config.js .projenrc.ts --fix"
         }
       ]
     },
@@ -130,10 +130,10 @@
       "description": "Check code formatting and code-quality rules",
       "steps": [
         {
-          "exec": "prettier --check src .projenrc.ts"
+          "exec": "prettier --check src typedoc.config.js .projenrc.ts"
         },
         {
-          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" src .projenrc.ts"
+          "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern \"!.projenrc.ts\" src typedoc.config.js .projenrc.ts"
         }
       ]
     },
@@ -197,6 +197,14 @@
       "steps": [
         {
           "exec": "tsc --noEmit --project tsconfig.dev.json"
+        }
+      ]
+    },
+    "typedoc": {
+      "name": "typedoc",
+      "steps": [
+        {
+          "exec": "typedoc"
         }
       ]
     },

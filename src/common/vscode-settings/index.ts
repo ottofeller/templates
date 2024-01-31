@@ -5,6 +5,7 @@ import type {NodeProject} from 'projen/lib/javascript'
  *
  * NOTE: It can either explicitly disabled with the option `vscode: false`,
  * or automatically for projects that have a parent, so that only the root project has the settings.
+ * @internal
  */
 export const addVsCode = (project: NodeProject) => {
   if (!project.vscode) {

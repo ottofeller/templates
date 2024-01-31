@@ -13,6 +13,10 @@
       "type": "build"
     },
     {
+      "name": "@sisense/typedoc-plugin-markdown",
+      "type": "build"
+    },
+    {
       "name": "@types/eslint",
       "type": "build"
     },
@@ -123,6 +127,10 @@
     },
     {
       "name": "ts-node",
+      "type": "build"
+    },
+    {
+      "name": "typedoc",
       "type": "build"
     },
     {

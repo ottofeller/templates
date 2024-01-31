@@ -56,6 +56,7 @@ interface TelemetryPayload {
 export const telemetryEnableEnvVar = 'IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED' as const
 export const reportTargetAuthToken = 'TELEMETRY_AUTH_TOKEN' as const
 
+/** @internal */
 export const collectTelemetry = async (project: NodeProject & IWithTelemetryReportUrl) => {
   if (!project.reportTargetUrl || !process.env[telemetryEnableEnvVar]) {
     return

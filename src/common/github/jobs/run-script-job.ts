@@ -12,6 +12,7 @@ export interface RunScriptJobOptions extends NodeJobOptions {
 
 /**
  * Create GitHub workflow job which runs a node.js script with a given setup.
+ * @internal
  */
 export const runScriptJob = (options: RunScriptJobOptions): Job => {
   const {command, runsOn, runScriptCommand, workingDirectory} = options

@@ -1,6 +1,7 @@
 import type {Linter} from 'eslint'
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
+import type {Job} from 'projen/lib/github/workflows-model'
 import {addHusky} from './src/common/git'
 import {ProjenDriftCheckWorkflow, job, npmRunJobStep} from './src/common/github'
 import {addLinters} from './src/common/lint'
@@ -20,7 +21,15 @@ const project = new projen.cdk.JsiiProject({
   deps: ['projen'],
   bundledDeps: ['prettier', 'eslint', 'node-fetch'],
   peerDeps: ['projen'],
-  devDeps: ['@types/eslint', '@types/jscodeshift', '@graphql-codegen/cli', 'node-fetch@2', '@types/node-fetch'],
+  devDeps: [
+    '@types/eslint',
+    '@types/jscodeshift',
+    '@graphql-codegen/cli',
+    'node-fetch@2',
+    '@types/node-fetch',
+    'typedoc',
+    '@sisense/typedoc-plugin-markdown',
+  ],
 
   jsiiVersion: '5.1.x',
   typescriptVersion: '5.1.x',
@@ -72,7 +81,7 @@ const rules: Linter.RulesRecord = {
 
 addLinters({
   project,
-  lintPaths: ['src'],
+  lintPaths: ['src', 'typedoc.config.js'],
   extraEslintConfigs: [{rules}],
 })
 
@@ -82,6 +91,9 @@ project.addDevDeps('@types/prettier@2.6.0')
 
 // ANCHOR Setup git hooks with Husky
 addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: ['main']}}})
+
+// ANCHOR typedoc script
+project.addTask('typedoc', {exec: 'typedoc'})
 
 // ANCHOR Github workflows
 const testGithubWorkflow = project.github!.addWorkflow('test')
@@ -95,6 +107,16 @@ testGithubWorkflow.addJobs({
 })
 
 new ProjenDriftCheckWorkflow(project.github!, {additionalPaths: ['src/common/**']})
+const driftCheckWorkflow = project.github!.tryFindWorkflow('projen-drift-check')!
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- we know it to be a Job
+const docsDriftCheckJob = driftCheckWorkflow.getJob('projen-drift-check') as Job
+
+driftCheckWorkflow.addJob('docs-drift-check', {
+  ...docsDriftCheckJob,
+  steps: docsDriftCheckJob.steps.map((step) =>
+    step.name === 'Execute the command' ? {...step, run: 'npm run typedoc'} : step,
+  ),
+})
 
 const createReleaseGithubWorkflow = project.github!.addWorkflow('create-release')
 
