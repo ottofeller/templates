@@ -1,4 +1,5 @@
 export * from './apollo-server'
+export * from './backend-test'
 export * from './cdk'
 export * from './common'
 export * from './nextjs'

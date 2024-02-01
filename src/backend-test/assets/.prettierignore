@@ -1,0 +1,5 @@
+generated/index.ts
+*.generated.ts
+tsconfig.json
+.eslintrc.json
+tsconfig.dev.json

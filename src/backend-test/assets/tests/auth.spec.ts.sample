@@ -1,0 +1,43 @@
+import {AuthRequestBody, AuthResponseBody} from 'api/auth'
+import {AxiosRequestConfig, AxiosResponse} from 'axios'
+import {client} from 'common/client'
+
+describe('Authorization & Authentication', () => {
+  test('Sign in with existing credentials', async () => {
+    const payload: AxiosRequestConfig<AuthRequestBody> = {
+      method: 'post',
+      url: '/auth',
+      data: {
+        login: process.env.USERNAME,
+        password: process.env.PASSWORD,
+      },
+    }
+
+    const response: AxiosResponse<AuthResponseBody> = await client.request(payload)
+
+    expect(response.status).toEqual(200)
+
+    expect(response.data).toEqual({
+      token: expect.any(String),
+    })
+  })
+
+  test('Sign in with not existing credentials', async () => {
+    const payload: AxiosRequestConfig<AuthRequestBody> = {
+      method: 'post',
+      url: '/auth',
+      data: {
+        login: 'invalid',
+        password: 'invalid',
+      },
+    }
+
+    const response: AxiosResponse<AuthResponseBody> = await client.request(payload)
+
+    expect(response.status).toEqual(404)
+
+    expect(response.data).toEqual({
+      message: expect.any(String),
+    })
+  })
+})

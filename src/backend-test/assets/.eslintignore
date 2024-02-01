@@ -1,0 +1,5 @@
+test-results/**/*
+generated/index.ts
+schema.graphql
+*.generated.ts
+*.generated.tsx
