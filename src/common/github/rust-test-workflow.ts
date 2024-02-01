@@ -88,8 +88,28 @@ export class RustTestWorkflow extends GithubWorkflow {
           {uses: 'actions/checkout@v3'},
           {
             name: 'Install latest nightly',
+            id: 'toolchain',
             uses: 'actions-rs/toolchain@v1',
             with: {toolchain, components: 'rustfmt, clippy'},
+          },
+          {
+            uses: 'actions/cache@v3',
+            with: {
+              path: [
+                '~/.cargo/bin/',
+                '~/.cargo/registry/index/',
+                '~/.cargo/registry/cache/',
+                '~/.cargo/git/db/',
+                'target/',
+              ].join('\n'),
+              key: [
+                'cargo',
+                '${{ runner.os }}',
+                '${{ steps.toolchain.outputs.rustc_hash }}',
+                "${{ hashFiles('**/Cargo.lock') }}",
+                command,
+              ].join('-'),
+            },
           },
           {
             name: `Run ${command}`,
