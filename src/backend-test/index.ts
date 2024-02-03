@@ -5,14 +5,15 @@ import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript
 import {
   AssetFile,
   IWithTelemetryReportUrl,
+  WithCustomLintPaths,
   WithDefaultWorkflow,
   WithGitHooks,
   WithTelemetry,
+  addLinters,
   collectTelemetry,
   setupTelemetry,
 } from '../common'
-import {WithCustomLintPaths, addLinters} from '../common/lint'
-import {eslintConfig} from './assets/eslint-config'
+import {eslintConfig} from './eslint-config'
 import {sampleCode} from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions
@@ -27,6 +28,7 @@ export interface OttofellerBackendTestProjectOptions
    * @default true
    */
   readonly isGraphqlEnabled?: boolean
+
   /**
    * Set up AWS DynamoDb dependencies and supplementary script.
    *
