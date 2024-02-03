@@ -168,9 +168,11 @@ publishReleaseGithubWorkflow.addJobs({
 
 // ANCHOR nmpignore
 project.npmignore!.exclude(
+  '/cspell.json',
   '/.eslintrc.json',
   '/.prettierrc.json',
   '/.projenrc.ts',
+  '/examples/',
   '/src/**',
   '/lib/**/assets/**',
   '**/__tests__/**',

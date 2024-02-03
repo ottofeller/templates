@@ -17,9 +17,11 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 !.jsii
+/cspell.json
 /.eslintrc.json
 /.prettierrc.json
 /.projenrc.ts
+/examples/
 /src/**
 /lib/**/assets/**
 **/__tests__/**
