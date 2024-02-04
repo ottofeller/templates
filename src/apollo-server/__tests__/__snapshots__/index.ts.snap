@@ -335,14 +335,10 @@ updates:
 name: projen-drift-check
 on:
   pull_request:
-    paths:
-      - .projenrc.mjs
     types:
       - opened
       - synchronize
   push:
-    paths:
-      - .projenrc.mjs
     branches:
       - main
 jobs:

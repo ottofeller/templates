@@ -1037,14 +1037,10 @@ jobs:
 name: projen-drift-check
 on:
   pull_request:
-    paths:
-      - .projenrc.js
     types:
       - opened
       - synchronize
   push:
-    paths:
-      - .projenrc.js
     branches:
       - main
 jobs:

@@ -395,14 +395,10 @@ updates:
 name: projen-drift-check
 on:
   pull_request:
-    paths:
-      - .projenrc.ts
     types:
       - opened
       - synchronize
   push:
-    paths:
-      - .projenrc.ts
     branches:
       - main
 jobs:
