@@ -1,7 +1,7 @@
 export {CodeOwners, CodeOwnersOptions, PatternOwners, WithCodeOwners} from './codeowners'
 export * from './jobs'
 export {ProjenDriftCheckOptions, ProjenDriftCheckWorkflow} from './projen-drift-check-workflow'
-export {PullRequestTest, PullRequestTestOptions} from './pull-request-test-workflow'
 export {ReleaseWorkflow, ReleaseWorkflowOptions} from './release-workflow'
 export {RustTestWorkflow, RustTestWorkflowOptions, WithRustTestWorkflow} from './rust-test-workflow'
+export {TypeScriptTestWorkflow, TypeScriptTestWorkflowOptions} from './typescript-test-workflow'
 export {WithDefaultWorkflow} from './with-default-workflow'

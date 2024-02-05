@@ -10,7 +10,7 @@ import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
   ProjenDriftCheckWorkflow,
-  PullRequestTest,
+  TypeScriptTestWorkflow,
   WithCodeOwners,
   WithDefaultWorkflow,
 } from '../common/github'
@@ -163,7 +163,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     }
 
     // ANCHOR Github
-    PullRequestTest.addToProject(this, options)
+    TypeScriptTestWorkflow.addToProject(this, options)
     ProjenDriftCheckWorkflow.addToProject(this, options)
     CodeOwners.addToProject(this, options)
 
