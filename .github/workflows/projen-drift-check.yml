@@ -3,16 +3,10 @@
 name: projen-drift-check
 on:
   pull_request:
-    paths:
-      - .projenrc.ts
-      - src/common/**
     types:
       - opened
       - synchronize
   push:
-    paths:
-      - .projenrc.ts
-      - src/common/**
     branches:
       - main
 jobs:

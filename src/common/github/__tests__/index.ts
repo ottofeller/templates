@@ -257,42 +257,26 @@ describe('GitHub utils', () => {
 
     test('configures the workflow to be run on pull requests and pushes to main branch with changes to projenrc file', () => {
       const project = new TestProject()
-      const paths = ['.projenrc.js']
       new ProjenDriftCheckWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[workflowPath])
 
       expect(workflow.on).toEqual({
-        pull_request: {paths, types: ['opened', 'synchronize']},
-        push: {paths, branches: ['main']},
-      })
-    })
-
-    test('allows setting additional paths to trigger the workflow', () => {
-      const additionalPaths = ['some/additional/path', 'another/additional/path']
-      const project = new TestProject()
-      const paths = ['.projenrc.js', ...additionalPaths]
-      new ProjenDriftCheckWorkflow(project.github!, {additionalPaths})
-      const snapshot = synthSnapshot(project)
-      const workflow = YAML.parse(snapshot[workflowPath])
-
-      expect(workflow.on).toEqual({
-        pull_request: {paths, types: ['opened', 'synchronize']},
-        push: {paths, branches: ['main']},
+        pull_request: {types: ['opened', 'synchronize']},
+        push: {branches: ['main']},
       })
     })
 
     test('allows to be run on pushes to specified branches', () => {
       const project = new TestProject()
       const branches = ['main', 'dev']
-      const paths = ['.projenrc.js']
       new ProjenDriftCheckWorkflow(project.github!, {triggerOnPushToBranches: branches})
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[workflowPath])
 
       expect(workflow.on).toEqual({
-        pull_request: {paths, types: ['opened', 'synchronize']},
-        push: {paths, branches},
+        pull_request: {types: ['opened', 'synchronize']},
+        push: {branches},
       })
     })
 
