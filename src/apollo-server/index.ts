@@ -9,7 +9,7 @@ import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
   ProjenDriftCheckWorkflow,
-  PullRequestTest,
+  TypeScriptTestWorkflow,
   WithCodeOwners,
   WithDefaultWorkflow,
 } from '../common/github'
@@ -163,7 +163,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
     addLinters({project: this, lintPaths})
 
     // ANCHOR Github
-    PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
+    TypeScriptTestWorkflow.addToProject(this, {...options, isLighthouseEnabled: false})
     ProjenDriftCheckWorkflow.addToProject(this, options)
     CodeOwners.addToProject(this, options)
 

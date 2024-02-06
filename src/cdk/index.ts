@@ -8,9 +8,9 @@ import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
   ProjenDriftCheckWorkflow,
-  PullRequestTest,
   ReleaseWorkflow,
   RustTestWorkflow,
+  TypeScriptTestWorkflow,
   WithCodeOwners,
   WithDefaultWorkflow,
   WithRustTestWorkflow,
@@ -137,7 +137,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
 
     if (hasDefaultGithubWorkflows && this.github) {
       new ReleaseWorkflow(this.github, {initialReleaseVersion: this.initialReleaseVersion})
-      PullRequestTest.addToProject(this, {...options, jest, isLighthouseEnabled: false})
+      TypeScriptTestWorkflow.addToProject(this, {...options, jest, isLighthouseEnabled: false})
       ProjenDriftCheckWorkflow.addToProject(this, options)
     }
 

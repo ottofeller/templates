@@ -8,26 +8,26 @@ import {
   CodeOwners,
   PatternOwners,
   ProjenDriftCheckWorkflow,
-  PullRequestTest,
   ReleaseWorkflow,
   RustTestWorkflow,
+  TypeScriptTestWorkflow,
   WithCodeOwners,
   WithDefaultWorkflow,
   WithRustTestWorkflow,
 } from '..'
 
 describe('GitHub utils', () => {
-  describe('PullRequestTest', () => {
-    const testWorkflowPath = '.github/workflows/test.yml'
+  describe('TypeScriptTestWorkflow', () => {
+    const testWorkflowPath = '.github/workflows/ts-test.yml'
 
     test('throws if called with a project not derived from NodeProject', () => {
       const project = new JavaProject({name: 'java', groupId: 'java', artifactId: 'app', version: '0', github: true})
-      expect(() => new PullRequestTest(project.github!)).toThrow()
+      expect(() => new TypeScriptTestWorkflow(project.github!)).toThrow()
     })
 
     test('creates a test workflow', () => {
       const project = new TestProject()
-      new PullRequestTest(project.github!)
+      new TypeScriptTestWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       expect(snapshot).toMatchSnapshot()
       expect(snapshot[testWorkflowPath]).toBeDefined()
@@ -35,7 +35,7 @@ describe('GitHub utils', () => {
 
     test('configures the test workflow to be run on pull requests and pushes to main branch, all paths', () => {
       const project = new TestProject()
-      new PullRequestTest(project.github!)
+      new TypeScriptTestWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -48,7 +48,7 @@ describe('GitHub utils', () => {
     test('allows to be run on pushes to specified branches', () => {
       const project = new TestProject()
       const branches = ['main', 'dev']
-      new PullRequestTest(project.github!, {triggerOnPushToBranches: branches})
+      new TypeScriptTestWorkflow(project.github!, {triggerOnPushToBranches: branches})
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -60,7 +60,7 @@ describe('GitHub utils', () => {
 
     test('adds basic checks to the test workflow', () => {
       const project = new TestProject()
-      new PullRequestTest(project.github!)
+      new TypeScriptTestWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
@@ -72,7 +72,7 @@ describe('GitHub utils', () => {
     test('adds test job to the test workflow if jest is enabled', () => {
       const options: Partial<NodeProjectOptions> = {jest: true}
       const project = new TestProject(options)
-      new PullRequestTest(project.github!, options)
+      new TypeScriptTestWorkflow(project.github!, options)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
@@ -82,7 +82,7 @@ describe('GitHub utils', () => {
 
     test('allows setting pnpm as a package manager', () => {
       const project = new TestProject({packageManager: NodePackageManager.PNPM})
-      new PullRequestTest(project.github!)
+      new TypeScriptTestWorkflow(project.github!)
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
       const jobs = Object.values<projen.github.workflows.Job>(workflow.jobs).map((j) => j.steps.at(-1)!.run)
@@ -94,7 +94,7 @@ describe('GitHub utils', () => {
     test('allows runsOn override', () => {
       const project = new TestProject()
       const runsOn = ['test-env1', 'test-env2']
-      new PullRequestTest(project.github!, {runsOn})
+      new TypeScriptTestWorkflow(project.github!, {runsOn})
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -108,7 +108,7 @@ describe('GitHub utils', () => {
 
       test('from workflow options', () => {
         const project = new TestProject()
-        new PullRequestTest(project.github!, {workflowNodeVersion: nodeVersion})
+        new TypeScriptTestWorkflow(project.github!, {workflowNodeVersion: nodeVersion})
         const snapshot = synthSnapshot(project)
         const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -121,7 +121,7 @@ describe('GitHub utils', () => {
 
       test('from project package', () => {
         const project = new TestProject({minNodeVersion: nodeVersion})
-        new PullRequestTest(project.github!)
+        new TypeScriptTestWorkflow(project.github!)
         const snapshot = synthSnapshot(project)
         const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -135,7 +135,7 @@ describe('GitHub utils', () => {
 
     test('includes lighthouse job when requested', () => {
       const project = new TestProject()
-      new PullRequestTest(project.github!, {isLighthouseEnabled: true})
+      new TypeScriptTestWorkflow(project.github!, {isLighthouseEnabled: true})
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[testWorkflowPath])
       expect(workflow.jobs.lighthouse.steps.at(-2).run).toEqual('npm run lighthouse')
@@ -157,7 +157,7 @@ describe('GitHub utils', () => {
         expect(snapshot[testWorkflowPath]).not.toBeDefined()
       })
 
-      test('adds a PullRequestTest component to the project with github by default', () => {
+      test('adds a TypeScriptTestWorkflow component to the project with github by default', () => {
         const project = new TestProjectWithTestWorkflow()
         const snapshot = synthSnapshot(project)
         expect(snapshot[testWorkflowPath]).toBeDefined()
@@ -198,7 +198,7 @@ describe('GitHub utils', () => {
 
         test('from workflow options first', () => {
           const project = new TestProject({workflowNodeVersion: '18.15.0'})
-          PullRequestTest.addToProject(project, {workflowNodeVersion: nodeVersion})
+          TypeScriptTestWorkflow.addToProject(project, {workflowNodeVersion: nodeVersion})
           const snapshot = synthSnapshot(project)
           const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -211,7 +211,7 @@ describe('GitHub utils', () => {
 
         test('from project package as a fallback', () => {
           const project = new TestProject({minNodeVersion: nodeVersion})
-          PullRequestTest.addToProject(project, {})
+          TypeScriptTestWorkflow.addToProject(project, {})
           const snapshot = synthSnapshot(project)
           const workflow = YAML.parse(snapshot[testWorkflowPath])
 
@@ -616,7 +616,7 @@ class TestProjectWithTestWorkflow extends NodeProject {
       ...options,
     })
 
-    PullRequestTest.addToProject(this, options)
+    TypeScriptTestWorkflow.addToProject(this, options)
   }
 }
 

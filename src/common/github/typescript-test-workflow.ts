@@ -6,7 +6,7 @@ import type {WithDefaultWorkflow} from './with-default-workflow'
 /**
  * Options for PullRequestLint
  */
-export interface PullRequestTestOptions
+export interface TypeScriptTestWorkflowOptions
   extends Partial<Pick<javascript.NodeProject, 'runScriptCommand'>>,
     Partial<Pick<javascript.NodePackage, 'installCommand'>>,
     Pick<NodeProjectOptions, 'workflowNodeVersion' | 'jest'> {
@@ -44,8 +44,8 @@ export interface PullRequestTestOptions
 /**
  * Configure a testing workflow with basic checks to run on GitHub pull requests.
  */
-export class PullRequestTest extends Component {
-  constructor(githubInstance: github.GitHub, options: PullRequestTestOptions = {}) {
+export class TypeScriptTestWorkflow extends Component {
+  constructor(githubInstance: github.GitHub, options: TypeScriptTestWorkflowOptions = {}) {
     super(githubInstance.project)
     const {project} = githubInstance
 
@@ -53,7 +53,7 @@ export class PullRequestTest extends Component {
       throw new Error('PullRequestTest works only with instances of NodeProject.')
     }
 
-    const workflowName = options.name ?? 'test'
+    const workflowName = options.name ?? 'ts-test'
     const workingDirectory = options.outdir
     const paths = workingDirectory ? [`${workingDirectory}/**`] : undefined
     const workflow = githubInstance.addWorkflow(workflowName)
@@ -96,7 +96,7 @@ export class PullRequestTest extends Component {
    * NOTE: Use this method if the described conditional logic is needed.
    * Otherwise just use the constructor.
    */
-  static addToProject(project: javascript.NodeProject, options: PullRequestTestOptions & WithDefaultWorkflow) {
+  static addToProject(project: javascript.NodeProject, options: TypeScriptTestWorkflowOptions & WithDefaultWorkflow) {
     const hasDefaultGithubWorkflows = options.hasDefaultGithubWorkflows ?? true
     const isLighthouseEnabled = options.isLighthouseEnabled ?? false
     const jest = options.jest ?? true
@@ -107,12 +107,12 @@ export class PullRequestTest extends Component {
     }
 
     if (project.github) {
-      new PullRequestTest(project.github, {isLighthouseEnabled, jest, runsOn, workflowNodeVersion})
+      new TypeScriptTestWorkflow(project.github, {isLighthouseEnabled, jest, runsOn, workflowNodeVersion})
       return
     }
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
-      new PullRequestTest(project.parent.github, {
+      new TypeScriptTestWorkflow(project.parent.github, {
         isLighthouseEnabled,
         jest,
         name: `test-${options.name}`,

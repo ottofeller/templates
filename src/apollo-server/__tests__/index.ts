@@ -75,8 +75,8 @@ describe('Apollo server template', () => {
     test('included by default', () => {
       const project = new TestApolloServerProject()
       const snapshot = synthSnapshot(project)
-      expect(snapshot['.github/workflows/test.yml']).toBeDefined()
-      expect(snapshot['.github/workflows/test.yml']).toMatchSnapshot()
+      expect(snapshot['.github/workflows/ts-test.yml']).toBeDefined()
+      expect(snapshot['.github/workflows/ts-test.yml']).toMatchSnapshot()
     })
 
     test('excluded if opted out', () => {

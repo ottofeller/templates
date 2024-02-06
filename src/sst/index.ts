@@ -8,8 +8,8 @@ import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
   ProjenDriftCheckWorkflow,
-  PullRequestTest,
   ReleaseWorkflow,
+  TypeScriptTestWorkflow,
   WithCodeOwners,
   WithDefaultWorkflow,
 } from '../common/github'
@@ -109,7 +109,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
     if (hasDefaultGithubWorkflows && this.github) {
       const initialReleaseVersion = options.initialReleaseVersion ?? '0.0.1'
       new ReleaseWorkflow(this.github, {initialReleaseVersion})
-      PullRequestTest.addToProject(this, {...options, isLighthouseEnabled: false})
+      TypeScriptTestWorkflow.addToProject(this, {...options, isLighthouseEnabled: false})
       ProjenDriftCheckWorkflow.addToProject(this, options)
     }
 

@@ -56,14 +56,14 @@ describe('NextJS template', () => {
     test('included by default', () => {
       const project = new TestNextJsTypeScriptProject()
       const snapshot = synthSnapshot(project)
-      expect(snapshot['.github/workflows/test.yml']).toBeDefined()
-      expect(snapshot['.github/workflows/test.yml']).toMatchSnapshot()
+      expect(snapshot['.github/workflows/ts-test.yml']).toBeDefined()
+      expect(snapshot['.github/workflows/ts-test.yml']).toMatchSnapshot()
     })
 
     test('excluded if opted out', () => {
       const project = new TestNextJsTypeScriptProject({hasDefaultGithubWorkflows: false})
       const snapshot = synthSnapshot(project)
-      expect(snapshot['.github/workflows/test.yml']).not.toBeDefined()
+      expect(snapshot['.github/workflows/ts-test.yml']).not.toBeDefined()
     })
   })
 
@@ -71,7 +71,7 @@ describe('NextJS template', () => {
     test('excluded by default', () => {
       const project = new TestNextJsTypeScriptProject()
       const snapshot = synthSnapshot(project)
-      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      const {jobs} = YAML.parse(snapshot['.github/workflows/ts-test.yml'])
       expect(jobs).not.toHaveProperty('lighthouse')
       expect(snapshot['lighthouserc.js']).not.toBeDefined()
       expect(snapshot['package.json'].scripts).not.toHaveProperty('lighthouse')
@@ -81,7 +81,7 @@ describe('NextJS template', () => {
     test('included with an option', () => {
       const project = new TestNextJsTypeScriptProject({isLighthouseEnabled: true})
       const snapshot = synthSnapshot(project)
-      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      const {jobs} = YAML.parse(snapshot['.github/workflows/ts-test.yml'])
       expect(jobs).toHaveProperty('lighthouse')
       expect(snapshot['lighthouserc.js']).toBeDefined()
       expect(snapshot['package.json'].scripts).toHaveProperty('lighthouse')

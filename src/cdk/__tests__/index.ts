@@ -73,14 +73,14 @@ describe('CDK template', () => {
     test('included by default', () => {
       const project = new TestCDKProject()
       const snapshot = synthSnapshot(project)
-      expect(snapshot['.github/workflows/test.yml']).toBeDefined()
-      expect(snapshot['.github/workflows/test.yml']).toMatchSnapshot()
+      expect(snapshot['.github/workflows/ts-test.yml']).toBeDefined()
+      expect(snapshot['.github/workflows/ts-test.yml']).toMatchSnapshot()
     })
 
     test('excluded if opted out', () => {
       const project = new TestCDKProject({hasDefaultGithubWorkflows: false})
       const snapshot = synthSnapshot(project)
-      expect(snapshot['.github/workflows/test.yml']).not.toBeDefined()
+      expect(snapshot['.github/workflows/ts-test.yml']).not.toBeDefined()
     })
   })
 
@@ -178,7 +178,7 @@ describe('CDK template', () => {
       const {tasks} = snapshot['.projen/tasks.json']
       expect(tasks).not.toHaveProperty('test')
       expect(tasks).not.toHaveProperty('test:watch')
-      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      const {jobs} = YAML.parse(snapshot['.github/workflows/ts-test.yml'])
       expect(jobs).not.toHaveProperty('unit-tests')
     })
 
@@ -191,7 +191,7 @@ describe('CDK template', () => {
       const {tasks} = snapshot['.projen/tasks.json']
       expect(tasks).toHaveProperty('test')
       expect(tasks).toHaveProperty('test:watch')
-      const {jobs} = YAML.parse(snapshot['.github/workflows/test.yml'])
+      const {jobs} = YAML.parse(snapshot['.github/workflows/ts-test.yml'])
       expect(jobs).toHaveProperty('unit-tests')
     })
   })
