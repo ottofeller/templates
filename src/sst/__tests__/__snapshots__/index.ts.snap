@@ -655,12 +655,44 @@ tsconfig.tsbuildinfo
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
+      "build": {
+        "name": "build",
+        "steps": [
+          {
+            "exec": "sst build",
+          },
+        ],
+      },
+      "console": {
+        "name": "console",
+        "steps": [
+          {
+            "exec": "sst console",
+          },
+        ],
+      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
+          },
+        ],
+      },
+      "deploy": {
+        "name": "deploy",
+        "steps": [
+          {
+            "exec": "sst deploy",
+          },
+        ],
+      },
+      "dev": {
+        "name": "dev",
+        "steps": [
+          {
+            "exec": "sst dev",
           },
         ],
       },
@@ -715,6 +747,14 @@ tsconfig.tsbuildinfo
           },
           {
             "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" stacks sst.config.ts .projenrc.ts",
+          },
+        ],
+      },
+      "remove": {
+        "name": "remove",
+        "steps": [
+          {
+            "exec": "sst remove",
           },
         ],
       },
@@ -1050,16 +1090,16 @@ tsconfig.tsbuildinfo
     "license": "Apache-2.0",
     "name": "sst",
     "scripts": {
-      "build": "sst build",
-      "console": "sst console",
+      "build": "npx projen build",
+      "console": "npx projen console",
       "default": "npx projen default",
-      "deploy": "sst deploy",
-      "dev": "sst dev",
+      "deploy": "npx projen deploy",
+      "dev": "npx projen dev",
       "eject": "npx projen eject",
       "format": "npx projen format",
       "lint": "npx projen lint",
       "projen": "npx projen",
-      "remove": "sst remove",
+      "remove": "npx projen remove",
       "typecheck": "npx projen typecheck",
     },
     "version": "0.0.0",

@@ -835,12 +835,44 @@ tsconfig.tsbuildinfo
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
+      "build": {
+        "name": "build",
+        "steps": [
+          {
+            "exec": "default && compile && test",
+          },
+        ],
+      },
+      "codemod:add-src-to-imports": {
+        "name": "codemod:add-src-to-imports",
+        "steps": [
+          {
+            "exec": "jscodeshift -t ./node_modules/@ottofeller/templates/lib/nextjs/add-src-reference-codemode.js --extensions=js,jsx,ts,tsx src pages",
+          },
+        ],
+      },
+      "compile": {
+        "name": "compile",
+        "steps": [
+          {
+            "exec": "tsc --build && next build",
+          },
+        ],
+      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
+          },
+        ],
+      },
+      "dev": {
+        "name": "dev",
+        "steps": [
+          {
+            "exec": "next dev",
           },
         ],
       },
@@ -856,6 +888,14 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "export": {
+        "name": "export",
+        "steps": [
+          {
+            "exec": "next export",
+          },
+        ],
+      },
       "format": {
         "description": "Perform code formatting and fixes of code-quality rules",
         "name": "format",
@@ -865,6 +905,22 @@ tsconfig.tsbuildinfo
           },
           {
             "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" app src .projenrc.ts --fix",
+          },
+        ],
+      },
+      "generate-graphql-schema": {
+        "name": "generate-graphql-schema",
+        "steps": [
+          {
+            "exec": "npx apollo schema:download",
+          },
+        ],
+      },
+      "gql-to-ts": {
+        "name": "gql-to-ts",
+        "steps": [
+          {
+            "exec": "graphql-codegen -r dotenv/config --config codegen.ts",
           },
         ],
       },
@@ -898,12 +954,52 @@ tsconfig.tsbuildinfo
           },
         ],
       },
+      "start": {
+        "name": "start",
+        "steps": [
+          {
+            "exec": "next start",
+          },
+        ],
+      },
+      "telemetry": {
+        "name": "telemetry",
+        "steps": [
+          {
+            "exec": "next telemetry",
+          },
+        ],
+      },
+      "test": {
+        "name": "test",
+        "steps": [
+          {
+            "exec": "jest --no-cache --all",
+          },
+        ],
+      },
+      "test-unit:watch": {
+        "name": "test-unit:watch",
+        "steps": [
+          {
+            "exec": "jest --watch",
+          },
+        ],
+      },
       "typecheck": {
         "description": "Perform type checking on the source code",
         "name": "typecheck",
         "steps": [
           {
             "exec": "tsc --noEmit --project tsconfig.dev.json",
+          },
+        ],
+      },
+      "watch": {
+        "name": "watch",
+        "steps": [
+          {
+            "exec": "tsc --build -",
           },
         ],
       },
@@ -1438,24 +1534,24 @@ module.exports = {
     "license": "Apache-2.0",
     "name": "nextjs",
     "scripts": {
-      "build": "default && compile && test",
-      "codemod:add-src-to-imports": "jscodeshift -t ./node_modules/@ottofeller/templates/lib/nextjs/add-src-reference-codemode.js --extensions=js,jsx,ts,tsx src pages",
-      "compile": "tsc --build && next build",
+      "build": "npx projen build",
+      "codemod:add-src-to-imports": "npx projen codemod:add-src-to-imports",
+      "compile": "npx projen compile",
       "default": "npx projen default",
-      "dev": "next dev",
+      "dev": "npx projen dev",
       "eject": "npx projen eject",
-      "export": "next export",
+      "export": "npx projen export",
       "format": "npx projen format",
-      "generate-graphql-schema": "npx apollo schema:download",
-      "gql-to-ts": "graphql-codegen -r dotenv/config --config codegen.ts",
+      "generate-graphql-schema": "npx projen generate-graphql-schema",
+      "gql-to-ts": "npx projen gql-to-ts",
       "lint": "npx projen lint",
       "projen": "npx projen",
-      "start": "next start",
-      "telemetry": "next telemetry",
-      "test": "jest --no-cache --all",
-      "test-unit:watch": "jest --watch",
+      "start": "npx projen start",
+      "telemetry": "npx projen telemetry",
+      "test": "npx projen test",
+      "test-unit:watch": "npx projen test-unit:watch",
       "typecheck": "npx projen typecheck",
-      "watch": "tsc --build -w",
+      "watch": "npx projen watch",
     },
     "version": "0.0.0",
   },

@@ -3,7 +3,7 @@ import * as path from 'path'
 import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {WithDefaultWorkflow, WithDocker, WithGitHooks} from '../common'
+import {WithDefaultWorkflow, WithDocker, WithGitHooks, addTaskOrScript} from '../common'
 import {CodeOwners, WithCodeOwners} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
@@ -69,10 +69,8 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
     this.addDeps('@playwright/test', 'playwright-qase-reporter')
     this.addDeps('dotenv')
 
-    this.addScripts({
-      'test:e2e': 'playwright test',
-      'test:report': 'playwright show-report',
-    })
+    addTaskOrScript(this, 'test:e2e', {exec: 'playwright test'})
+    addTaskOrScript(this, 'test:report', {exec: 'playwright show-report'})
 
     this.package.file.addDeletionOverride('main')
     this.package.file.addDeletionOverride('types')

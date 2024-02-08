@@ -745,12 +745,28 @@ tsconfig.tsbuildinfo
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
+      "build": {
+        "name": "build",
+        "steps": [
+          {
+            "exec": "node esbuild.config.js",
+          },
+        ],
+      },
       "default": {
         "description": "Synthesize project files",
         "name": "default",
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.mjs",
+          },
+        ],
+      },
+      "dev": {
+        "name": "dev",
+        "steps": [
+          {
+            "exec": "nodemon",
           },
         ],
       },
@@ -775,6 +791,22 @@ tsconfig.tsbuildinfo
           },
           {
             "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" src .projenrc.mjs --fix",
+          },
+        ],
+      },
+      "generate-graphql-schema": {
+        "name": "generate-graphql-schema",
+        "steps": [
+          {
+            "exec": "npx apollo schema:download",
+          },
+        ],
+      },
+      "gql-to-ts": {
+        "name": "gql-to-ts",
+        "steps": [
+          {
+            "exec": "graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development",
           },
         ],
       },
@@ -805,6 +837,30 @@ tsconfig.tsbuildinfo
           },
           {
             "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.mjs" src .projenrc.mjs",
+          },
+        ],
+      },
+      "start": {
+        "name": "start",
+        "steps": [
+          {
+            "exec": "node build/index.js",
+          },
+        ],
+      },
+      "test": {
+        "name": "test",
+        "steps": [
+          {
+            "exec": "jest --passWithNoTests --updateSnapshot",
+          },
+        ],
+      },
+      "test:watch": {
+        "name": "test:watch",
+        "steps": [
+          {
+            "exec": "jest --watch",
           },
         ],
       },
@@ -1289,18 +1345,18 @@ buildSync({
     "license": "Apache-2.0",
     "name": "apollo-server",
     "scripts": {
-      "build": "node esbuild.config.js",
+      "build": "npx projen build",
       "default": "npx projen default",
-      "dev": "nodemon",
+      "dev": "npx projen dev",
       "eject": "npx projen eject",
       "format": "npx projen format",
-      "generate-graphql-schema": "npx apollo schema:download",
-      "gql-to-ts": "graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development",
+      "generate-graphql-schema": "npx projen generate-graphql-schema",
+      "gql-to-ts": "npx projen gql-to-ts",
       "lint": "npx projen lint",
       "projen": "npx projen",
-      "start": "node build/index.js",
-      "test": "jest --passWithNoTests --updateSnapshot",
-      "test:watch": "jest --watch",
+      "start": "npx projen start",
+      "test": "npx projen test",
+      "test:watch": "npx projen test:watch",
       "typecheck": "npx projen typecheck",
     },
     "type": "module",

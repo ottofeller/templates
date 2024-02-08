@@ -10,6 +10,7 @@ import {
   WithGitHooks,
   WithTelemetry,
   addLinters,
+  addTaskOrScript,
   collectTelemetry,
   setupTelemetry,
 } from '../common'
@@ -135,9 +136,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     tasksToRemove.forEach(this.removeTask.bind(this))
 
     // ANCHOR Jest setup
-    this.addScripts({
-      test: 'jest --detectOpenHandles',
-    })
+    addTaskOrScript(this, 'test', {exec: 'jest --detectOpenHandles'})
 
     new AssetFile(this, 'jest.config.ts', {
       sourcePath: path.join(assetsDir, 'jest.config.ts'),
@@ -192,9 +191,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
         marker: false,
       })
 
-      this.addScripts({
-        'gql-to-ts': 'graphql-codegen',
-      })
+      addTaskOrScript(this, 'gql-to-ts', {exec: 'graphql-codegen'})
     }
 
     this.package.file.addDeletionOverride('main')
