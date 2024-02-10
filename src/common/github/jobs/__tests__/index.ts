@@ -1,5 +1,5 @@
 import {NodePackageManager, NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
-import {job, npmRunJobStep, runScriptJob, setupNode} from '..'
+import {job, runScriptJob, setupNode} from '..'
 
 describe('GitHub utils', () => {
   test('job function creates a job object', () => {
@@ -14,29 +14,6 @@ describe('GitHub utils', () => {
       runsOn: ['ubuntu-latest'],
       permissions: {contents: 'read'},
       steps,
-    })
-  })
-
-  describe('npmRunJobStep function', () => {
-    const command = 'command'
-
-    test('creates a job object with undefined directory field', () => {
-      const jobObject = npmRunJobStep(command)
-
-      expect(jobObject).toStrictEqual({
-        uses: 'ottofeller/github-actions/npm-run@main',
-        with: {'node-version': 18, command: `npm run ${command}`, directory: undefined},
-      })
-    })
-
-    test('creates a job object with the directory specified', () => {
-      const directory = 'testDir'
-      const jobObject = npmRunJobStep(command, directory)
-
-      expect(jobObject).toStrictEqual({
-        uses: 'ottofeller/github-actions/npm-run@main',
-        with: {'node-version': 18, command: `npm run ${command}`, directory},
-      })
     })
   })
 

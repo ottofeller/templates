@@ -2,7 +2,7 @@ import type {Linter} from 'eslint'
 import {readFileSync} from 'fs'
 import * as projen from 'projen'
 import {addHusky} from './src/common/git'
-import {ProjenDriftCheckWorkflow, job, npmRunJobStep} from './src/common/github'
+import {ProjenDriftCheckWorkflow, job, runScriptJob} from './src/common/github'
 import {addLinters} from './src/common/lint'
 
 // ANCHOR Basic setup
@@ -87,11 +87,14 @@ addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: ['main']}}})
 const testGithubWorkflow = project.github!.addWorkflow('test')
 testGithubWorkflow.on({push: {paths: ['src/**', '.projenrc.ts', '.github/workflows/test.yml', 'package-lock.json']}})
 
+const {package: projectPackage, runScriptCommand} = project
+const commonJobOptions = {runScriptCommand, projectPackage}
+
 testGithubWorkflow.addJobs({
-  lint: job([npmRunJobStep('lint')]),
-  test: job([npmRunJobStep('test')]),
-  typecheck: job([npmRunJobStep('typecheck')]),
-  build: {...job([npmRunJobStep('build')]), needs: ['lint', 'test', 'typecheck']},
+  lint: runScriptJob({command: 'lint', ...commonJobOptions}),
+  test: runScriptJob({command: 'test', ...commonJobOptions}),
+  typecheck: runScriptJob({command: 'typecheck', ...commonJobOptions}),
+  build: {...runScriptJob({command: 'build', ...commonJobOptions}), needs: ['lint', 'test', 'typecheck']},
 })
 
 new ProjenDriftCheckWorkflow(project.github!, {})
@@ -144,9 +147,9 @@ publishReleaseGithubWorkflow.addJobs({
     },
   ]),
 
-  lint: {needs: ['set-commit-hash'], ...job([npmRunJobStep('lint')])},
-  typecheck: {needs: ['set-commit-hash'], ...job([npmRunJobStep('typecheck')])},
-  test: {needs: ['set-commit-hash'], ...job([npmRunJobStep('test')])},
+  lint: {...runScriptJob({command: 'lint', ...commonJobOptions}), needs: ['set-commit-hash']},
+  typecheck: {...runScriptJob({command: 'typecheck', ...commonJobOptions}), needs: ['set-commit-hash']},
+  test: {...runScriptJob({command: 'test', ...commonJobOptions}), needs: ['set-commit-hash']},
 
   publish: {
     needs: ['set-commit-hash', 'lint', 'typecheck', 'test'],
