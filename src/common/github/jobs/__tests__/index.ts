@@ -23,9 +23,9 @@ describe('GitHub utils', () => {
       const setupNodeSteps = setupNode({projectPackage: project.package})
 
       expect(setupNodeSteps.map((step) => step.uses)).toStrictEqual([
-        'actions/checkout@v3',
-        'actions/setup-node@v3',
-        'actions/cache@v3',
+        'actions/checkout@v4',
+        'actions/setup-node@v4',
+        'actions/cache@v4',
         undefined,
       ])
 
@@ -102,11 +102,11 @@ describe('GitHub utils', () => {
       const setupNodeSteps = setupNode({projectPackage: project.package})
 
       expect(setupNodeSteps.map((step) => step.uses)).toStrictEqual([
-        'actions/checkout@v3',
-        'actions/setup-node@v3',
-        'pnpm/action-setup@v2',
+        'actions/checkout@v4',
+        'actions/setup-node@v4',
+        'pnpm/action-setup@v3',
         undefined,
-        'actions/cache@v3',
+        'actions/cache@v4',
         undefined,
       ])
 
@@ -124,7 +124,7 @@ describe('GitHub utils', () => {
       const pnpmVersion = '8.6.5'
       const project = new TestProject({packageManager: NodePackageManager.PNPM, pnpmVersion})
       const setupNodeSteps = setupNode({projectPackage: project.package})
-      const pnpmSetupStep = setupNodeSteps.find((step) => step.uses === 'pnpm/action-setup@v2')
+      const pnpmSetupStep = setupNodeSteps.find((step) => step.uses === 'pnpm/action-setup@v3')
       expect(pnpmSetupStep).toBeDefined()
       expect(pnpmSetupStep!.with!.version).toEqual(pnpmVersion)
     })

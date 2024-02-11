@@ -16,7 +16,7 @@ export const lighthouseJob = (options: NodeJobOptions): Job => {
     {name: 'Run Lighthouse audit', run: `${runScriptCommand} lighthouse`, workingDirectory},
     {
       name: 'Save Lighthouse report as an artifact',
-      uses: 'actions/upload-artifact@v3',
+      uses: 'actions/upload-artifact@v4',
       if: 'always()',
       with: {name: 'lighthouse-report', path: '.lighthouseci/'},
       workingDirectory,

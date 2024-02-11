@@ -45,7 +45,7 @@ export interface SetupNodeOptions {
  * The steps include dependency installation and caching.
  */
 export const setupNode = ({
-  nodeVersion = 18,
+  nodeVersion = 20,
   projectPackage,
   ref,
   registryUrl,
@@ -58,9 +58,9 @@ export const setupNode = ({
 
   // ANCHOR Basic setup: checkout and node
   const steps: Array<JobStep> = [
-    {uses: 'actions/checkout@v3', with: {'fetch-depth': 0, ref}},
+    {uses: 'actions/checkout@v4', with: {'fetch-depth': 0, ref}},
     {
-      uses: 'actions/setup-node@v3',
+      uses: 'actions/setup-node@v4',
       with: {'node-version': nodeVersion, 'registry-url': registryUrl, scope},
     },
   ]
@@ -69,7 +69,7 @@ export const setupNode = ({
   if (isPnpm) {
     steps.push(
       {
-        uses: 'pnpm/action-setup@v2',
+        uses: 'pnpm/action-setup@v3',
         name: 'Install pnpm',
         id: 'pnpm-install',
         with: {version: pnpmVersion, run_install: false},
@@ -88,7 +88,7 @@ export const setupNode = ({
     {
       id: 'cache-deps',
       name: 'Cache node_modules',
-      uses: 'actions/cache@v3',
+      uses: 'actions/cache@v4',
       with: {key: `\${{ hashFiles('${directory}/${lockFile}') }}`, path: cachePath},
     },
     {

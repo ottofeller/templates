@@ -14,15 +14,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Cache node_modules
         id: cache-deps
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ hashFiles('./package-lock.json') }}
           path: ./node_modules
@@ -36,15 +36,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Cache node_modules
         id: cache-deps
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ hashFiles('./package-lock.json') }}
           path: ./node_modules
@@ -58,15 +58,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Cache node_modules
         id: cache-deps
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ hashFiles('./package-lock.json') }}
           path: ./node_modules
@@ -84,15 +84,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Cache node_modules
         id: cache-deps
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ hashFiles('./package-lock.json') }}
           path: ./node_modules

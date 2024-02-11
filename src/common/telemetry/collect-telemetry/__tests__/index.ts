@@ -243,17 +243,17 @@ describe('collectTelemetry function', () => {
           runsOn: ['ubuntu-latest'],
           steps: [
             {
-              uses: 'actions/checkout@v3',
+              uses: 'actions/checkout@v4',
               with: {'fetch-depth': 0},
             },
             {
-              uses: 'actions/setup-node@v3',
-              with: {'node-version': 18},
+              uses: 'actions/setup-node@v4',
+              with: {'node-version': 20},
             },
             {
               id: 'cache-deps',
               name: 'Cache node_modules',
-              uses: 'actions/cache@v3',
+              uses: 'actions/cache@v4',
               with: {
                 key: "${{ hashFiles('./yarn.lock') }}",
                 path: './node_modules',
