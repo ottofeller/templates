@@ -113,7 +113,7 @@ describe('GitHub utils', () => {
         const workflow = YAML.parse(snapshot[testWorkflowPath])
 
         Object.values<Job>(workflow.jobs)
-          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v4`))
           .forEach((job) => {
             expect(job!.with!['node-version']).toEqual(nodeVersion)
           })
@@ -126,7 +126,7 @@ describe('GitHub utils', () => {
         const workflow = YAML.parse(snapshot[testWorkflowPath])
 
         Object.values<Job>(workflow.jobs)
-          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v4`))
           .forEach((job) => {
             expect(job!.with!['node-version']).toEqual(nodeVersion)
           })
@@ -203,7 +203,7 @@ describe('GitHub utils', () => {
           const workflow = YAML.parse(snapshot[testWorkflowPath])
 
           Object.values<Job>(workflow.jobs)
-            .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+            .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v4`))
             .forEach((job) => {
               expect(job!.with!['node-version']).toEqual(nodeVersion)
             })
@@ -216,7 +216,7 @@ describe('GitHub utils', () => {
           const workflow = YAML.parse(snapshot[testWorkflowPath])
 
           Object.values<Job>(workflow.jobs)
-            .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+            .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v4`))
             .forEach((job) => {
               expect(job!.with!['node-version']).toEqual(nodeVersion)
             })
@@ -300,7 +300,7 @@ describe('GitHub utils', () => {
         const workflow = YAML.parse(snapshot[workflowPath])
 
         Object.values<Job>(workflow.jobs)
-          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v4`))
           .forEach((job) => {
             expect(job!.with!['node-version']).toEqual(nodeVersion)
           })
@@ -313,7 +313,7 @@ describe('GitHub utils', () => {
         const workflow = YAML.parse(snapshot[workflowPath])
 
         Object.values<Job>(workflow.jobs)
-          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v3`))
+          .map((job) => job.steps.find((step) => step.uses === `actions/setup-node@v4`))
           .forEach((job) => {
             expect(job!.with!['node-version']).toEqual(nodeVersion)
           })

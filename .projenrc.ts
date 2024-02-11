@@ -15,7 +15,7 @@ const project = new projen.cdk.JsiiProject({
   description: 'Projen templates for OttoFeller projects',
   packageName: '@ottofeller/templates',
   packageManager: projen.javascript.NodePackageManager.NPM,
-  minNodeVersion: '16.0.0',
+  minNodeVersion: '20.0.0',
 
   deps: ['projen'],
   bundledDeps: ['prettier', 'eslint', 'node-fetch'],
