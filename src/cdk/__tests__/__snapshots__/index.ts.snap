@@ -753,6 +753,14 @@ cdk.out/
       "PATH": "$(npx -c "node --print process.env.PATH")",
     },
     "tasks": {
+      "build": {
+        "name": "build",
+        "steps": [
+          {
+            "exec": "npm run default && npm run synth:silent",
+          },
+        ],
+      },
       "bundle": {
         "description": "Prepare assets",
         "name": "bundle",
@@ -763,6 +771,30 @@ cdk.out/
         "steps": [
           {
             "exec": "ts-node --project tsconfig.dev.json .projenrc.ts",
+          },
+        ],
+      },
+      "deploy": {
+        "name": "deploy",
+        "steps": [
+          {
+            "exec": "cdk deploy",
+          },
+        ],
+      },
+      "destroy": {
+        "name": "destroy",
+        "steps": [
+          {
+            "exec": "cdk destroy",
+          },
+        ],
+      },
+      "diff": {
+        "name": "diff",
+        "steps": [
+          {
+            "exec": "cdk diff",
           },
         ],
       },
@@ -820,12 +852,36 @@ cdk.out/
           },
         ],
       },
+      "synth": {
+        "name": "synth",
+        "steps": [
+          {
+            "exec": "cdk synth",
+          },
+        ],
+      },
+      "synth:silent": {
+        "name": "synth:silent",
+        "steps": [
+          {
+            "exec": "cdk synth -q",
+          },
+        ],
+      },
       "typecheck": {
         "description": "Perform type checking on the source code",
         "name": "typecheck",
         "steps": [
           {
             "exec": "tsc --noEmit --project tsconfig.dev.json",
+          },
+        ],
+      },
+      "watch": {
+        "name": "watch",
+        "steps": [
+          {
+            "exec": "cdk deploy --hotswap && cdk watch",
           },
         ],
       },
@@ -1178,20 +1234,20 @@ cdk.out/
     "license": "Apache-2.0",
     "name": "cdk",
     "scripts": {
-      "build": "npm run default && npm run synth:silent",
+      "build": "npx projen build",
       "bundle": "npx projen bundle",
       "default": "npx projen default",
-      "deploy": "cdk deploy",
-      "destroy": "cdk destroy",
-      "diff": "cdk diff",
+      "deploy": "npx projen deploy",
+      "destroy": "npx projen destroy",
+      "diff": "npx projen diff",
       "eject": "npx projen eject",
       "format": "npx projen format",
       "lint": "npx projen lint",
       "projen": "npx projen",
-      "synth": "cdk synth",
-      "synth:silent": "cdk synth -q",
+      "synth": "npx projen synth",
+      "synth:silent": "npx projen synth:silent",
       "typecheck": "npx projen typecheck",
-      "watch": "cdk deploy --hotswap && cdk watch",
+      "watch": "npx projen watch",
     },
     "version": "0.0.0",
   },

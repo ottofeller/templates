@@ -520,6 +520,14 @@ tsconfig.dev.json
           },
         ],
       },
+      "gql-to-ts": {
+        "name": "gql-to-ts",
+        "steps": [
+          {
+            "exec": "graphql-codegen",
+          },
+        ],
+      },
       "install": {
         "description": "Install project dependencies and update lockfile (non-frozen)",
         "name": "install",
@@ -547,6 +555,14 @@ tsconfig.dev.json
           },
           {
             "exec": "eslint --ext .js,.jsx,.ts,.tsx --ignore-pattern "!.projenrc.ts" . .projenrc.ts",
+          },
+        ],
+      },
+      "test": {
+        "name": "test",
+        "steps": [
+          {
+            "exec": "jest --detectOpenHandles",
           },
         ],
       },
@@ -1020,10 +1036,10 @@ export default config
       "default": "npx projen default",
       "eject": "npx projen eject",
       "format": "npx projen format",
-      "gql-to-ts": "graphql-codegen",
+      "gql-to-ts": "npx projen gql-to-ts",
       "lint": "npx projen lint",
       "projen": "npx projen",
-      "test": "jest --detectOpenHandles",
+      "test": "npx projen test",
       "typecheck": "npx projen typecheck",
     },
     "version": "0.0.0",

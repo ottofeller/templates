@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {WithDocker} from '../common'
+import {WithDocker, addTaskOrScript} from '../common'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
@@ -110,28 +110,21 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
     this.removeTask('test')
     this.removeTask('watch')
 
-    this.addScripts({
-      build: 'node esbuild.config.js',
-      dev: 'nodemon',
-      'generate-graphql-schema': 'npx apollo schema:download',
-      'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development',
-      start: 'node build/index.js',
-    })
+    addTaskOrScript(this, 'build', {exec: 'node esbuild.config.js'})
+    addTaskOrScript(this, 'dev', {exec: 'nodemon'})
+    addTaskOrScript(this, 'generate-graphql-schema', {exec: 'npx apollo schema:download'})
+    const gqlToTsCommand = 'graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=.env.development'
+    addTaskOrScript(this, 'gql-to-ts', {exec: gqlToTsCommand})
+    addTaskOrScript(this, 'start', {exec: 'node build/index.js'})
 
     if (this.jest) {
-      this.addScripts({
-        test: 'jest --passWithNoTests --updateSnapshot',
-        'test:watch': 'jest --watch',
-      })
+      addTaskOrScript(this, 'test', {exec: 'jest --passWithNoTests --updateSnapshot'})
+      addTaskOrScript(this, 'test:watch', {exec: 'jest --watch'})
     }
 
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/apollo-server/assets')
     sampleCode(this, options, assetsDir)
-
-    if (options.jest === false) {
-      this.removeTask('test')
-    }
 
     // ANCHOR Environment file
     new projen.SampleFile(this, '.env.development', {sourcePath: path.join(assetsDir, '.env.development')})

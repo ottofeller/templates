@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
-import {AssetFile} from '../common'
+import {AssetFile, addTaskOrScript} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
@@ -108,15 +108,13 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
     this.removeTask('synth:silent')
     this.removeTask('watch')
 
-    this.addScripts({
-      build: `${this.ejected ? '' : 'npm run default && '}npm run synth:silent`,
-      deploy: 'cdk deploy',
-      destroy: 'cdk destroy',
-      diff: 'cdk diff',
-      synth: 'cdk synth',
-      'synth:silent': 'cdk synth -q',
-      watch: 'cdk deploy --hotswap && cdk watch',
-    })
+    addTaskOrScript(this, 'build', {exec: `${this.ejected ? '' : 'npm run default && '}npm run synth:silent`})
+    addTaskOrScript(this, 'deploy', {exec: 'cdk deploy'})
+    addTaskOrScript(this, 'destroy', {exec: 'cdk destroy'})
+    addTaskOrScript(this, 'diff', {exec: 'cdk diff'})
+    addTaskOrScript(this, 'synth', {exec: 'cdk synth'})
+    addTaskOrScript(this, 'synth:silent', {exec: 'cdk synth -q'})
+    addTaskOrScript(this, 'watch', {exec: 'cdk deploy --hotswap && cdk watch'})
 
     // Manage test task separately - delete it only if jest is disabled
     if (!this.jest) {
@@ -163,10 +161,8 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
       const codegenPath = path.join(__dirname, '..', '..', 'src/cdk/assets/codegen.ts')
       new AssetFile(this, 'codegen.ts', {sourcePath: codegenPath, readonly: false, marker: false})
 
-      this.addScripts({
-        'generate-graphql-schema': 'npx apollo schema:download',
-        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.ts',
-      })
+      addTaskOrScript(this, 'generate-graphql-schema', {exec: 'npx apollo schema:download'})
+      addTaskOrScript(this, 'gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.ts'})
     }
 
     // ANCHOR VSCode settings

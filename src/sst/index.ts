@@ -4,6 +4,7 @@ import {SampleFile} from 'projen'
 import {DependabotScheduleInterval} from 'projen/lib/github'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
+import {addTaskOrScript} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
@@ -86,13 +87,11 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
     this.removeTask('test')
     this.removeTask('watch')
 
-    this.addScripts({
-      dev: 'sst dev',
-      build: 'sst build',
-      deploy: 'sst deploy',
-      remove: 'sst remove',
-      console: 'sst console',
-    })
+    addTaskOrScript(this, 'build', {exec: 'sst build'})
+    addTaskOrScript(this, 'console', {exec: 'sst console'})
+    addTaskOrScript(this, 'deploy', {exec: 'sst deploy'})
+    addTaskOrScript(this, 'dev', {exec: 'sst dev'})
+    addTaskOrScript(this, 'remove', {exec: 'sst remove'})
 
     // ANCHOR Setup git hooks with Husky
     if (options.hasGitHooks ?? false) {

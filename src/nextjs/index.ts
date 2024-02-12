@@ -4,7 +4,7 @@ import * as projen from 'projen'
 import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
-import {WithDocker} from '../common'
+import {WithDocker, addTaskOrScript} from '../common'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
@@ -106,34 +106,29 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     this.tsconfig?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
     this.tsconfigDev?.file.addOverride('compilerOptions.plugins', [{name: 'next'}])
 
-    /*
-     * Clean off the projen tasks and if needed replace them with regular npm scripts.
-     * This way we ensure smooth ejection experience with all the commands visible in package.json
-     * and no need to keep the projen task runner within an ejected project.
-     */
-    const scripts = {
-      build: `${this.ejected ? '' : 'default && '}compile && test`,
-      compile: 'tsc --build && next build',
-      dev: 'next dev',
-      export: 'next export',
-      start: 'next start',
-      telemetry: 'next telemetry',
-      watch: 'tsc --build -w',
-    }
+    // ANCHOR Scripts
+    this.removeTask('build')
+    this.removeTask('clobber')
+    this.removeTask('compile')
+    this.removeTask('dev')
+    this.removeTask('export')
+    this.removeTask('start')
+    this.removeTask('telemetry')
+    this.removeTask('watch')
+    // Empty tasks
+    this.removeTask('package')
+    this.removeTask('post-compile')
+    this.removeTask('pre-compile')
+    // Rename "server" task to "start"
+    this.removeTask('server')
 
-    const tasksToRemove = [
-      ...Object.keys(scripts),
-      'clobber',
-      // Empty tasks
-      'package',
-      'post-compile',
-      'pre-compile',
-      // Rename "server" task to "start"
-      'server',
-    ]
-
-    tasksToRemove.forEach((task) => this.removeTask(task))
-    this.addScripts(scripts)
+    addTaskOrScript(this, 'build', {exec: `${this.ejected ? '' : 'default && '}compile && test`})
+    addTaskOrScript(this, 'compile', {exec: 'tsc --build && next build'})
+    addTaskOrScript(this, 'dev', {exec: 'next dev'})
+    addTaskOrScript(this, 'export', {exec: 'next export'})
+    addTaskOrScript(this, 'start', {exec: 'next start'})
+    addTaskOrScript(this, 'telemetry', {exec: 'next telemetry'})
+    addTaskOrScript(this, 'watch', {exec: 'tsc --build -'})
 
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
@@ -192,10 +187,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
         marker: false,
       })
 
-      this.addScripts({
-        'generate-graphql-schema': 'npx apollo schema:download',
-        'gql-to-ts': 'graphql-codegen -r dotenv/config --config codegen.ts',
-      })
+      addTaskOrScript(this, 'generate-graphql-schema', {exec: 'npx apollo schema:download'})
+      addTaskOrScript(this, 'gql-to-ts', {exec: 'graphql-codegen -r dotenv/config --config codegen.ts'})
     }
 
     // ANCHOR Set up Lighthouse audit
@@ -203,7 +196,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
 
     if (isLighthouseEnabled) {
       this.addDevDeps('@lhci/cli')
-      this.addScripts({lighthouse: 'lhci autorun'})
+      addTaskOrScript(this, 'lighthouse', {exec: 'lhci autorun'})
       new SampleFile(this, 'lighthouserc.js', {sourcePath: path.join(assetsDir, 'lighthouserc.js')})
     }
 
@@ -233,8 +226,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     const extensions = '--extensions=js,jsx,ts,tsx'
     const foldersToProcess = 'src pages'
 
-    this.addScripts({
-      'codemod:add-src-to-imports': `jscodeshift ${addSrcTransform} ${extensions} ${foldersToProcess}`,
+    addTaskOrScript(this, 'codemod:add-src-to-imports', {
+      exec: `jscodeshift ${addSrcTransform} ${extensions} ${foldersToProcess}`,
     })
 
     // ANCHOR Telemetry

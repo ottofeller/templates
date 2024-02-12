@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as projen from 'projen'
 import type {OttofellerNextjsProject, OttofellerNextjsProjectOptions} from '.'
-import {AssetFile} from '../common'
+import {AssetFile, addTaskOrScript} from '../common'
 
 /**
  * Add jest to the project.
@@ -28,8 +28,6 @@ export function setupJest(
   const testTask = project.removeTask('test')
   const testTaskName = testTask ? 'test' : 'test-unit'
 
-  project.addScripts({
-    [testTaskName]: 'jest --no-cache --all',
-    'test-unit:watch': 'jest --watch',
-  })
+  addTaskOrScript(project, testTaskName, {exec: 'jest --no-cache --all'})
+  addTaskOrScript(project, 'test-unit:watch', {exec: 'jest --watch'})
 }
