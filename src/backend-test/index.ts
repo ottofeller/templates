@@ -8,6 +8,7 @@ import {
   WithCustomLintPaths,
   WithDefaultWorkflow,
   WithGitHooks,
+  WithGraphql,
   WithTelemetry,
   addLinters,
   addTaskOrScript,
@@ -22,14 +23,8 @@ export interface OttofellerBackendTestProjectOptions
     WithTelemetry,
     WithGitHooks,
     WithCustomLintPaths,
-    WithDefaultWorkflow {
-  /**
-   * Set up GraphQL dependencies and supplementary script.
-   *
-   * @default true
-   */
-  readonly isGraphqlEnabled?: boolean
-
+    WithDefaultWorkflow,
+    WithGraphql {
   /**
    * Set up AWS DynamoDb dependencies and supplementary script.
    *

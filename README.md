@@ -45,7 +45,7 @@ The command removes default projen task, makes projen remove its authority from 
 ### Install
 Simply install dependencies:
 ```sh
-npm install
+npm ci
 ```
 
 ### Synthesize
@@ -69,10 +69,93 @@ Publishing is a two-step process:
 
 ## 🧩 Templates
 
+### Apollo Server
+```sh
+# Create a project with defaults
+npx projen new --from @ottofeller/templates ottofeller-apollo-server
+```
+```sh
+# With options
+npx projen new \
+  ottofeller-apollo-server \
+  --from @ottofeller/templates \
+  --hasDocker=false \
+  --hasGitHooks=false \
+  --lintPaths=src --lintPaths=test \
+  --hasDefaultGithubWorkflows=false
+```
+#### Options
+For a list of available options see [Common custom options](#common-custom-options).
+#### Codegen config
+See the [Codegen config](#codegen-config) subsection for the [NextJS](#nextjs) template above.
+
+### Backend test
+```sh
+npx projen new --from @ottofeller/templates ottofeller-backend-test
+```
+```sh
+# With options
+npx projen new \
+  ottofeller-backend-test \
+  --from @ottofeller/templates \
+  --hasGitHooks=false \
+  --lintPaths=src --lintPaths=test \
+  --hasDefaultGithubWorkflows=false \
+  --isGraphqlEnabled=false \
+  --isAWSDynamoDBEnabled=false
+```
+#### Options
+`isAWSDynamoDBEnabled` - sets up AWS DynamoDb dependencies and supplementary script; defaults to true.
+
+For other options see [Common custom options](#common-custom-options).
+
+### CDK
+```sh
+npx projen new --from @ottofeller/templates ottofeller-cdk
+```
+```sh
+# With options
+npx projen new \
+  ottofeller-cdk \
+  --from @ottofeller/templates \
+  --hasGitHooks=false \
+  --lintPaths=src --lintPaths=test \
+  --hasDefaultGithubWorkflows=false \
+  --hasRustTestWorkflow=true \
+  --isGraphqlCodegenEnabled=true \
+  --initialReleaseVersion='1.0.0'
+```
+#### Options
+`initialReleaseVersion` - the base version of the very first release; defaults to `0.0.1`.
+
+`isGraphqlCodegenEnabled` - sets up GraphQL dependencies and supplementary script; defaults to  `false`.
+
+For other options see [Common custom options](#common-custom-options).
+
 ### NextJS
 ```sh
 npx projen new --from @ottofeller/templates ottofeller-nextjs
 ```
+```sh
+# With options
+npx projen new \
+  ottofeller-nextjs \
+  --from @ottofeller/templates \
+  --hasGitHooks=false \
+  --lintPaths=src \
+  --hasDefaultGithubWorkflows=false \
+  --hasRustTestWorkflow=true \
+  --isGraphqlEnabled=false \
+  --isUiConfigEnabled=false \
+  --isLighthouseEnabled=false
+```
+
+#### Options
+`isUiConfigEnabled` - sets up ui packages; defaults to `true`.
+
+`isLighthouseEnabled` - sets up Lighthouse audit script & GitHub job; defaults to  `true`.
+
+For other options see [Common custom options](#common-custom-options).
 
 #### next.config.js
 The config for NextJS is separated into two parts:
@@ -112,17 +195,24 @@ npm run codemod:add-src-to-imports
 npm run codemod:add-src-to-imports -- --dry
 ```
 
-### Apollo Server
-```sh
-npx projen new --from @ottofeller/templates ottofeller-apollo-server
-```
-#### Codegen config
-See the [Codegen config](#codegen-config) subsection for the [NextJS](#nextjs) template above.
+### Playwright
+A [playwright](https://playwright.dev) based template for browser test projects.
 
-### CDK
 ```sh
-npx projen new --from @ottofeller/templates ottofeller-cdk
+npx projen new --from @ottofeller/templates ottofeller-playwright
 ```
+```sh
+# With options
+npx projen new \
+  ottofeller-playwright \
+  --from @ottofeller/templates \
+  --hasGitHooks=false \
+  --lintPaths=src \
+  --hasDocker=false \
+  --hasDefaultGithubWorkflows=false
+```
+#### Options
+For a list of available options see [Common custom options](#common-custom-options).
 
 ### SST
 An [SST](https://sst.dev) based template for easy deployment of modern full-stack applications on AWS.
@@ -133,23 +223,63 @@ npx projen new --from @ottofeller/templates ottofeller-sst
 
 The initial release version can be set with `initialReleaseVersion` option:
 ```sh
-npx projen new --from @ottofeller/templates ottofeller-sst --initial-release-version "1.0.0"
+npx projen new \
+  ottofeller-sst \
+  --from @ottofeller/templates \
+  --hasGitHooks=false \
+  --lintPaths=src --lintPaths=test \
+  --hasDefaultGithubWorkflows=false \
+  --initialReleaseVersion='1.0.0'
 ```
+#### Options
+`initialReleaseVersion` - the base version of the very first release; defaults to `0.0.1`.
 
-The project has the following common options (see [Other custom options](#other-custom-options) section for details):
-- `hasDefaultGithubWorkflows`;
-- `lintPaths`;
-- `hasGitHooks`;
-- `huskyRules`.
+For other options see [Common custom options](#common-custom-options).
 
-### Other custom options
-There are a few other options specific to all the templates within this project:
-- `hasVscode` - include recommended VSCode settings, defaults to `true`;
-- `lintPaths` - an array of paths for linting and formatting;
-- `hasDefaultGithubWorkflows` - include a default GitHub pull request template, defaults to `true`;
-- `hasGitHooks` - include `husky` for git hooks management, defaults to `true` (NOTE: `projen` sets up `git` as a final step of project bootstrapping and thus there is no way to run `husky install` within the process. Hence a user has to run it manually after the `git` repo is initialized.);
-- `huskyRules` - an options object for husky rules; if `hasGitHooks` is enabled, sets up the rules from this object:
-  - `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default); 
-  - `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`); can be set to an object with `ignoreBranches` property which specifies an array of branch names to be ignored while processing commit messages; bu default (with `commitMsg: true` option) the `ignoreBranches` is set to `['main', 'dev']`; in order to perform the check on all branches set either `commitMsg: {}` or `commitMsg: {ignoreBranches: []}`;
-  - `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default;
-  - `telemetry` if provided defines an endpoint URL for reporting; with the provided URL sets up a script and a GitHub workflow which collect some data about the project and send it to the URL.
+### Common custom options
+The projects inherit from regular projen components and thus share the same options. In addition there are several custom options defined in this repository. The table below lists the custom options along with their per-project availability.
+
+Option | [apollo-server](#apollo-server) | [backend-test](#backend-test) | [cdk](#cdk) | [nextjs](#nextjs) | [playwright](#playwright) | [sst](#sst)
+---|:---:|:---:|:---:|:---:|:---:|:---:
+[hasDocker](#hasDocker) | ✅ | - | - | ✅ | ✅ | -
+[hasGitHooks](#hasGitHooks)<br>+ [huskyRules](#huskyRules) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅
+[codeOwners](#codeOwners) | ✅ | - | ✅ | ✅ | ✅ | ✅
+[lintPaths](#lintPaths) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅
+[hasDefaultGithubWorkflows](#hasDefaultGithubWorkflows) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅
+[hasRustTestWorkflow](#hasRustTestWorkflow) | - | - | ✅ | - | - | -
+[isGraphqlEnabled](#isGraphqlEnabled) | - | ✅ | - | ✅ | - | -
+[isTelemetryEnabled](#isTelemetryEnabled)<br>+ [telemetryOptions](#telemetryOptions) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅
+
+#### hasDocker
+Include docker-related files such as `.dockerignore`, `Dockerfile`; defaults to `true`.
+
+#### hasGitHooks
+Include `husky` for git hooks management, defaults to `true` (NOTE: `projen` sets up `git` as a final step of project bootstrapping and thus there is no way to run `husky install` within the process. Hence a user has to run it manually after the `git` repo is initialized.).
+##### huskyRules
+Comes with `hasGitHooks` and defines rules to include:
+- `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default); 
+- `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`); can be set to an object with `ignoreBranches` property which specifies an array of branch names to be ignored while processing commit messages; bu default (with `commitMsg: true` option) the `ignoreBranches` is set to `['main', 'dev']`; in order to perform the check on all branches set either `commitMsg: {}` or `commitMsg: {ignoreBranches: []}`;
+- `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default.
+
+#### codeOwners
+If defined, lists file patterns and corresponding owners for it to include into CODEOWNERS file.
+
+#### lintPaths
+An array of paths for linting and formatting.
+
+#### hasDefaultGithubWorkflows
+Include a default GitHub pull request template, defaults to `true`.
+
+#### hasRustTestWorkflow
+Include a default GitHub workflow for rust projects, defaults to `false`.
+
+#### isGraphqlEnabled
+Sets up GraphQL dependencies and supplementary scripts, defaults to `true`.
+
+#### isTelemetryEnabled
+Enables telemetry on the project.
+##### telemetryOptions
+With `isTelemetryEnabled: true` defines the following telemetry options:
+- `reportTargetUrl` - an endpoint URL for reporting; with the provided URL a script and a GitHub workflow are set up, which enables collection of some data about the project and sending it to the URL;
+- `reportTargetAuthHeaderName` - optionally defines Authorization header name for telemetry;
+- `reportTargetAuthTokenVar` - the name of env var to extract header value from; the value is expected to be stored in a CI secret.
