@@ -9,7 +9,7 @@ export interface WithGitHooks {
   readonly hasGitHooks?: boolean
 
   /**
-   * Include a default git hook that checks commit message.
+   * Defines which rules to include.
    *
    * @default { commitMsg: true }
    */
