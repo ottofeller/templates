@@ -19,8 +19,15 @@ const project = new projen.cdk.JsiiProject({
 
   deps: ['projen'],
   bundledDeps: ['prettier', 'eslint', 'node-fetch'],
-  peerDeps: ['projen'],
-  devDeps: ['@types/eslint', '@types/jscodeshift', '@graphql-codegen/cli', 'node-fetch@2', '@types/node-fetch'],
+  peerDeps: ['projen', 'constructs'],
+  devDeps: [
+    '@types/eslint',
+    '@types/jscodeshift',
+    '@types/prettier',
+    '@graphql-codegen/cli',
+    'node-fetch@2',
+    '@types/node-fetch',
+  ],
 
   jsiiVersion: '5.3.x',
   typescriptVersion: '5.3.x',
@@ -38,16 +45,8 @@ const project = new projen.cdk.JsiiProject({
   docgen: false,
   eslint: false,
   jest: true,
-  jestOptions: {
-    jestVersion: '29',
-    jestConfig: {
-      transform: {'^.+\\.tsx?$': new projen.javascript.Transform('ts-jest', {tsconfig: 'tsconfig.dev.json'})},
-    },
-  },
+  jestOptions: {jestVersion: '29'},
 })
-
-// FIXME It is a workaround needed until this issue resolves: https://github.com/projen/projen/issues/2361
-project.package.file.addDeletionOverride('jest.globals')
 
 // ANCHOR Pull project version from package.json (in order to make possible the version update with npm).
 // Allow an override with an environment variable
@@ -61,9 +60,6 @@ const packageJson = JSON.parse(readFileSync('package.json', {encoding: 'utf-8'})
 const version = versionFromEnv || packageJson.version
 project.package.addField('version', version)
 
-// Use older version of the package that is compatible with TS 3.9 (the version used by JSII)
-project.package.addField('overrides', {'@types/babel__traverse': 'ts3.9'})
-
 // ANCHOR ESLint and prettier setup
 const rules: Linter.RulesRecord = {
   'import/no-relative-parent-imports': ['off'], // Relative paths are required at runtime
@@ -75,10 +71,6 @@ addLinters({
   lintPaths: ['src'],
   extraEslintConfigs: [{rules}],
 })
-
-// Solves the typescript > 4 problem
-// https://github.com/projen/projen/blob/0eae60e2cb5a5f7e4b80f96d8760f4be781f82f4/src/cdk/jsii-project.ts#L343
-project.addDevDeps('@types/prettier@2.6.0')
 
 // ANCHOR Setup git hooks with Husky
 addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: ['main']}}})

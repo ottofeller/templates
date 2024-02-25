@@ -36,7 +36,6 @@
     },
     {
       "name": "@types/prettier",
-      "version": "2.6.0",
       "type": "build"
     },
     {
@@ -52,6 +51,11 @@
     {
       "name": "@typescript-eslint/typescript-estree",
       "version": "6",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
+      "version": "^10.0.0",
       "type": "build"
     },
     {
@@ -141,6 +145,10 @@
     {
       "name": "prettier",
       "type": "bundled"
+    },
+    {
+      "name": "constructs",
+      "type": "peer"
     },
     {
       "name": "projen",
