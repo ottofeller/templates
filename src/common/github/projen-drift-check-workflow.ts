@@ -59,7 +59,9 @@ export class ProjenDriftCheckWorkflow extends Component {
       nodeVersion,
     })
 
-    const checkChangesCommand = 'CHANGES=$(git status --porcelain) && [ -z $CHANGES ] || { echo $CHANGES; exit 1; }'
+    const checkChangesCommand =
+      'CHANGES=$(git status --porcelain) && [ -z "$CHANGES" ] || { echo "$CHANGES"; echo Found uncommitted projen changes; exit 1; }'
+
     uncomittedChangesJob.steps.push({name: 'Check git', run: checkChangesCommand})
     workflow.addJob(workflowName, uncomittedChangesJob)
   }
