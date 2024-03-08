@@ -10,7 +10,6 @@
     ".gitignore",
     ".husky/check-commit-msg.js",
     ".husky/commit-msg",
-    ".npmrc",
     ".prettierrc.json",
     ".projen/deps.json",
     ".projen/files.json",

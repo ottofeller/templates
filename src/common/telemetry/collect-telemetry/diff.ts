@@ -1,3 +1,5 @@
+import {propsToDelete} from './clone-workflow'
+
 type ObjectLike = Record<string, unknown>
 
 const isObject = (o: unknown): o is ObjectLike => o != null && typeof o === 'object'
@@ -17,9 +19,10 @@ export const diff = (initial: ObjectLike, updated: ObjectLike): ObjectLike => {
     return updated
   }
 
-  const allKeys = Array.from(new Set(Object.keys(initial).concat(Object.keys(updated))))
+  const uniqueKeys = Array.from(new Set(Object.keys(initial).concat(Object.keys(updated))))
+  const keys = uniqueKeys.filter((key) => !propsToDelete.includes(key))
 
-  return allKeys.reduce((acc, key) => {
+  return keys.reduce((acc, key) => {
     if (!initial.hasOwnProperty(key) && typeof updated[key] !== 'function') {
       // new property
       acc[key] = updated[key]

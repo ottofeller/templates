@@ -29,12 +29,10 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
 !/.github/dependabot.yml
-!/.npmrc
 !/test/
 !/tsconfig.dev.json
 !/src/
@@ -50,3 +48,4 @@ tsconfig.json
 !/.github/workflows/projen-drift-check.yml
 !/.github/workflows/create-release.yml
 !/.github/workflows/publish-release.yml
+!/.projenrc.ts

@@ -2,7 +2,7 @@ import {execSync} from 'child_process'
 import * as path from 'path'
 import * as projen from 'projen'
 import {SampleFile} from 'projen'
-import {NodePackageManager} from 'projen/lib/javascript'
+import {NodePackageManager, TypeScriptModuleResolution} from 'projen/lib/javascript'
 import {NextJsTypeScriptProject, NextJsTypeScriptProjectOptions} from 'projen/lib/web'
 import {WithDocker, WithGraphql, addTaskOrScript} from '../common'
 import {AssetFile} from '../common/files/AssetFile'
@@ -73,6 +73,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
       tsconfig: {
         compilerOptions: {
           baseUrl: './',
+          module: 'CommonJS',
+          moduleResolution: TypeScriptModuleResolution.NODE,
           target: 'es6',
           skipLibCheck: true,
         },

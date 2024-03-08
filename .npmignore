@@ -20,9 +20,10 @@ tsconfig.tsbuildinfo
 /cspell.json
 /.eslintrc.json
 /.prettierrc.json
-/.projenrc.ts
 /examples/
 /src/**
 /lib/**/assets/**
 **/__tests__/**
 !/src/**/assets/**
+/.gitattributes
+/.projenrc.ts

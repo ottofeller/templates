@@ -40,10 +40,11 @@
     "@types/jscodeshift": "^0.11.6",
     "@types/node": "^20",
     "@types/node-fetch": "^2.6.6",
-    "@types/prettier": "2.6.0",
+    "@types/prettier": "2.7.3",
     "@typescript-eslint/eslint-plugin": "6",
     "@typescript-eslint/parser": "6",
     "@typescript-eslint/typescript-estree": "6",
+    "constructs": "10.0.0",
     "eslint": "8",
     "eslint-plugin-eslint-comments": "3.2.0",
     "eslint-plugin-import": "2.27.5",
@@ -57,28 +58,26 @@
     "node-fetch": "2",
     "prettier": "2.8.7",
     "prettier-plugin-organize-imports": "3.2.2",
-    "projen": "^0.71.128",
+    "projen": "^0.80.1",
     "ts-jest": "29",
     "ts-node": "10.8.1",
     "typescript": "5.3.x"
   },
   "peerDependencies": {
-    "projen": "^0.71.128"
+    "constructs": "^10.0.0",
+    "projen": "^0.80.1"
   },
   "dependencies": {
     "eslint": "8.42.0",
     "node-fetch": "^2.7.0",
     "prettier": "2.8.0",
-    "projen": "^0.71.128"
+    "projen": "^0.80.1"
   },
   "bundledDependencies": [
     "eslint",
     "node-fetch",
     "prettier"
   ],
-  "overrides": {
-    "@types/babel__traverse": "ts3.9"
-  },
   "engines": {
     "node": ">= 20.0.0"
   },
@@ -86,14 +85,6 @@
   "license": "Apache-2.0",
   "version": "1.9.1",
   "jest": {
-    "transform": {
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "tsconfig": "tsconfig.dev.json"
-        }
-      ]
-    },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)"
@@ -126,7 +117,14 @@
         }
       ]
     ],
-    "preset": "ts-jest"
+    "transform": {
+      "^.+\\.[t]sx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.dev.json"
+        }
+      ]
+    }
   },
   "types": "lib/index.d.ts",
   "stability": "stable",
