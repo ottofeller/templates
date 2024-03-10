@@ -60,7 +60,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
   readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerNextjsProjectOptions) {
+    const workflowNodeVersion = '20'
+
     super({
+      workflowNodeVersion,
       ...options,
       bundlerOptions: {},
       projenrcTs: true,
@@ -153,9 +156,10 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     }
 
     // ANCHOR Github
-    TypeScriptTestWorkflow.addToProject(this, options)
-    ProjenDriftCheckWorkflow.addToProject(this, options)
-    CodeOwners.addToProject(this, options)
+    const githubOptions = {workflowNodeVersion, ...options}
+    TypeScriptTestWorkflow.addToProject(this, githubOptions)
+    ProjenDriftCheckWorkflow.addToProject(this, githubOptions)
+    CodeOwners.addToProject(this, githubOptions)
 
     // ANCHOR Set up GraphQL
     const isGraphqlEnabled = options.isGraphqlEnabled ?? true
