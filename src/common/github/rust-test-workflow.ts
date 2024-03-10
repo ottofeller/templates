@@ -152,6 +152,6 @@ export class RustTestWorkflow extends GithubWorkflow {
       return
     }
 
-    new RustTestWorkflow(githubInstance, {})
+    return new RustTestWorkflow(githubInstance, {})
   }
 }

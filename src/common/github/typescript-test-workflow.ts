@@ -1,4 +1,5 @@
-import {Component, github, javascript} from 'projen'
+import {github, javascript} from 'projen'
+import {GithubWorkflow} from 'projen/lib/github'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {NodeJobOptions, lighthouseJob, runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
@@ -44,23 +45,22 @@ export interface TypeScriptTestWorkflowOptions
 /**
  * Configure a testing workflow with basic checks to run on GitHub pull requests.
  */
-export class TypeScriptTestWorkflow extends Component {
+export class TypeScriptTestWorkflow extends GithubWorkflow {
   constructor(githubInstance: github.GitHub, options: TypeScriptTestWorkflowOptions = {}) {
-    super(githubInstance.project)
+    const workflowName = options.name ?? 'ts-test'
+    super(githubInstance, workflowName)
     const {project} = githubInstance
 
     if (!(project instanceof NodeProject)) {
       throw new Error('PullRequestTest works only with instances of NodeProject.')
     }
 
-    const workflowName = options.name ?? 'ts-test'
     const workingDirectory = options.outdir
     const paths = workingDirectory ? [`${workingDirectory}/**`] : undefined
-    const workflow = githubInstance.addWorkflow(workflowName)
     const branches = options.triggerOnPushToBranches ?? ['main']
     const nodeVersion = options.workflowNodeVersion ?? project.package.minNodeVersion
 
-    workflow.on({
+    this.on({
       pullRequest: {paths, types: ['opened', 'synchronize']},
       push: {paths, branches},
     })
@@ -73,17 +73,17 @@ export class TypeScriptTestWorkflow extends Component {
       nodeVersion,
     }
 
-    workflow.addJobs({
+    this.addJobs({
       lint: runScriptJob({command: 'lint', ...commonJobProps}),
       typecheck: runScriptJob({command: 'typecheck', ...commonJobProps}),
     })
 
     if (options.jest) {
-      workflow.addJob('unit-tests', runScriptJob({command: 'test', ...commonJobProps}))
+      this.addJob('unit-tests', runScriptJob({command: 'test', ...commonJobProps}))
     }
 
     if (options.isLighthouseEnabled) {
-      workflow.addJob('lighthouse', lighthouseJob(commonJobProps))
+      this.addJob('lighthouse', lighthouseJob(commonJobProps))
     }
   }
 
@@ -107,12 +107,11 @@ export class TypeScriptTestWorkflow extends Component {
     }
 
     if (project.github) {
-      new TypeScriptTestWorkflow(project.github, {isLighthouseEnabled, jest, runsOn, workflowNodeVersion})
-      return
+      return new TypeScriptTestWorkflow(project.github, {isLighthouseEnabled, jest, runsOn, workflowNodeVersion})
     }
 
     if (project.parent && project.parent instanceof javascript.NodeProject && project.parent.github) {
-      new TypeScriptTestWorkflow(project.parent.github, {
+      return new TypeScriptTestWorkflow(project.parent.github, {
         isLighthouseEnabled,
         jest,
         name: `test-${options.name}`,
@@ -121,5 +120,7 @@ export class TypeScriptTestWorkflow extends Component {
         workflowNodeVersion,
       })
     }
+
+    return
   }
 }
