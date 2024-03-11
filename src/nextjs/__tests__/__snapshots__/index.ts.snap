@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -411,7 +411,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -448,7 +448,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -470,7 +470,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -492,7 +492,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 16.14.0
+          node-version: "20"
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
