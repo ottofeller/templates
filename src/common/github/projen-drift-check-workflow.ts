@@ -1,4 +1,5 @@
-import {Component, github, javascript} from 'projen'
+import {github, javascript} from 'projen'
+import {GithubWorkflow} from 'projen/lib/github'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {runScriptJob} from './jobs'
 import type {WithDefaultWorkflow} from './with-default-workflow'
@@ -30,22 +31,21 @@ export interface ProjenDriftCheckOptions
 /**
  * Configure a workflow that runs projen default task and checks for any generated but uncomitted changes.
  */
-export class ProjenDriftCheckWorkflow extends Component {
+export class ProjenDriftCheckWorkflow extends GithubWorkflow {
   constructor(githubInstance: github.GitHub, options: ProjenDriftCheckOptions = {}) {
+    const workflowName = 'projen-drift-check'
+    super(githubInstance, workflowName)
     const {project} = githubInstance
-    super(project)
 
     if (!(project instanceof NodeProject)) {
       throw new Error('ProjenDriftCheckWorkflow works only with instances of NodeProject.')
     }
 
-    const workflowName = 'projen-drift-check'
     const workingDirectory = options.outdir
-    const workflow = githubInstance.addWorkflow(workflowName)
     const branches = options.triggerOnPushToBranches ?? ['main']
     const nodeVersion = options.workflowNodeVersion ?? project.package.minNodeVersion
 
-    workflow.on({
+    this.on({
       pullRequest: {types: ['opened', 'synchronize']},
       push: {branches},
     })
@@ -63,7 +63,7 @@ export class ProjenDriftCheckWorkflow extends Component {
       'CHANGES=$(git status --porcelain) && [ -z "$CHANGES" ] || { echo "$CHANGES"; echo Found uncommitted projen changes; exit 1; }'
 
     uncomittedChangesJob.steps.push({name: 'Check git', run: checkChangesCommand})
-    workflow.addJob(workflowName, uncomittedChangesJob)
+    this.addJob(workflowName, uncomittedChangesJob)
   }
 
   /**
@@ -82,6 +82,6 @@ export class ProjenDriftCheckWorkflow extends Component {
       return
     }
 
-    new ProjenDriftCheckWorkflow(project.github, options)
+    return new ProjenDriftCheckWorkflow(project.github, options)
   }
 }
