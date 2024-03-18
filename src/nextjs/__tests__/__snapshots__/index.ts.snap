@@ -843,7 +843,13 @@ tsconfig.tsbuildinfo
         "name": "build",
         "steps": [
           {
-            "exec": "default && compile && test",
+            "spawn": "default",
+          },
+          {
+            "spawn": "compile",
+          },
+          {
+            "spawn": "test",
           },
         ],
       },
