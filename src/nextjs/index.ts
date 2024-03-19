@@ -120,7 +120,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     // Rename "server" task to "start"
     this.removeTask('server')
 
-    addTaskOrScript(this, 'build', {exec: `${this.ejected ? '' : 'default && '}compile && test`})
+    addTaskOrScript(this, 'build', {steps: [...(this.ejected ? [] : [{spawn: 'default'}]), {spawn: 'compile'}]})
     addTaskOrScript(this, 'compile', {exec: 'tsc --build && next build'})
     addTaskOrScript(this, 'dev', {exec: 'next dev'})
     addTaskOrScript(this, 'export', {exec: 'next export'})

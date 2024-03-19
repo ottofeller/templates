@@ -30,4 +30,6 @@ export function setupJest(
 
   addTaskOrScript(project, testTaskName, {exec: 'jest --no-cache --all'})
   addTaskOrScript(project, 'test-unit:watch', {exec: 'jest --watch'})
+
+  project.tasks.tryFind('build')?.spawn(project.tasks.tryFind(testTaskName)!)
 }
