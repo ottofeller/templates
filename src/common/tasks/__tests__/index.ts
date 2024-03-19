@@ -21,14 +21,14 @@ describe('addTaskOrScript function', () => {
     const taskName = 'do-some-work'
     const step1 = 'dig'
     const step2 = 'rest'
-    addTaskOrScript(project, taskName, {steps: [{exec: step1}, {exec: step2}]})
+    addTaskOrScript(project, taskName, {steps: [{exec: step1}, {spawn: step2}]})
 
     const snapshot = synthSnapshot(project)
     const {scripts} = snapshot['package.json']
     expect(scripts[taskName]).toEqual(`npx projen ${taskName}`)
     const {tasks} = snapshot['.projen/tasks.json']
     expect(tasks[taskName].steps[0].exec).toEqual(step1)
-    expect(tasks[taskName].steps[1].exec).toEqual(step2)
+    expect(tasks[taskName].steps[1].spawn).toEqual(step2)
   })
 
   test('adds a script to package.json of an ejected project', () => {
@@ -61,7 +61,7 @@ describe('addTaskOrScript function', () => {
 
     const snapshot = synthSnapshot(project)
     const {scripts} = snapshot['package.json']
-    expect(scripts[taskName]).toEqual(`${step1} && ${step2}`)
+    expect(scripts[taskName]).toEqual(`${step1} && yarn run ${step2}`)
 
     if (PROJEN_EJECTING !== undefined) {
       delete process.env.PROJEN_EJECTING

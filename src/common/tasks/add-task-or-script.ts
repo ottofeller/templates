@@ -18,7 +18,7 @@ export const addTaskOrScript = (project: NodeProject, name: string, props: TaskO
   const execute = props.exec
 
   const steps = props.steps
-    ?.map(({exec, spawn}) => exec ?? spawn)
+    ?.map(({exec, spawn}) => exec ?? (spawn ? `${project.runScriptCommand} ${spawn}` : ''))
     .filter(Boolean)
     .join(' && ')
 
