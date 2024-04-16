@@ -28,6 +28,7 @@ export {
 } from './github'
 export {WithGraphql} from './graphql/with-graphql'
 export {WithCustomLintPaths, addLinters} from './lint'
+export {getReadmeOptions} from './readme'
 export {addTaskOrScript} from './tasks'
 export {IWithTelemetryReportUrl, TelemetryOptions, WithTelemetry, collectTelemetry, setupTelemetry} from './telemetry'
 export {addVsCode} from './vscode-settings'

@@ -4,7 +4,7 @@ import {SampleFile} from 'projen'
 import {DependabotScheduleInterval} from 'projen/lib/github'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {addTaskOrScript} from '../common'
+import {addTaskOrScript, getReadmeOptions} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
@@ -43,12 +43,15 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
   readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerSSTProjectOptions) {
+    const name = 'sst'
+
     super({
       // Default options
       packageManager: options.packageManager ?? NodePackageManager.NPM,
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6', skipLibCheck: true}},
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: DependabotScheduleInterval.WEEKLY},
+      readme: getReadmeOptions(name),
 
       // In case Github is enabled remove all default stuff.
       githubOptions: {mergify: false, pullRequestLint: false},
@@ -64,7 +67,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
       defaultReleaseBranch: 'main',
       eslint: false,
       jest: false,
-      name: 'sst',
+      name,
       projenrcJs: false,
       projenrcTs: true,
       sampleCode: false,
