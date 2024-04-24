@@ -1,6 +1,6 @@
 # {{PROJECT_TITLE}}
 
-The app is created using a [projen](https://projen.io) template.
+The app is created using a [projen](https://projen.io) template from `@ottofeller/templates` package.
 
 ## Update a project
 
@@ -18,21 +18,12 @@ Upon completion the following changes would apply:
 
 ## Install new packages
 
-The common approach of installing packages by running `npm install <package-name>` won't work because `npx projen` re-synthesizes all files, including `package.json`. For dependency handling see the docs in `projen` repo:
-
-- [generic dependency handling](https://github.com/projen/projen/blob/main/docs/deps.md);
-- [node.js specific](https://github.com/projen/projen/blob/main/docs/node.md#dependencies);
-- [node-package comments on dependency options](https://github.com/projen/projen/blob/main/src/javascript/node-package.ts#L46-L111) - these are available in an IDE.
+The common approach of installing packages by running `npm install <package-name>` won't work because `npx projen` re-synthesizes all files, including `package.json`. For details see https://github.com/ottofeller/templates?tab=readme-ov-file#install-new-packages.
 
 To install a new packages to the project:
 
 - Add a new item with the package name to either the `deps` or `devDeps` array in project options. Alternative way would be to use `project.addDeps('package-name')` or `project.addDevDeps('dev-package-name')`.
-- Run `npx projen`. This will update the `package.json` and lock file as well.
-
-Note that there are two distinct approaches in controlling package version:
-
-- Strict version control in `.projenrc.ts` - when adding packages one specifies a name and a version. All updates are handled manually by specifying a new version and then running `npx projen` to resynthesize the project.
-- Specifying just a package name in `.projenrc.ts`. This is how `projen` [recommends it](https://github.com/projen/projen/blob/main/src/javascript/node-package.ts#L49-L54). When no version is specified it makes it possible to update versions in `package.json` and `package-lock.json` without touching the `.projenrc.ts` file. It also allows the use of `dependabot` - otherwise all changes introduced by `dependabot` would be overwritten on `npx projen`.
+- Run `npx projen`. This will update the `package.json` as well as the lock file.
 
 ## Eject
 
@@ -42,6 +33,4 @@ To get rid of projen run this command:
 npm run eject
 ```
 
-The command removes default projen task, makes projen remove its authority from all the generated files and stop tracking changes. At this moment the project is managed as a regular repository (feel free to edit and remove files).
-
-> All the projen tasks are run via a custom runner, so the runner is saved into the project at `scripts/run-task` and the tasks remain in the project in a tasks definition file (`.projen/tasks.json`). All the internal tasks within the templates are saved as npm scripts and thus don't need this task runner. Therefore the task runner and the tasks definition file file can be deleted. If you had any custom tasks created in your project either use this runner or make sure to convert all the tasks into npm scripts before deleting the tasks definition file and the runner.
+The command removes default projen task, makes projen remove its authority from all the generated files and stop tracking changes. At this moment the project is managed as a regular repository (feel free to edit and remove files). For more details see https://github.com/ottofeller/templates?tab=readme-ov-file#eject.
