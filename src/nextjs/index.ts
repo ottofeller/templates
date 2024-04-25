@@ -15,6 +15,7 @@ import {
   WithDefaultWorkflow,
 } from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
+import {renderReadme} from '../common/readme'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 import {eslintConfigReact} from './eslint-config-react'
@@ -61,15 +62,17 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
 
   constructor(options: OttofellerNextjsProjectOptions) {
     const workflowNodeVersion = '20'
+    const name = 'nextjs'
 
     super({
       workflowNodeVersion,
+      readme: renderReadme(name),
       ...options,
       bundlerOptions: {},
       projenrcTs: true,
       projenrcJs: false,
       defaultReleaseBranch: 'main',
-      name: 'nextjs',
+      name,
       packageManager: options.packageManager ?? NodePackageManager.NPM,
       srcdir: options.srcdir ?? '.',
 

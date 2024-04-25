@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {WithDocker, addTaskOrScript} from '../common'
+import {WithDocker, addTaskOrScript, renderReadme} from '../common'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
@@ -37,7 +37,10 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
   readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerApolloServerProjectOptions) {
+    const name = 'apollo-server'
+
     super({
+      readme: renderReadme(name),
       ...options,
       projenrcTs: true,
       projenrcJs: false,
@@ -46,7 +49,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
       projenrcTsOptions: {filename: '.projenrc.mjs'},
 
       defaultReleaseBranch: 'main',
-      name: 'apollo-server',
+      name,
       packageManager: options.packageManager ?? NodePackageManager.NPM,
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6', skipLibCheck: true}},
       sampleCode: false,

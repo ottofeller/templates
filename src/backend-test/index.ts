@@ -13,6 +13,7 @@ import {
   addLinters,
   addTaskOrScript,
   collectTelemetry,
+  renderReadme,
   setupTelemetry,
 } from '../common'
 import {eslintConfig} from './eslint-config'
@@ -44,14 +45,17 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
   readonly reportTargetAuthHeaderName?: string
 
   constructor(options: OttofellerBackendTestProjectOptions) {
+    const name = 'backend-test'
+
     super({
+      readme: renderReadme(name),
       ...options,
       bundlerOptions: {},
       jest: false,
       eslint: false,
       projenrcTs: true,
       projenrcJs: false,
-      name: 'backend-test',
+      name,
       packageManager: options.packageManager ?? NodePackageManager.NPM,
       srcdir: options.srcdir ?? '.',
 
