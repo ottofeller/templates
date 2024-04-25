@@ -4,7 +4,7 @@ import {SampleFile} from 'projen'
 import {DependabotScheduleInterval} from 'projen/lib/github'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {addTaskOrScript, getReadmeOptions} from '../common'
+import {addTaskOrScript, renderReadme} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
@@ -51,7 +51,7 @@ export class OttofellerSSTProject extends TypeScriptAppProject implements IWithT
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6', skipLibCheck: true}},
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: DependabotScheduleInterval.WEEKLY},
-      readme: getReadmeOptions(name),
+      readme: renderReadme(name),
 
       // In case Github is enabled remove all default stuff.
       githubOptions: {mergify: false, pullRequestLint: false},

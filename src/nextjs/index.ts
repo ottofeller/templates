@@ -15,7 +15,7 @@ import {
   WithDefaultWorkflow,
 } from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
-import {getReadmeOptions} from '../common/readme'
+import {renderReadme} from '../common/readme'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
 import {addVsCode} from '../common/vscode-settings'
 import {eslintConfigReact} from './eslint-config-react'
@@ -66,7 +66,7 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
 
     super({
       workflowNodeVersion,
-      readme: getReadmeOptions(name),
+      readme: renderReadme(name),
       ...options,
       bundlerOptions: {},
       projenrcTs: true,

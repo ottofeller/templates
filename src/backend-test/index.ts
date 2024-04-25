@@ -13,7 +13,7 @@ import {
   addLinters,
   addTaskOrScript,
   collectTelemetry,
-  getReadmeOptions,
+  renderReadme,
   setupTelemetry,
 } from '../common'
 import {eslintConfig} from './eslint-config'
@@ -48,7 +48,7 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
     const name = 'backend-test'
 
     super({
-      readme: getReadmeOptions(name),
+      readme: renderReadme(name),
       ...options,
       bundlerOptions: {},
       jest: false,

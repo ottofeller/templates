@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptAppProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {WithDocker, addTaskOrScript, getReadmeOptions} from '../common'
+import {WithDocker, addTaskOrScript, renderReadme} from '../common'
 import {AssetFile} from '../common/files/AssetFile'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
@@ -40,7 +40,7 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
     const name = 'apollo-server'
 
     super({
-      readme: getReadmeOptions(name),
+      readme: renderReadme(name),
       ...options,
       projenrcTs: true,
       projenrcJs: false,

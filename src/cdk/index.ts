@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as projen from 'projen'
 import {AwsCdkTypeScriptApp, AwsCdkTypeScriptAppOptions} from 'projen/lib/awscdk'
 import {NodePackageManager} from 'projen/lib/javascript'
-import {AssetFile, addTaskOrScript, getReadmeOptions} from '../common'
+import {AssetFile, addTaskOrScript, renderReadme} from '../common'
 import {WithGitHooks, addHusky, extendGitignore} from '../common/git'
 import {
   CodeOwners,
@@ -67,7 +67,7 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
       jest,
       dependabot: (options.github ?? true) && (options.dependabot ?? true),
       dependabotOptions: {scheduleInterval: projen.github.DependabotScheduleInterval.WEEKLY},
-      readme: getReadmeOptions(name),
+      readme: renderReadme(name),
 
       // In case Github is enabled remove all default stuff.
       githubOptions: {mergify: false, pullRequestLint: false},

@@ -3,7 +3,7 @@ import * as path from 'path'
 import {SampleFile} from 'projen'
 import {NodePackageManager} from 'projen/lib/javascript'
 import {TypeScriptProject, TypeScriptProjectOptions} from 'projen/lib/typescript'
-import {WithDefaultWorkflow, WithDocker, WithGitHooks, addTaskOrScript, getReadmeOptions} from '../common'
+import {WithDefaultWorkflow, WithDocker, WithGitHooks, addTaskOrScript, renderReadme} from '../common'
 import {CodeOwners, WithCodeOwners} from '../common/github'
 import {WithCustomLintPaths, addLinters} from '../common/lint'
 import {IWithTelemetryReportUrl, WithTelemetry, collectTelemetry, setupTelemetry} from '../common/telemetry'
@@ -31,7 +31,7 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
     const name = 'playwright'
 
     super({
-      readme: getReadmeOptions(name),
+      readme: renderReadme(name),
       ...options,
       bundlerOptions: {},
       jest: false,
