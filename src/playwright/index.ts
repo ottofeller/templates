@@ -32,6 +32,9 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
 
     super({
       readme: renderReadme(name),
+      packageManager: NodePackageManager.NPM,
+      minNodeVersion: '20.0.0',
+      srcdir: '.',
       ...options,
       bundlerOptions: {},
       jest: false,
@@ -39,8 +42,6 @@ export class OttofellerPlaywrightProject extends TypeScriptProject implements IW
       projenrcTs: true,
       projenrcJs: false,
       name,
-      packageManager: options.packageManager ?? NodePackageManager.NPM,
-      srcdir: options.srcdir ?? '.',
 
       tsconfig: {
         compilerOptions: {
