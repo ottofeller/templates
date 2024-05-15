@@ -67,14 +67,15 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     super({
       workflowNodeVersion,
       readme: renderReadme(name),
+      minNodeVersion: '20.0.0',
+      packageManager: NodePackageManager.NPM,
+      srcdir: '.',
       ...options,
       bundlerOptions: {},
       projenrcTs: true,
       projenrcJs: false,
       defaultReleaseBranch: 'main',
       name,
-      packageManager: options.packageManager ?? NodePackageManager.NPM,
-      srcdir: options.srcdir ?? '.',
 
       tsconfig: {
         compilerOptions: {

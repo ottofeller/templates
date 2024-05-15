@@ -41,6 +41,8 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
 
     super({
       readme: renderReadme(name),
+      packageManager: NodePackageManager.NPM,
+      minNodeVersion: '20.0.0',
       ...options,
       projenrcTs: true,
       projenrcJs: false,
@@ -50,7 +52,6 @@ export class OttofellerApolloServerProject extends TypeScriptAppProject implemen
 
       defaultReleaseBranch: 'main',
       name,
-      packageManager: options.packageManager ?? NodePackageManager.NPM,
       tsconfig: {compilerOptions: {paths: {'*': ['./src/*']}, target: 'es6', skipLibCheck: true}},
       sampleCode: false,
       eslint: false,
