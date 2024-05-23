@@ -48,6 +48,9 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     super({
       readme: renderReadme(name),
+      packageManager: NodePackageManager.NPM,
+      minNodeVersion: '20.0.0',
+      srcdir: '.',
       ...options,
       bundlerOptions: {},
       jest: false,
@@ -55,8 +58,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
       projenrcTs: true,
       projenrcJs: false,
       name,
-      packageManager: options.packageManager ?? NodePackageManager.NPM,
-      srcdir: options.srcdir ?? '.',
 
       tsconfig: {
         compilerOptions: {

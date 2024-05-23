@@ -365,7 +365,7 @@ tsconfig.dev.json
       {
         "name": "@types/node",
         "type": "build",
-        "version": "^16",
+        "version": "^20",
       },
       {
         "name": "@typescript-eslint/eslint-plugin",
@@ -1006,7 +1006,7 @@ export default config
       "@graphql-codegen/typescript-graphql-request": "*",
       "@graphql-codegen/typescript-operations": "*",
       "@ottofeller/eslint-plugin-ottofeller": "*",
-      "@types/node": "^16",
+      "@types/node": "^20",
       "@typescript-eslint/eslint-plugin": "6",
       "@typescript-eslint/parser": "6",
       "@typescript-eslint/typescript-estree": "6",
@@ -1018,6 +1018,9 @@ export default config
       "projen": "*",
       "ts-node": "*",
       "typescript": "*",
+    },
+    "engines": {
+      "node": ">= 20.0.0",
     },
     "license": "Apache-2.0",
     "name": "backend-test",

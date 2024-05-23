@@ -676,7 +676,7 @@ tsconfig.tsbuildinfo
       {
         "name": "@types/node",
         "type": "build",
-        "version": "^12",
+        "version": "^20",
       },
       {
         "name": "@types/react",
@@ -1528,7 +1528,7 @@ module.exports = {
       "@tailwindcss/line-clamp": "*",
       "@testing-library/react": "*",
       "@types/jest": "*",
-      "@types/node": "^12",
+      "@types/node": "^20",
       "@types/react": "*",
       "@types/react-dom": "*",
       "@typescript-eslint/eslint-plugin": "6",
@@ -1554,7 +1554,7 @@ module.exports = {
       "typescript": "*",
     },
     "engines": {
-      "node": ">= 12.22.0",
+      "node": ">= 20.0.0",
     },
     "license": "Apache-2.0",
     "name": "nextjs",

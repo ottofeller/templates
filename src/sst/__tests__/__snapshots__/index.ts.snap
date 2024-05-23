@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -330,7 +330,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -397,7 +397,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -419,7 +419,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -441,7 +441,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -562,7 +562,7 @@ tsconfig.tsbuildinfo
       {
         "name": "@types/node",
         "type": "build",
-        "version": "^16",
+        "version": "^20",
       },
       {
         "name": "@typescript-eslint/eslint-plugin",
@@ -1090,7 +1090,7 @@ To get rid of projen in the project follow [these](https://github.com/ottofeller
     "devDependencies": {
       "@cspell/eslint-plugin": "*",
       "@ottofeller/eslint-plugin-ottofeller": "*",
-      "@types/node": "^16",
+      "@types/node": "^20",
       "@typescript-eslint/eslint-plugin": "6",
       "@typescript-eslint/parser": "6",
       "@typescript-eslint/typescript-estree": "6",
@@ -1105,6 +1105,9 @@ To get rid of projen in the project follow [these](https://github.com/ottofeller
       "sst": "*",
       "ts-node": "*",
       "typescript": "*",
+    },
+    "engines": {
+      "node": ">= 20.0.0",
     },
     "license": "Apache-2.0",
     "name": "sst",

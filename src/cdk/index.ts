@@ -59,8 +59,9 @@ export class OttofellerCDKProject extends AwsCdkTypeScriptApp implements IWithTe
 
     super({
       // Default options
-      appEntrypoint: options.appEntrypoint ?? 'index.ts',
-      packageManager: options.packageManager ?? NodePackageManager.NPM,
+      appEntrypoint: 'index.ts',
+      packageManager: NodePackageManager.NPM,
+      minNodeVersion: '20.0.0',
       tsconfig: {compilerOptions: {paths: {'*': [`./${srcdir}/*`]}, target: 'es6', skipLibCheck: true}},
       sampleCode: false,
       eslint: false,

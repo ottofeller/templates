@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -67,7 +67,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -352,7 +352,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -389,7 +389,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -411,7 +411,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -433,7 +433,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.0.0
       - name: Cache node_modules
         id: cache-deps
         uses: actions/cache@v4
@@ -593,7 +593,7 @@ tsconfig.tsbuildinfo
       {
         "name": "@types/node",
         "type": "build",
-        "version": "^16",
+        "version": "^20",
       },
       {
         "name": "@types/source-map-support",
@@ -1303,7 +1303,7 @@ buildSync({
       "@graphql-codegen/typescript-resolvers": "*",
       "@ottofeller/eslint-plugin-ottofeller": "*",
       "@types/jest": "*",
-      "@types/node": "^16",
+      "@types/node": "^20",
       "@types/source-map-support": "*",
       "@typescript-eslint/eslint-plugin": "6",
       "@typescript-eslint/parser": "6",
@@ -1320,6 +1320,9 @@ buildSync({
       "ts-jest": "*",
       "ts-node": "*",
       "typescript": "*",
+    },
+    "engines": {
+      "node": ">= 20.0.0",
     },
     "jest": {
       "clearMocks": true,
