@@ -2,9 +2,6 @@
 
 exports[`Backend-test template sets defaults 1`] = `
 {
-  ".env.development": "HASURA_GRAPHQL_URL=http://localhost:8080/v1/graphql
-HASURA_GRAPHQL_ADMIN_SECRET=111
-UPLOAD_AVATAR_URL=https://api.worldcoin-distributors.com/user/upload-avatar",
   ".eslintignore": "test-results/**/*
 generated/index.ts
 schema.graphql

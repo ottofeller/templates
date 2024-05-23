@@ -14,6 +14,7 @@ exports[`GitHub utils CodeOwners creates CODEOWNERS file 1`] = `
 /.gitignore linguist-generated
 /.mergify.yml linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -40,7 +41,7 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
@@ -55,11 +56,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "self_mutation_happened=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
       - name: Fail build on mutation
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
@@ -74,13 +74,13 @@ jobs:
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -117,7 +117,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v5.4.0
+      - uses: amannn/action-semantic-pull-request@v5.0.2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
@@ -142,12 +142,11 @@ jobs:
       contents: write
     outputs:
       latest_commit: \${{ steps.git_remote.outputs.latest_commit }}
-      tag_exists: \${{ steps.check_tag_exists.outputs.exists }}
     env:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set git identity
@@ -158,41 +157,32 @@ jobs:
         run: npm ci
       - name: release
         run: npx projen release
-      - name: Check if version has already been tagged
-        id: check_tag_exists
-        run: |-
-          TAG=$(cat dist/releasetag.txt)
-          ([ ! -z "$TAG" ] && git ls-remote -q --exit-code --tags origin $TAG && (echo "exists=true" >> $GITHUB_OUTPUT)) || (echo "exists=false" >> $GITHUB_OUTPUT)
-          cat $GITHUB_OUTPUT
       - name: Check for new commits
         id: git_remote
-        run: |-
-          echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+        run: echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
       - name: Backup artifact permissions
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
         run: cd dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: dist
-          overwrite: true
   release_github:
     name: Publish to GitHub Releases
     needs: release
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: needs.release.outputs.tag_exists != 'true' && needs.release.outputs.latest_commit == github.sha
+    if: needs.release.outputs.latest_commit == github.sha
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: build-artifact
           path: dist
@@ -223,7 +213,7 @@ jobs:
       patch_created: \${{ steps.create_patch.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Install dependencies
@@ -237,11 +227,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.create_patch.outputs.patch_created
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
   pr:
     name: Create Pull Request
     needs: upgrade
@@ -251,11 +240,11 @@ jobs:
     if: \${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -267,7 +256,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v4
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
@@ -326,6 +315,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -336,8 +326,8 @@ junit.xml
 !/.mergify.yml
 !/.github/workflows/upgrade-main.yml
 !/.github/pull_request_template.md
+!/.npmrc
 !/CODEOWNERS
-!/.projenrc.js
 ",
   ".mergify.yml": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
 
@@ -365,6 +355,7 @@ pull_request_rules:
       - status-success=build
 ",
   ".npmignore": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
+/.projenrc.js
 /.projen/
 /test-reports/
 junit.xml
@@ -373,17 +364,10 @@ permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
-/.projenrc.js
-/.gitattributes
 ",
   ".projen/deps.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "dependencies": [
-      {
-        "name": "constructs",
-        "type": "build",
-        "version": "^10.0.0",
-      },
       {
         "name": "jest",
         "type": "build",
@@ -392,6 +376,11 @@ permissions-backup.acl
         "name": "jest-junit",
         "type": "build",
         "version": "^15",
+      },
+      {
+        "name": "npm-check-updates",
+        "type": "build",
+        "version": "^16",
       },
       {
         "name": "projen",
@@ -416,6 +405,7 @@ permissions-backup.acl
       ".gitignore",
       ".mergify.yml",
       ".npmignore",
+      ".npmrc",
       ".projen/deps.json",
       ".projen/files.json",
       ".projen/tasks.json",
@@ -636,13 +626,28 @@ permissions-backup.acl
         "name": "upgrade",
         "steps": [
           {
-            "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=jest,projen",
+            "exec": "npm update npm-check-updates",
+          },
+          {
+            "exec": "npm-check-updates --dep dev --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep optional --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep peer --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep prod --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep bundle --upgrade --target=minor",
           },
           {
             "exec": "npm install",
           },
           {
-            "exec": "npm update constructs jest jest-junit projen standard-version",
+            "exec": "npm update",
           },
           {
             "exec": "npx projen",
@@ -863,9 +868,9 @@ permissions-backup.acl
   "package.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "devDependencies": {
-      "constructs": "^10.0.0",
       "jest": "*",
       "jest-junit": "^15",
+      "npm-check-updates": "^16",
       "projen": "*",
       "standard-version": "^9",
     },
@@ -944,6 +949,7 @@ exports[`GitHub utils ProjenDriftCheckWorkflow creates a workflow 1`] = `
 /.gitignore linguist-generated
 /.mergify.yml linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -969,7 +975,7 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
@@ -984,11 +990,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "self_mutation_happened=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
       - name: Fail build on mutation
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
@@ -1003,13 +1008,13 @@ jobs:
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -1083,7 +1088,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v5.4.0
+      - uses: amannn/action-semantic-pull-request@v5.0.2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
@@ -1108,12 +1113,11 @@ jobs:
       contents: write
     outputs:
       latest_commit: \${{ steps.git_remote.outputs.latest_commit }}
-      tag_exists: \${{ steps.check_tag_exists.outputs.exists }}
     env:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set git identity
@@ -1124,41 +1128,32 @@ jobs:
         run: npm ci
       - name: release
         run: npx projen release
-      - name: Check if version has already been tagged
-        id: check_tag_exists
-        run: |-
-          TAG=$(cat dist/releasetag.txt)
-          ([ ! -z "$TAG" ] && git ls-remote -q --exit-code --tags origin $TAG && (echo "exists=true" >> $GITHUB_OUTPUT)) || (echo "exists=false" >> $GITHUB_OUTPUT)
-          cat $GITHUB_OUTPUT
       - name: Check for new commits
         id: git_remote
-        run: |-
-          echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+        run: echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
       - name: Backup artifact permissions
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
         run: cd dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: dist
-          overwrite: true
   release_github:
     name: Publish to GitHub Releases
     needs: release
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: needs.release.outputs.tag_exists != 'true' && needs.release.outputs.latest_commit == github.sha
+    if: needs.release.outputs.latest_commit == github.sha
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: build-artifact
           path: dist
@@ -1189,7 +1184,7 @@ jobs:
       patch_created: \${{ steps.create_patch.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Install dependencies
@@ -1203,11 +1198,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.create_patch.outputs.patch_created
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
   pr:
     name: Create Pull Request
     needs: upgrade
@@ -1217,11 +1211,11 @@ jobs:
     if: \${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -1233,7 +1227,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v4
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
@@ -1292,6 +1286,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -1302,8 +1297,8 @@ junit.xml
 !/.mergify.yml
 !/.github/workflows/upgrade-main.yml
 !/.github/pull_request_template.md
+!/.npmrc
 !/.github/workflows/projen-drift-check.yml
-!/.projenrc.js
 ",
   ".mergify.yml": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
 
@@ -1331,6 +1326,7 @@ pull_request_rules:
       - status-success=build
 ",
   ".npmignore": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
+/.projenrc.js
 /.projen/
 /test-reports/
 junit.xml
@@ -1339,17 +1335,10 @@ permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
-/.projenrc.js
-/.gitattributes
 ",
   ".projen/deps.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "dependencies": [
-      {
-        "name": "constructs",
-        "type": "build",
-        "version": "^10.0.0",
-      },
       {
         "name": "jest",
         "type": "build",
@@ -1358,6 +1347,11 @@ permissions-backup.acl
         "name": "jest-junit",
         "type": "build",
         "version": "^15",
+      },
+      {
+        "name": "npm-check-updates",
+        "type": "build",
+        "version": "^16",
       },
       {
         "name": "projen",
@@ -1383,6 +1377,7 @@ permissions-backup.acl
       ".gitignore",
       ".mergify.yml",
       ".npmignore",
+      ".npmrc",
       ".projen/deps.json",
       ".projen/files.json",
       ".projen/tasks.json",
@@ -1602,13 +1597,28 @@ permissions-backup.acl
         "name": "upgrade",
         "steps": [
           {
-            "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=jest,projen",
+            "exec": "npm update npm-check-updates",
+          },
+          {
+            "exec": "npm-check-updates --dep dev --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep optional --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep peer --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep prod --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep bundle --upgrade --target=minor",
           },
           {
             "exec": "npm install",
           },
           {
-            "exec": "npm update constructs jest jest-junit projen standard-version",
+            "exec": "npm update",
           },
           {
             "exec": "npx projen",
@@ -1827,9 +1837,9 @@ permissions-backup.acl
   "package.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "devDependencies": {
-      "constructs": "^10.0.0",
       "jest": "*",
       "jest-junit": "^15",
+      "npm-check-updates": "^16",
       "projen": "*",
       "standard-version": "^9",
     },
@@ -1907,6 +1917,7 @@ exports[`GitHub utils ReleaseWorkflow creates a release workflow 1`] = `
 /.gitignore linguist-generated
 /.mergify.yml linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -1932,7 +1943,7 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
@@ -1947,11 +1958,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "self_mutation_happened=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
       - name: Fail build on mutation
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
@@ -1966,13 +1976,13 @@ jobs:
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -2009,7 +2019,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v5.4.0
+      - uses: amannn/action-semantic-pull-request@v5.0.2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
@@ -2066,7 +2076,7 @@ jobs:
       patch_created: \${{ steps.create_patch.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: npm ci
       - name: Upgrade dependencies
@@ -2078,11 +2088,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.create_patch.outputs.patch_created
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
   pr:
     name: Create Pull Request
     needs: upgrade
@@ -2092,9 +2101,10 @@ jobs:
     if: \${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+        with: {}
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -2106,7 +2116,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v4
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
@@ -2165,6 +2175,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -2172,8 +2183,8 @@ junit.xml
 !/.mergify.yml
 !/.github/workflows/upgrade.yml
 !/.github/pull_request_template.md
+!/.npmrc
 !/.github/workflows/release.yml
-!/.projenrc.js
 ",
   ".mergify.yml": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
 
@@ -2201,23 +2212,17 @@ pull_request_rules:
       - status-success=build
 ",
   ".npmignore": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
+/.projenrc.js
 /.projen/
 /test-reports/
 junit.xml
 /coverage/
 permissions-backup.acl
 /.mergify.yml
-/.projenrc.js
-/.gitattributes
 ",
   ".projen/deps.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "dependencies": [
-      {
-        "name": "constructs",
-        "type": "build",
-        "version": "^10.0.0",
-      },
       {
         "name": "jest",
         "type": "build",
@@ -2226,6 +2231,11 @@ permissions-backup.acl
         "name": "jest-junit",
         "type": "build",
         "version": "^15",
+      },
+      {
+        "name": "npm-check-updates",
+        "type": "build",
+        "version": "^16",
       },
       {
         "name": "projen",
@@ -2245,6 +2255,7 @@ permissions-backup.acl
       ".gitignore",
       ".mergify.yml",
       ".npmignore",
+      ".npmrc",
       ".projen/deps.json",
       ".projen/files.json",
       ".projen/tasks.json",
@@ -2407,13 +2418,28 @@ permissions-backup.acl
         "name": "upgrade",
         "steps": [
           {
-            "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=jest,projen",
+            "exec": "npm update npm-check-updates",
+          },
+          {
+            "exec": "npm-check-updates --dep dev --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep optional --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep peer --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep prod --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep bundle --upgrade --target=minor",
           },
           {
             "exec": "npm install",
           },
           {
-            "exec": "npm update constructs jest jest-junit projen",
+            "exec": "npm update",
           },
           {
             "exec": "npx projen",
@@ -2632,9 +2658,9 @@ permissions-backup.acl
   "package.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "devDependencies": {
-      "constructs": "^10.0.0",
       "jest": "*",
       "jest-junit": "^15",
+      "npm-check-updates": "^16",
       "projen": "*",
     },
     "jest": {
@@ -2709,6 +2735,7 @@ exports[`GitHub utils RustTestWorkflow creates a workflow 1`] = `
 /.gitignore linguist-generated
 /.mergify.yml linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -2734,7 +2761,7 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
@@ -2749,11 +2776,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "self_mutation_happened=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
       - name: Fail build on mutation
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
@@ -2768,13 +2794,13 @@ jobs:
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -2811,7 +2837,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v5.4.0
+      - uses: amannn/action-semantic-pull-request@v5.0.2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
@@ -2836,12 +2862,11 @@ jobs:
       contents: write
     outputs:
       latest_commit: \${{ steps.git_remote.outputs.latest_commit }}
-      tag_exists: \${{ steps.check_tag_exists.outputs.exists }}
     env:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set git identity
@@ -2852,41 +2877,32 @@ jobs:
         run: npm ci
       - name: release
         run: npx projen release
-      - name: Check if version has already been tagged
-        id: check_tag_exists
-        run: |-
-          TAG=$(cat dist/releasetag.txt)
-          ([ ! -z "$TAG" ] && git ls-remote -q --exit-code --tags origin $TAG && (echo "exists=true" >> $GITHUB_OUTPUT)) || (echo "exists=false" >> $GITHUB_OUTPUT)
-          cat $GITHUB_OUTPUT
       - name: Check for new commits
         id: git_remote
-        run: |-
-          echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+        run: echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
       - name: Backup artifact permissions
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
         run: cd dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: dist
-          overwrite: true
   release_github:
     name: Publish to GitHub Releases
     needs: release
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: needs.release.outputs.tag_exists != 'true' && needs.release.outputs.latest_commit == github.sha
+    if: needs.release.outputs.latest_commit == github.sha
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: build-artifact
           path: dist
@@ -3038,7 +3054,7 @@ jobs:
       patch_created: \${{ steps.create_patch.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Install dependencies
@@ -3052,11 +3068,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.create_patch.outputs.patch_created
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
   pr:
     name: Create Pull Request
     needs: upgrade
@@ -3066,11 +3081,11 @@ jobs:
     if: \${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -3082,7 +3097,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v4
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
@@ -3141,6 +3156,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -3151,8 +3167,8 @@ junit.xml
 !/.mergify.yml
 !/.github/workflows/upgrade-main.yml
 !/.github/pull_request_template.md
+!/.npmrc
 !/.github/workflows/rust-test.yml
-!/.projenrc.js
 ",
   ".mergify.yml": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
 
@@ -3180,6 +3196,7 @@ pull_request_rules:
       - status-success=build
 ",
   ".npmignore": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
+/.projenrc.js
 /.projen/
 /test-reports/
 junit.xml
@@ -3188,17 +3205,10 @@ permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
-/.projenrc.js
-/.gitattributes
 ",
   ".projen/deps.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "dependencies": [
-      {
-        "name": "constructs",
-        "type": "build",
-        "version": "^10.0.0",
-      },
       {
         "name": "jest",
         "type": "build",
@@ -3207,6 +3217,11 @@ permissions-backup.acl
         "name": "jest-junit",
         "type": "build",
         "version": "^15",
+      },
+      {
+        "name": "npm-check-updates",
+        "type": "build",
+        "version": "^16",
       },
       {
         "name": "projen",
@@ -3232,6 +3247,7 @@ permissions-backup.acl
       ".gitignore",
       ".mergify.yml",
       ".npmignore",
+      ".npmrc",
       ".projen/deps.json",
       ".projen/files.json",
       ".projen/tasks.json",
@@ -3451,13 +3467,28 @@ permissions-backup.acl
         "name": "upgrade",
         "steps": [
           {
-            "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=jest,projen",
+            "exec": "npm update npm-check-updates",
+          },
+          {
+            "exec": "npm-check-updates --dep dev --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep optional --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep peer --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep prod --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep bundle --upgrade --target=minor",
           },
           {
             "exec": "npm install",
           },
           {
-            "exec": "npm update constructs jest jest-junit projen standard-version",
+            "exec": "npm update",
           },
           {
             "exec": "npx projen",
@@ -3676,9 +3707,9 @@ permissions-backup.acl
   "package.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "devDependencies": {
-      "constructs": "^10.0.0",
       "jest": "*",
       "jest-junit": "^15",
+      "npm-check-updates": "^16",
       "projen": "*",
       "standard-version": "^9",
     },
@@ -3757,6 +3788,7 @@ exports[`GitHub utils TypeScriptTestWorkflow creates a test workflow 1`] = `
 /.gitignore linguist-generated
 /.mergify.yml linguist-generated
 /.npmignore linguist-generated
+/.npmrc linguist-generated
 /.projen/** linguist-generated
 /.projen/deps.json linguist-generated
 /.projen/files.json linguist-generated
@@ -3782,7 +3814,7 @@ jobs:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
@@ -3797,11 +3829,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "self_mutation_happened=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
       - name: Fail build on mutation
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
@@ -3816,13 +3847,13 @@ jobs:
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: \${{ github.event.pull_request.head.ref }}
           repository: \${{ github.event.pull_request.head.repo.full_name }}
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -3859,7 +3890,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: amannn/action-semantic-pull-request@v5.4.0
+      - uses: amannn/action-semantic-pull-request@v5.0.2
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
@@ -3884,12 +3915,11 @@ jobs:
       contents: write
     outputs:
       latest_commit: \${{ steps.git_remote.outputs.latest_commit }}
-      tag_exists: \${{ steps.check_tag_exists.outputs.exists }}
     env:
       CI: "true"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set git identity
@@ -3900,41 +3930,32 @@ jobs:
         run: npm ci
       - name: release
         run: npx projen release
-      - name: Check if version has already been tagged
-        id: check_tag_exists
-        run: |-
-          TAG=$(cat dist/releasetag.txt)
-          ([ ! -z "$TAG" ] && git ls-remote -q --exit-code --tags origin $TAG && (echo "exists=true" >> $GITHUB_OUTPUT)) || (echo "exists=false" >> $GITHUB_OUTPUT)
-          cat $GITHUB_OUTPUT
       - name: Check for new commits
         id: git_remote
-        run: |-
-          echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+        run: echo "latest_commit=$(git ls-remote origin -h \${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
       - name: Backup artifact permissions
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
         run: cd dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         if: \${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: dist
-          overwrite: true
   release_github:
     name: Publish to GitHub Releases
     needs: release
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: needs.release.outputs.tag_exists != 'true' && needs.release.outputs.latest_commit == github.sha
+    if: needs.release.outputs.latest_commit == github.sha
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: build-artifact
           path: dist
@@ -4022,7 +4043,7 @@ jobs:
       patch_created: \${{ steps.create_patch.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Install dependencies
@@ -4036,11 +4057,10 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.create_patch.outputs.patch_created
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: .repo.patch
           path: .repo.patch
-          overwrite: true
   pr:
     name: Create Pull Request
     needs: upgrade
@@ -4050,11 +4070,11 @@ jobs:
     if: \${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: main
       - name: Download patch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .repo.patch
           path: \${{ runner.temp }}
@@ -4066,7 +4086,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v4
         with:
           token: \${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
@@ -4125,6 +4145,7 @@ jspm_packages/
 *.tgz
 .yarn-integrity
 .cache
+!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -4135,8 +4156,8 @@ junit.xml
 !/.mergify.yml
 !/.github/workflows/upgrade-main.yml
 !/.github/pull_request_template.md
+!/.npmrc
 !/.github/workflows/ts-test.yml
-!/.projenrc.js
 ",
   ".mergify.yml": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
 
@@ -4164,6 +4185,7 @@ pull_request_rules:
       - status-success=build
 ",
   ".npmignore": "# ~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".
+/.projenrc.js
 /.projen/
 /test-reports/
 junit.xml
@@ -4172,17 +4194,10 @@ permissions-backup.acl
 /dist/changelog.md
 /dist/version.txt
 /.mergify.yml
-/.projenrc.js
-/.gitattributes
 ",
   ".projen/deps.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "dependencies": [
-      {
-        "name": "constructs",
-        "type": "build",
-        "version": "^10.0.0",
-      },
       {
         "name": "jest",
         "type": "build",
@@ -4191,6 +4206,11 @@ permissions-backup.acl
         "name": "jest-junit",
         "type": "build",
         "version": "^15",
+      },
+      {
+        "name": "npm-check-updates",
+        "type": "build",
+        "version": "^16",
       },
       {
         "name": "projen",
@@ -4216,6 +4236,7 @@ permissions-backup.acl
       ".gitignore",
       ".mergify.yml",
       ".npmignore",
+      ".npmrc",
       ".projen/deps.json",
       ".projen/files.json",
       ".projen/tasks.json",
@@ -4435,13 +4456,28 @@ permissions-backup.acl
         "name": "upgrade",
         "steps": [
           {
-            "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=jest,projen",
+            "exec": "npm update npm-check-updates",
+          },
+          {
+            "exec": "npm-check-updates --dep dev --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep optional --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep peer --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep prod --upgrade --target=minor",
+          },
+          {
+            "exec": "npm-check-updates --dep bundle --upgrade --target=minor",
           },
           {
             "exec": "npm install",
           },
           {
-            "exec": "npm update constructs jest jest-junit projen standard-version",
+            "exec": "npm update",
           },
           {
             "exec": "npx projen",
@@ -4660,9 +4696,9 @@ permissions-backup.acl
   "package.json": {
     "//": "~~ Generated by projen. To modify, edit .projenrc.js and run "npx projen".",
     "devDependencies": {
-      "constructs": "^10.0.0",
       "jest": "*",
       "jest-junit": "^15",
+      "npm-check-updates": "^16",
       "projen": "*",
       "standard-version": "^9",
     },

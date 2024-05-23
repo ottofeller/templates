@@ -17,7 +17,6 @@ import {
   setupTelemetry,
 } from '../common'
 import {eslintConfig} from './eslint-config'
-import {sampleCode} from './sample-code'
 
 export interface OttofellerBackendTestProjectOptions
   extends TypeScriptProjectOptions,
@@ -107,7 +106,6 @@ export class OttofellerBackendTestProject extends TypeScriptProject implements I
 
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/backend-test/assets')
-    sampleCode(this, options, assetsDir)
 
     /*
      * Clean off the projen tasks and if needed replace them with regular npm scripts.
