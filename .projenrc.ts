@@ -155,6 +155,8 @@ publishReleaseGithubWorkflow.addJobs({
           'registry-url': 'https://registry.npmjs.org/',
           'npm-token': '${{ secrets.NPM_TOKEN }}',
           'include-build-step': true,
+          // FIXME: v16 is a workaround with the problem revealed on v20: deps are not bundled upon publish.
+          'node-version': 16,
         },
       },
     ]),

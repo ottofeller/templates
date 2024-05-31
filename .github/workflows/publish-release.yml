@@ -101,3 +101,4 @@ jobs:
           registry-url: https://registry.npmjs.org/
           npm-token: ${{ secrets.NPM_TOKEN }}
           include-build-step: true
+          node-version: 16
