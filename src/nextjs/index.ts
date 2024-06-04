@@ -131,6 +131,8 @@ export class OttofellerNextjsProject extends NextJsTypeScriptProject implements 
     addTaskOrScript(this, 'start', {exec: 'next start'})
     addTaskOrScript(this, 'telemetry', {exec: 'next telemetry'})
     addTaskOrScript(this, 'watch', {exec: 'tsc --build -'})
+    const createComponentScript = 'npx -p @ottofeller/create-from-template create-from-template -t component'
+    addTaskOrScript(this, 'cc', {exec: createComponentScript, receiveArgs: true})
 
     // ANCHOR Source code
     const assetsDir = path.join(__dirname, '..', '..', 'src/nextjs/assets')
