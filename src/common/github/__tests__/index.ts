@@ -498,6 +498,40 @@ describe('GitHub utils', () => {
       expect(env!.RUSTFLAGS).toEqual('-D unused_crate_dependencies')
     })
 
+    test('runs at root if no outdir is configured', () => {
+      const project = new TestProject()
+      new RustTestWorkflow(project.github!)
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const noArgsJobs = ['check', 'test']
+
+      noArgsJobs.forEach((job) => {
+        const {args} = workflow.jobs[job].steps.at(-1)!.with
+        expect(args).toBeUndefined()
+      })
+
+      const jobsWithArgs = ['clippy', 'format']
+
+      jobsWithArgs.forEach((job) => {
+        const {args} = workflow.jobs[job].steps.at(-1)!.with
+        expect(args).not.toContain(`--manifest-path`)
+      })
+    })
+
+    test('runs for a nested project if outdir is configured', () => {
+      const project = new TestProject()
+      const outdir = 'inner-project'
+      new RustTestWorkflow(project.github!, {outdir})
+      const snapshot = synthSnapshot(project)
+      const workflow = YAML.parse(snapshot[workflowPath])
+      const jobs = ['clippy', 'check', 'format', 'test']
+
+      jobs.forEach((job) => {
+        const {args} = workflow.jobs[job].steps.at(-1)!.with
+        expect(args).toContain(`--manifest-path=${outdir}/Cargo.toml`)
+      })
+    })
+
     describe('addToProject', () => {
       test('does nothing by default', () => {
         const project = new TestProjectWithRustTestWorkflow({})
