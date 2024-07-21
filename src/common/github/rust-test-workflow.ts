@@ -28,6 +28,15 @@ export interface RustTestWorkflowOptions extends GithubWorkflowOptions {
   readonly name?: string
 
   /**
+   * The root directory of the rust project.
+   *
+   * This directory is expected to contain the manifest file.
+   *
+   * @default "."
+   */
+  readonly rootdir?: string
+
+  /**
    * A list of paths on pushes to which the workflow will run.
    * @default ['.']
    */
@@ -76,6 +85,8 @@ export class RustTestWorkflow extends GithubWorkflow {
 
     const paths = options.triggerOnPaths
     const branches = options.triggerOnBranches ?? ['main']
+    const {rootdir} = options
+    const manifestPath = rootdir ? `--manifest-path=${rootdir}/Cargo.toml` : undefined
 
     this.on({
       pullRequest: {paths, types: ['opened', 'synchronize']},
@@ -114,7 +125,11 @@ export class RustTestWorkflow extends GithubWorkflow {
           {
             name: `Run ${command}`,
             uses: 'actions-rs/cargo@v1',
-            with: {command, args, toolchain},
+            with: {
+              command,
+              args: [manifestPath, args].filter(Boolean).join(' ') || undefined,
+              toolchain,
+            },
             env,
           },
         ],
