@@ -521,7 +521,7 @@ describe('GitHub utils', () => {
     test('runs for a nested project if outdir is configured', () => {
       const project = new TestProject()
       const outdir = 'inner-project'
-      new RustTestWorkflow(project.github!, {outdir})
+      new RustTestWorkflow(project.github!, {rootdir: outdir})
       const snapshot = synthSnapshot(project)
       const workflow = YAML.parse(snapshot[workflowPath])
       const jobs = ['clippy', 'check', 'format', 'test']

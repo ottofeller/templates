@@ -34,7 +34,7 @@ export interface RustTestWorkflowOptions extends GithubWorkflowOptions {
    *
    * @default "."
    */
-  readonly outdir?: string
+  readonly rootdir?: string
 
   /**
    * A list of paths on pushes to which the workflow will run.
@@ -85,8 +85,8 @@ export class RustTestWorkflow extends GithubWorkflow {
 
     const paths = options.triggerOnPaths
     const branches = options.triggerOnBranches ?? ['main']
-    const {outdir} = options
-    const manifestPath = outdir ? `--manifest-path=${outdir}/Cargo.toml` : undefined
+    const {rootdir} = options
+    const manifestPath = rootdir ? `--manifest-path=${rootdir}/Cargo.toml` : undefined
 
     this.on({
       pullRequest: {paths, types: ['opened', 'synchronize']},
