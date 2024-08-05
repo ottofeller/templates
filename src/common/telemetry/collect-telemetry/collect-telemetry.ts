@@ -1,6 +1,5 @@
 import {execSync} from 'child_process'
 import * as fs from 'fs'
-import fetch from 'node-fetch'
 import * as path from 'path'
 import {ProjenrcFile} from 'projen'
 import type {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'

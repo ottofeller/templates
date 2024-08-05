@@ -1,6 +1,5 @@
 import {execSync} from 'child_process'
 import {readFileSync} from 'fs'
-import fetch, {RequestInfo, RequestInit, Response} from 'node-fetch'
 import {NodeProject, NodeProjectOptions} from 'projen/lib/javascript'
 import {cloneWorkflow, collectTelemetry, diff} from '..'
 import {IWithTelemetryReportUrl, WithTelemetry, setupTelemetry} from '../..'
@@ -9,7 +8,7 @@ import {collectEscapeHatches} from '../collect-escape-hatches'
 import {reportTargetAuthToken, telemetryEnableEnvVar} from '../collect-telemetry'
 
 jest.mock('child_process')
-jest.mock('node-fetch')
+const fetchSpy = jest.spyOn(globalThis, 'fetch').mockImplementation()
 
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
@@ -59,8 +58,6 @@ describe('collectEscapeHatches function', () => {
 })
 
 describe('collectTelemetry function', () => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- TS is not aware of the Jest mock, thus casting is needed
-  const mockedNodeFetch = fetch as unknown as jest.Mock<Promise<Response>, [url: RequestInfo, init: RequestInit]>
   const telemetryOptions: TelemetryOptions = {reportTargetUrl: 'http://localhost:3000/telemetry'}
   const projectOptionsWithTelemetry: WithTelemetry = {isTelemetryEnabled: true, telemetryOptions}
 
@@ -95,7 +92,7 @@ describe('collectTelemetry function', () => {
     const project = new TestProject()
     collectTelemetry(project)
 
-    expect(mockedNodeFetch).not.toHaveBeenCalled()
+    expect(fetchSpy).not.toHaveBeenCalled()
   })
 
   test('does nothing if IS_OTTOFELLER_TEMPLATES_TELEMETRY_COLLECTED env var not set', () => {
@@ -103,7 +100,7 @@ describe('collectTelemetry function', () => {
     const project = new TestProject(projectOptionsWithTelemetry)
     collectTelemetry(project)
 
-    expect(mockedNodeFetch).not.toHaveBeenCalled()
+    expect(fetchSpy).not.toHaveBeenCalled()
   })
 
   test('sets auth header if it is defined in options', () => {
@@ -124,7 +121,7 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     const headers = {[telemetryAuthHeader]: telemetryAuthTokenValue}
-    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, {...fetchOptions, headers})
+    expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, {...fetchOptions, headers})
 
     delete process.env[telemetryAuthHeader]
   })
@@ -140,7 +137,7 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({templateVersion}))
-    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('collects git URLs', () => {
@@ -156,7 +153,7 @@ describe('collectTelemetry function', () => {
 
     const gitUrls = ['https://github.com/ottofeller/sampleProject.git']
     expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({gitUrls}))
-    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('collects escape hatches utilized in projenrc file', () => {
@@ -199,7 +196,7 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({escapeHatches}))
-    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('does not collect empty escape hatches', () => {
@@ -218,7 +215,7 @@ describe('collectTelemetry function', () => {
     collectTelemetry(project)
 
     expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({escapeHatches}))
-    expect(mockedNodeFetch).toHaveBeenLastCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(fetchSpy).toHaveBeenLastCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   test('collects GitHub workflow data', () => {
@@ -286,7 +283,7 @@ describe('collectTelemetry function', () => {
     }
 
     expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({workflows}))
-    expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+    expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
   })
 
   describe('collects errors', () => {
@@ -301,7 +298,7 @@ describe('collectTelemetry function', () => {
       ]
 
       expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({errors}))
-      expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+      expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
     })
 
     test('if failed to read projenrc file', () => {
@@ -315,7 +312,7 @@ describe('collectTelemetry function', () => {
       ]
 
       expect(mockStringify).toHaveBeenLastCalledWith(expect.objectContaining({errors}))
-      expect(mockedNodeFetch).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
+      expect(fetchSpy).toHaveBeenCalledWith(telemetryOptions.reportTargetUrl, fetchOptions)
     })
   })
 })
