@@ -26,10 +26,6 @@
       "type": "build"
     },
     {
-      "name": "@types/node-fetch",
-      "type": "build"
-    },
-    {
       "name": "@types/node",
       "version": "^20",
       "type": "build"
@@ -104,15 +100,6 @@
       "type": "build"
     },
     {
-      "name": "node-fetch",
-      "version": "2",
-      "type": "build"
-    },
-    {
-      "name": "prettier",
-      "type": "build"
-    },
-    {
       "name": "prettier-plugin-organize-imports",
       "type": "build"
     },
@@ -135,14 +122,6 @@
       "type": "build"
     },
     {
-      "name": "eslint",
-      "type": "bundled"
-    },
-    {
-      "name": "node-fetch",
-      "type": "bundled"
-    },
-    {
       "name": "prettier",
       "type": "bundled"
     },
@@ -153,6 +132,10 @@
     {
       "name": "projen",
       "type": "peer"
+    },
+    {
+      "name": "prettier",
+      "type": "runtime"
     },
     {
       "name": "projen",

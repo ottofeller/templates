@@ -39,7 +39,6 @@
     "@types/jest": "29",
     "@types/jscodeshift": "^0.11.6",
     "@types/node": "^20",
-    "@types/node-fetch": "^2.6.6",
     "@types/prettier": "2.7.3",
     "@typescript-eslint/eslint-plugin": "6",
     "@typescript-eslint/parser": "6",
@@ -55,8 +54,6 @@
     "jsii-diff": "^1.61.0",
     "jsii-pacmak": "^1.61.0",
     "jsii-rosetta": "5.3.x",
-    "node-fetch": "2",
-    "prettier": "2.8.7",
     "prettier-plugin-organize-imports": "3.2.2",
     "projen": "^0.80.1",
     "ts-jest": "29",
@@ -68,14 +65,10 @@
     "projen": "^0.80.1"
   },
   "dependencies": {
-    "eslint": "8.42.0",
-    "node-fetch": "^2.7.0",
-    "prettier": "2.8.0",
+    "prettier": "^2.8.7",
     "projen": "^0.80.1"
   },
   "bundledDependencies": [
-    "eslint",
-    "node-fetch",
     "prettier"
   ],
   "engines": {

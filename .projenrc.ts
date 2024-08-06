@@ -17,17 +17,10 @@ const project = new projen.cdk.JsiiProject({
   packageManager: projen.javascript.NodePackageManager.NPM,
   minNodeVersion: '20.0.0',
 
-  deps: ['projen'],
-  bundledDeps: ['prettier', 'eslint', 'node-fetch'],
+  deps: ['projen', 'prettier'],
+  bundledDeps: ['prettier'],
   peerDeps: ['projen', 'constructs'],
-  devDeps: [
-    '@types/eslint',
-    '@types/jscodeshift',
-    '@types/prettier',
-    '@graphql-codegen/cli',
-    'node-fetch@2',
-    '@types/node-fetch',
-  ],
+  devDeps: ['@types/eslint', '@types/jscodeshift', '@types/prettier', '@graphql-codegen/cli'],
 
   jsiiVersion: '5.3.x',
   typescriptVersion: '5.3.x',
@@ -71,6 +64,12 @@ addLinters({
   lintPaths: ['src'],
   extraEslintConfigs: [{rules}],
 })
+
+/*
+  NPM skips bundling all deps found in dev section.
+  Therefore prettier needs to be removed from the dev list to enable bundling.
+*/
+project.deps.removeDependency('prettier', projen.DependencyType.BUILD)
 
 // ANCHOR Setup git hooks with Husky
 addHusky(project, {huskyRules: {commitMsg: {ignoreBranches: ['main']}}})
@@ -155,8 +154,6 @@ publishReleaseGithubWorkflow.addJobs({
           'registry-url': 'https://registry.npmjs.org/',
           'npm-token': '${{ secrets.NPM_TOKEN }}',
           'include-build-step': true,
-          // FIXME: v16 is a workaround with the problem revealed on v20: deps are not bundled upon publish.
-          'node-version': 16,
         },
       },
     ]),
