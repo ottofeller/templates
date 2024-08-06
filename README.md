@@ -11,22 +11,25 @@ npx projen new --from @ottofeller/templates ottofeller-nextjs
 ### Update a project
 In order to pull template updates you need to specify the desired version of the `@ottofeller/templates` package in either `.projenrc.ts` file or in `package.json` (if the version in `.projenrc.ts` is not fixed). Then run the default projen task:
 ```sh
-npx projen 
+npx projen
 ```
 Upon completion the following changes would apply:
 - all packages with specified versions are updated (if a template does not specify a dependency version, it is not managed by projen and can be updated by simply setting the desired version in `package.json`; note that this way `package-lock.json` is not necessarily updated, thus you need to check it as well);
 - all projen-generated files are updated;
 - all sample code files are left unchanged (note that if you have deleted some sample code files they will be recreated unless you use the `sampleCode: false` option).
 
-### Install new packages
+### Install new or update existing packages
 The common approach of installing packages by running `npm install <package-name>` won't work because `npx projen` re-synthesizes all files, including `package.json`. For dependency handling see the docs in `projen` repo:
 - [generic dependency handling](https://github.com/projen/projen/blob/main/docs/deps.md);
 - [node.js specific](https://github.com/projen/projen/blob/main/docs/node.md#dependencies);
 - [node-package comments on dependency options](https://github.com/projen/projen/blob/main/src/javascript/node-package.ts#L46-L111) - these are available in an IDE.
 
-To install a new packages to the project:
+#### To install a new packages to the project:
 - Add a new item with the package name to either the `deps` or `devDeps` array in project options. Alternative way would be to use `project.addDeps('package-name')` or `project.addDevDeps('dev-package-name')`.
 - Run `npx projen`. This will update the `package.json` and lock file as well.
+
+#### To update a packages already in the project:
+- Use the project methods `addDeps` and `addDevDeps`. E.g. in order to bump the dependency `package-name@1` from the template one runs `project.addDeps('package-name@2')`, which effectively keeps the package and updates the version.
 
 Note that there are two distinct approaches in controlling package version:
 - Strict version control in `.projenrc.ts` - when adding packages one specifies a name and a version. All updates are handled manually by specifying a new version and then running `npx projen` to resynthesize the project.
@@ -35,7 +38,7 @@ Note that there are two distinct approaches in controlling package version:
 ### Eject
 To get rid of projen run this command:
 ```sh
-npm run eject 
+npm run eject
 ```
 The command removes default projen task, makes projen remove its authority from all the generated files and stop tracking changes. At this moment the project is managed as a regular repository (feel free to edit and remove files).
 
@@ -257,7 +260,7 @@ Include docker-related files such as `.dockerignore`, `Dockerfile`; defaults to 
 Include `husky` for git hooks management, defaults to `true` (NOTE: `projen` sets up `git` as a final step of project bootstrapping and thus there is no way to run `husky install` within the process. Hence a user has to run it manually after the `git` repo is initialized.).
 ##### huskyRules
 Comes with `hasGitHooks` and defines rules to include:
-- `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default); 
+- `checkCargo` creates a `pre-commit` hook that runs a check on Rust cargo (disabled by default);
 - `commitMsg` creates a `commit-msg` hook for a basic check of commit messages (defaults to `true`); can be set to an object with `ignoreBranches` property which specifies an array of branch names to be ignored while processing commit messages; bu default (with `commitMsg: true` option) the `ignoreBranches` is set to `['main', 'dev']`; in order to perform the check on all branches set either `commitMsg: {}` or `commitMsg: {ignoreBranches: []}`;
 - `huskyCustomRules` adds arbitrary commands to supported hooks (`commit-msg` and `pre-commit`); disabled by default.
 
