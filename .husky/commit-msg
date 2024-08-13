@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
-. "$(dirname -- "$0")/_/husky.sh"
-
 branch=$(git branch --show-current)
 check_branch () {
-  array=$@
-  if [[ " ${array[*]} " =~ " ${branch} " ]];
-  then return 1;
-  else return 0;
-  fi
+  for i in $@
+  do
+    if [ "$i" = "$branch" ];
+      then return 1;
+    fi
+  done
+  
+  return 0;
 }
 
 if check_branch "main"; then
