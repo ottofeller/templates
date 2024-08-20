@@ -15,8 +15,8 @@ fi
 `
 
 export const addHusky = (project: NodeProject, options: WithGitHooks): void => {
-  project.addDevDeps('husky')
-  project.addScripts({prepare: 'husky install'})
+  project.addDevDeps('husky@9')
+  project.addScripts({prepare: 'husky'})
   const {commitMsg, checkCargo, huskyCustomRules: huskyCustomRule} = options.huskyRules ?? {commitMsg: true}
   const commitMessageCommands: Array<string> = []
   const preCommitCommands: Array<string> = []

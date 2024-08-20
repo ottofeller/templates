@@ -69,6 +69,7 @@
     },
     {
       "name": "husky",
+      "version": "9",
       "type": "build"
     },
     {
