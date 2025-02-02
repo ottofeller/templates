@@ -1,4 +1,3 @@
-export {MaybePlural} from './MaybePlural'
 export {WithDocker} from './docker/with-docker'
 export {AssetFile, AssetFileOptions, AssetFileTemplate} from './files/AssetFile'
 export {
@@ -28,6 +27,7 @@ export {
 } from './github'
 export {WithGraphql} from './graphql/with-graphql'
 export {WithCustomLintPaths, addLinters} from './lint'
+export {MaybePlural} from './MaybePlural'
 export {renderReadme} from './readme'
 export {addTaskOrScript} from './tasks'
 export {IWithTelemetryReportUrl, TelemetryOptions, WithTelemetry, collectTelemetry, setupTelemetry} from './telemetry'
