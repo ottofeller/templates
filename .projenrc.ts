@@ -22,8 +22,8 @@ const project = new projen.cdk.JsiiProject({
   peerDeps: ['projen', 'constructs'],
   devDeps: ['@types/eslint', '@types/jscodeshift', '@types/prettier', '@graphql-codegen/cli'],
 
-  jsiiVersion: '5.3.x',
-  typescriptVersion: '5.3.x',
+  jsiiVersion: '5.7.x',
+  typescriptVersion: '5.7.x',
 
   github: true,
   buildWorkflow: false,
